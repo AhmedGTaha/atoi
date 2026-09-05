@@ -1,0 +1,278 @@
+// Atrio — PostgreSQL schema
+// V1 data model. See docs/SRS.md section 54 for the source requirements.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Locale {
+  en
+  ar
+}
+
+enum AccountStatus {
+  INVITED
+  ACTIVE
+  DISABLED
+}
+
+enum RequestState {
+  NEW
+  CONVERTED
+  ARCHIVED
+}
+
+enum ProjectStatus {
+  PENDING_TEAM_APPROVAL
+  DEVELOPMENT
+  TESTING
+  DONE
+}
+
+enum EmailDeliveryState {
+  PENDING
+  SENT
+  FAILED
+}
+
+enum GccCountry {
+  BH
+  SA
+  AE
+  QA
+  KW
+  OM
+}
+
+enum SecureTokenType {
+  CUSTOMER_INVITE
+  PASSWORD_RESET
+}
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  projectUpdates ProjectUpdate[]
+
+  @@map("admin_users")
+}
+
+model Customer {
+  id              String        @id @default(uuid())
+  name            String?
+  businessName    String?
+  email           String        @unique
+  passwordHash    String?
+  phoneCountry    GccCountry
+  phoneE164       String
+  preferredLocale Locale        @default(en)
+  accountStatus   AccountStatus @default(INVITED)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  projects        Project[]
+  supportRequests SupportRequest[]
+  secureTokens    SecureToken[]
+  projectRequests ProjectRequest[]
+
+  @@map("customers")
+}
+
+model ProjectRequest {
+  id                  String       @id @default(uuid())
+  businessType        String?
+  description         String
+  name                String?
+  businessName        String?
+  email               String
+  phoneCountry        GccCountry
+  phoneE164           String
+  preferredLocale     Locale       @default(en)
+  state               RequestState @default(NEW)
+  confirmationEmailState EmailDeliveryState @default(PENDING)
+  internalEmailState     EmailDeliveryState @default(PENDING)
+  convertedCustomerId String?
+  convertedCustomer   Customer?    @relation(fields: [convertedCustomerId], references: [id])
+  convertedProjectId  String?      @unique
+  convertedProject    Project?     @relation(fields: [convertedProjectId], references: [id])
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  @@map("project_requests")
+}
+
+model Project {
+  id          String        @id @default(uuid())
+  customerId  String
+  customer    Customer      @relation(fields: [customerId], references: [id])
+  name        String
+  description String
+  status      ProjectStatus @default(PENDING_TEAM_APPROVAL)
+  progress    Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  members         ProjectMember[]
+  updates         ProjectUpdate[]
+  supportRequests SupportRequest[]
+  sourceRequest   ProjectRequest?
+
+  @@map("projects")
+}
+
+model TeamMember {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projects ProjectMember[]
+
+  @@map("team_members")
+}
+
+model ProjectMember {
+  projectId    String
+  teamMemberId String
+  createdAt    DateTime @default(now())
+
+  project    Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  teamMember TeamMember @relation(fields: [teamMemberId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, teamMemberId])
+  @@map("project_members")
+}
+
+model ProjectUpdate {
+  id               String             @id @default(uuid())
+  projectId        String
+  project          Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  authorAdminId    String
+  author           AdminUser          @relation(fields: [authorAdminId], references: [id])
+  body             String
+  statusSnapshot   ProjectStatus
+  progressSnapshot Int
+  emailDeliveryState EmailDeliveryState @default(PENDING)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  @@map("project_updates")
+}
+
+model SupportRequest {
+  id                 String             @id @default(uuid())
+  projectId          String
+  project            Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  customerId         String
+  customer           Customer           @relation(fields: [customerId], references: [id])
+  message            String
+  emailDeliveryState EmailDeliveryState @default(PENDING)
+  notifiedFallback   Boolean            @default(false)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@map("support_requests")
+}
+
+model PortfolioProject {
+  id             String   @id @default(uuid())
+  titleEn        String
+  titleAr        String
+  descriptionEn  String
+  descriptionAr  String
+  category       String?
+  clientName     String?
+  problemEn      String?
+  problemAr      String?
+  builtEn        String?
+  builtAr        String?
+  resultEn       String?
+  resultAr       String?
+  liveUrl        String?
+  featured       Boolean  @default(false)
+  published      Boolean  @default(false)
+  displayOrder   Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  images PortfolioImage[]
+
+  @@map("portfolio_projects")
+}
+
+model PortfolioImage {
+  id                 String           @id @default(uuid())
+  portfolioProjectId String
+  portfolioProject   PortfolioProject @relation(fields: [portfolioProjectId], references: [id], onDelete: Cascade)
+  storageKey         String
+  publicUrl          String
+  altEn              String?
+  altAr              String?
+  isMain             Boolean          @default(false)
+  displayOrder       Int              @default(0)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@map("portfolio_images")
+}
+
+model WebsiteContent {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  valueEn   String
+  valueAr   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("website_content")
+}
+
+model CompanySettings {
+  id                          String   @id @default(uuid())
+  companyName                 String
+  companyEmail                String
+  companyPhone                String
+  whatsappPhone                String?
+  locationEn                  String
+  locationAr                  String
+  instagramUrl                 String?
+  linkedinUrl                  String?
+  logoStorageKey               String?
+  logoPublicUrl                 String?
+  requestNotificationRecipients String[]
+  supportFallbackRecipients     String[]
+  seoTitleEn                   String
+  seoTitleAr                   String
+  seoDescriptionEn             String
+  seoDescriptionAr             String
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+
+  @@map("company_settings")
+}
+
+model SecureToken {
+  id         String          @id @default(uuid())
+  customerId String
+  customer   Customer        @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  type       SecureTokenType
+  tokenHash  String          @unique
+  expiresAt  DateTime
+  usedAt     DateTime?
+  createdAt  DateTime        @default(now())
+
+  @@map("secure_tokens")
+}

@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+:root {
+  --color-cream: #f0ebe5;
+  --color-cream-dim: #e6ded4;
+  --color-blue-light: #8eabd5;
+  --color-blue-dark: #486fa6;
+  --color-ink: #000000;
+
+  --color-cream-border: rgba(0, 0, 0, 0.1);
+  --color-ink-border: rgba(255, 255, 255, 0.14);
+
+  --font-body: var(--font-latin);
+}
+
+html[dir="rtl"] {
+  --font-body: var(--font-arabic);
+}
+
+@theme inline {
+  --color-cream: var(--color-cream);
+  --color-cream-dim: var(--color-cream-dim);
+  --color-blue-light: var(--color-blue-light);
+  --color-blue-dark: var(--color-blue-dark);
+  --color-ink: var(--color-ink);
+  --font-sans: var(--font-body);
+}
+
+* {
+  border-color: var(--color-cream-border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--color-blue-light);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-blue-dark);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Keep touch targets comfortable and inputs at a size that avoids
+   automatic zoom on iOS Safari (must stay >= 16px). */
+input,
+select,
+textarea,
+button {
+  font-size: 16px;
+}
+
+html[dir="rtl"] .flip-rtl {
+  transform: scaleX(-1);
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

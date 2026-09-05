@@ -1,0 +1,57 @@
+"use client";
+
+import { GCC_COUNTRIES, GCC_COUNTRY_CODES, type GccCountryCode } from "@/lib/validation/phone";
+
+export function PhoneInput({
+  country,
+  onCountryChange,
+  number,
+  onNumberChange,
+  placeholder,
+  error,
+  describedById,
+}: {
+  country: GccCountryCode;
+  onCountryChange: (c: GccCountryCode) => void;
+  number: string;
+  onNumberChange: (v: string) => void;
+  placeholder: string;
+  error?: string;
+  describedById?: string;
+}) {
+  return (
+    <div
+      className={`flex overflow-hidden rounded-2xl border bg-white ${
+        error ? "border-red-500" : "border-black/10"
+      }`}
+    >
+      <label className="sr-only" htmlFor="phone-country">
+        Country code
+      </label>
+      <select
+        id="phone-country"
+        value={country}
+        onChange={(e) => onCountryChange(e.target.value as GccCountryCode)}
+        className="shrink-0 border-r border-black/10 bg-blue-light/40 px-2.5 text-sm font-medium text-ink outline-none"
+        aria-label="Country code"
+      >
+        {GCC_COUNTRY_CODES.map((code) => (
+          <option key={code} value={code}>
+            {GCC_COUNTRIES[code].flag} {GCC_COUNTRIES[code].dialCode}
+          </option>
+        ))}
+      </select>
+      <input
+        type="tel"
+        inputMode="numeric"
+        autoComplete="tel-national"
+        value={number}
+        onChange={(e) => onNumberChange(e.target.value)}
+        placeholder={placeholder}
+        aria-describedby={describedById}
+        aria-invalid={!!error}
+        className="w-full min-w-0 flex-1 px-3.5 py-3.5 outline-none placeholder:text-black/40"
+      />
+    </div>
+  );
+}
