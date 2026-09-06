@@ -1,7 +1,7 @@
 import type { Locale } from "@/lib/i18n/locale";
 
 const COLORS = {
-  offWhite: "#F0EBE5",
+  offWhite: "#F5F5F7",
   lightBlue: "#8EABD5",
   darkBlue: "#486FA6",
   black: "#000000",

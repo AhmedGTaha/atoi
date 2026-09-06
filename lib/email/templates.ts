@@ -14,7 +14,7 @@ const COPY = {
     requestConfirmationHeading: "Thanks for reaching out.",
     requestConfirmationBody: (description: string) =>
       `<p>We've received your project request and our team will review it shortly.</p>
-       <p style="margin-top:16px;padding:16px;background:#F0EBE5;border-radius:12px;color:#333;">
+       <p style="margin-top:16px;padding:16px;background:#F5F5F7;border-radius:12px;color:#333;">
          ${escapeHtml(description)}
        </p>
        <p style="margin-top:16px;">We'll be in touch soon.</p>`,
@@ -50,7 +50,7 @@ const COPY = {
     requestConfirmationHeading: "شكراً لتواصلك معنا.",
     requestConfirmationBody: (description: string) =>
       `<p>لقد استلمنا طلب مشروعك وسيقوم فريقنا بمراجعته قريباً.</p>
-       <p style="margin-top:16px;padding:16px;background:#F0EBE5;border-radius:12px;color:#333;">
+       <p style="margin-top:16px;padding:16px;background:#F5F5F7;border-radius:12px;color:#333;">
          ${escapeHtml(description)}
        </p>
        <p style="margin-top:16px;">سنتواصل معك قريباً.</p>`,
@@ -198,7 +198,7 @@ export function internalNewRequestEmail(
       heading: c.internalRequestHeading,
       bodyHtml: `<table style="border-collapse:collapse;font-size:14px;">${rows}</table>
                  <p style="margin-top:16px;"><strong>Description</strong></p>
-                 <p style="padding:16px;background:#F0EBE5;border-radius:12px;color:#333;">${escapeHtml(fields.description)}</p>`,
+                 <p style="padding:16px;background:#F5F5F7;border-radius:12px;color:#333;">${escapeHtml(fields.description)}</p>`,
       ctaUrl: fields.adminUrl,
       ctaLabel: "Open request",
     }),
@@ -223,7 +223,7 @@ export function supportNotificationEmail(
       companyName,
       heading: c.supportHeading,
       bodyHtml: `<p><strong>${escapeHtml(fields.projectName)}</strong> — ${escapeHtml(fields.customerLabel)}</p>
-                 <p style="margin-top:16px;padding:16px;background:#F0EBE5;border-radius:12px;color:#333;">${escapeHtml(fields.message)}</p>`,
+                 <p style="margin-top:16px;padding:16px;background:#F5F5F7;border-radius:12px;color:#333;">${escapeHtml(fields.message)}</p>`,
       ctaUrl: fields.adminUrl,
       ctaLabel: "Open project",
     }),
