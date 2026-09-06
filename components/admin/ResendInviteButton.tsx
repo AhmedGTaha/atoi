@@ -14,9 +14,9 @@ export function ResendInviteButton({ customerId }: { customerId: string }) {
       <Button type="submit" variant="outline" disabled={isPending}>
         {isPending ? "Sending…" : "Resend invitation email"}
       </Button>
-      {state.sent && <p className="mt-2 text-sm text-green-700">Invitation email sent.</p>}
+      {state.sent && <p className="mt-2 text-sm text-success">Invitation email sent.</p>}
       {state.error && (
-        <p role="alert" className="mt-2 text-sm text-red-600">
+        <p role="alert" className="mt-2 text-sm text-danger">
           {state.error}
         </p>
       )}

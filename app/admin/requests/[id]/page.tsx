@@ -52,7 +52,7 @@ export default async function AdminRequestDetailPage({
 
           {request.state === "NEW" && (
             <form action={archiveRequestAction.bind(null, request.id)} className="mt-5">
-              <button type="submit" className="text-sm font-semibold text-ink/60 hover:text-ink">
+              <button type="submit" className="text-sm font-semibold text-muted hover:text-ink">
                 Archive request
               </button>
             </form>
@@ -76,7 +76,7 @@ export default async function AdminRequestDetailPage({
           ) : (
             <div>
               <h2 className="font-bold">Create Customer & Project</h2>
-              <p className="mt-1 text-sm text-ink/60">
+              <p className="mt-1 text-sm text-muted">
                 Review and edit the details below before creating the account.
               </p>
               <div className="mt-4">
@@ -93,7 +93,7 @@ export default async function AdminRequestDetailPage({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-4 border-b border-black/5 pb-2">
-      <dt className="text-ink/50">{label}</dt>
+      <dt className="text-muted">{label}</dt>
       <dd className="text-end font-medium">{value}</dd>
     </div>
   );

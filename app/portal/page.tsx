@@ -11,14 +11,14 @@ export default async function PortalDashboardPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-extrabold tracking-tight">
+      <h1 className="page-header text-[length:var(--type-title)] uppercase">
         {dict.portal.welcome}
         {customer.name ? `, ${customer.name}` : ""}
       </h1>
 
-      <h2 className="mt-8 text-sm font-bold uppercase tracking-wide text-ink/50">{dict.portal.yourProjects}</h2>
+      <h2 className="mt-8 text-sm font-bold uppercase tracking-wide text-muted">{dict.portal.yourProjects}</h2>
       {projects.length === 0 ? (
-        <p className="mt-4 rounded-2xl bg-white p-8 text-center text-ink/50">{dict.portal.noProjects}</p>
+        <p className="mt-4 empty-state">{dict.portal.noProjects}</p>
       ) : (
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
           {projects.map((project) => (

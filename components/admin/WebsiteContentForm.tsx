@@ -48,7 +48,7 @@ export function WebsiteContentForm({
                         name={`${field.key}__en`}
                         defaultValue={current.valueEn}
                         rows={field.multiline ? 3 : undefined}
-                        className="w-full rounded-xl border border-black/10 bg-white px-3.5 py-2.5 outline-none focus-visible:border-blue-dark"
+                        className="input"
                       />
                     </label>
                     <label className="block">
@@ -58,7 +58,7 @@ export function WebsiteContentForm({
                         dir="rtl"
                         defaultValue={current.valueAr}
                         rows={field.multiline ? 3 : undefined}
-                        className="w-full rounded-xl border border-black/10 bg-white px-3.5 py-2.5 outline-none focus-visible:border-blue-dark"
+                        className="input"
                       />
                     </label>
                   </div>
@@ -69,11 +69,11 @@ export function WebsiteContentForm({
       ))}
 
       {state.error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-danger">
           {state.error}
         </p>
       )}
-      {state.success && <p className="text-sm text-green-700">Content saved and published.</p>}
+      {state.success && <p role="status" className="text-sm text-success">Content saved and published.</p>}
 
       <Button type="submit" variant="primaryDark" disabled={isPending}>
         {isPending ? "Saving…" : "Save & publish"}

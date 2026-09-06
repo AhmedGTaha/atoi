@@ -14,7 +14,7 @@ export default async function AdminLoginPage() {
   const settings = await getCompanySettings();
 
   return (
-    <AuthCard title="Admin sign in" subtitle="Internal Atrio team access." companyName={settings.companyName}>
+    <AuthCard title="Admin sign in" subtitle="Internal ATOI team access." companyName={settings.companyName}>
       <AdminLoginForm />
     </AuthCard>
   );

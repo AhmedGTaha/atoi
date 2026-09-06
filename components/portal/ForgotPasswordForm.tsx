@@ -22,7 +22,7 @@ export function ForgotPasswordForm() {
     <form action={formAction} className="space-y-4">
       <AuthInput label="Email" name="email" type="email" autoComplete="username" required />
       {state.error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-danger">
           {state.error}
         </p>
       )}

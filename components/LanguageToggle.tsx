@@ -21,7 +21,7 @@ export function LanguageToggle({ locale, className }: { locale: Locale; classNam
   return (
     <div
       className={clsx(
-        "inline-flex items-center gap-1 rounded-full border border-black/15 px-1 py-1 text-sm font-medium",
+        "inline-flex items-center gap-1  border border-black/15 px-1 py-1 text-sm font-medium",
         className
       )}
       role="group"
@@ -29,11 +29,12 @@ export function LanguageToggle({ locale, className }: { locale: Locale; classNam
     >
       <button
         type="button"
+        disabled={isPending}
         onClick={() => switchTo("en")}
         aria-pressed={locale === "en"}
         className={clsx(
-          "rounded-full px-2.5 py-1 transition-colors",
-          locale === "en" ? "bg-black text-white" : "text-black/70 hover:text-black"
+          " px-2.5 py-1 transition-colors",
+          locale === "en" ? "bg-blue-dark text-white" : "text-muted hover:text-ink"
         )}
       >
         EN
@@ -43,11 +44,12 @@ export function LanguageToggle({ locale, className }: { locale: Locale; classNam
       </span>
       <button
         type="button"
+        disabled={isPending}
         onClick={() => switchTo("ar")}
         aria-pressed={locale === "ar"}
         className={clsx(
-          "rounded-full px-2.5 py-1 transition-colors",
-          locale === "ar" ? "bg-black text-white" : "text-black/70 hover:text-black"
+          " px-2.5 py-1 transition-colors",
+          locale === "ar" ? "bg-blue-dark text-white" : "text-muted hover:text-ink"
         )}
       >
         عربي

@@ -10,7 +10,7 @@ export function Container({
   as?: React.ElementType;
 }) {
   return (
-    <As className={clsx("mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12", className)}>
+    <As className={clsx("site-container", className)}>
       {children}
     </As>
   );

@@ -35,18 +35,18 @@ export function PortfolioImageManager({
         </Button>
       </form>
       {state.error && (
-        <p role="alert" className="mt-2 text-sm text-red-600">
+        <p role="alert" className="mt-2 text-sm text-danger">
           {state.error}
         </p>
       )}
 
       <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3">
         {images.map((image, index) => (
-          <div key={image.id} className="overflow-hidden rounded-xl border border-black/10">
+          <div key={image.id} className="overflow-hidden border border-black/10">
             <div className="relative aspect-square bg-cream-dim">
               <Image src={image.publicUrl} alt="" fill sizes="200px" className="object-cover" />
               {image.isMain && (
-                <span className="absolute start-2 top-2 rounded-full bg-ink px-2 py-0.5 text-xs font-semibold text-white">
+                <span className="absolute start-2 top-2 bg-ink px-2 py-0.5 text-xs font-semibold text-white">
                   Main
                 </span>
               )}
@@ -54,15 +54,15 @@ export function PortfolioImageManager({
             <div className="flex items-center justify-between gap-1 p-2">
               <div className="flex gap-1">
                 <form action={movePortfolioImageAction.bind(null, image.id, "up")}>
-                  <button type="submit" disabled={index === 0} className="rounded border border-black/10 px-1.5 py-0.5 text-xs disabled:opacity-30">
+                  <button type="submit" aria-label="Move image up" disabled={index === 0} className="border border-black/10 px-1.5 py-0.5 text-xs disabled:opacity-30">
                     ↑
                   </button>
                 </form>
                 <form action={movePortfolioImageAction.bind(null, image.id, "down")}>
                   <button
                     type="submit"
-                    disabled={index === images.length - 1}
-                    className="rounded border border-black/10 px-1.5 py-0.5 text-xs disabled:opacity-30"
+                    aria-label="Move image down" disabled={index === images.length - 1}
+                    className="border border-black/10 px-1.5 py-0.5 text-xs disabled:opacity-30"
                   >
                     ↓
                   </button>
@@ -71,13 +71,13 @@ export function PortfolioImageManager({
               <div className="flex gap-2">
                 {!image.isMain && (
                   <form action={setMainPortfolioImageAction.bind(null, projectId, image.id)}>
-                    <button type="submit" className="text-xs font-semibold text-ink/60 hover:text-ink">
+                    <button type="submit" className="text-xs font-semibold text-muted hover:text-ink">
                       Set main
                     </button>
                   </form>
                 )}
                 <form action={removePortfolioImageAction.bind(null, image.id)}>
-                  <button type="submit" className="text-xs font-semibold text-red-600 hover:text-red-700">
+                  <button type="submit" className="text-xs font-semibold text-danger hover:text-danger">
                     Remove
                   </button>
                 </form>

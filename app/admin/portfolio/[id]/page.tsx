@@ -38,11 +38,11 @@ export default async function EditPortfolioProjectPage({
 
           <Card>
             <h2 className="mb-2 font-bold">Danger zone</h2>
-            <p className="mb-3 text-sm text-ink/60">
+            <p className="mb-3 text-sm text-muted">
               Deleting a project removes it and all its images permanently.
             </p>
             <form action={deletePortfolioProjectAction.bind(null, project.id)}>
-              <button type="submit" className="text-sm font-semibold text-red-600 hover:text-red-700">
+              <button type="submit" className="text-sm font-semibold text-danger hover:text-danger">
                 Delete project
               </button>
             </form>

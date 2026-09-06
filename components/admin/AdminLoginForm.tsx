@@ -26,7 +26,7 @@ export function AdminLoginForm() {
       />
       <AuthInput label="Password" name="password" type="password" autoComplete="current-password" required />
       {state.error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-danger">
           {state.error}
         </p>
       )}

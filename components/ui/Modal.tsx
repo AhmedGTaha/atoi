@@ -29,11 +29,15 @@ export function Modal({
 
     const previouslyFocused = restoreFocusTo?.current ?? (document.activeElement as HTMLElement | null);
     const dialog = dialogRef.current;
+    const siblings = Array.from(document.body.children).filter((el): el is HTMLElement => el instanceof HTMLElement && !el.contains(dialog));
+    const previousInert = siblings.map(el => el.inert);
+    siblings.forEach(el => { el.inert = true; });
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
     const focusable = dialog?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
-    focusable?.[0]?.focus();
+    if (focusable?.length) focusable[0].focus();
+    else dialog?.focus();
 
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
@@ -46,7 +50,7 @@ export function Modal({
       const nodes = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
         (el) => el.offsetParent !== null
       );
-      if (nodes.length === 0) return;
+      if (nodes.length === 0) { e.preventDefault(); dialog.focus(); return; }
 
       const first = nodes[0]!;
       const last = nodes[nodes.length - 1]!;
@@ -65,6 +69,7 @@ export function Modal({
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true);
       document.body.style.overflow = originalOverflow;
+      siblings.forEach((el, index) => { el.inert = previousInert[index]; });
       previouslyFocused?.focus?.();
     };
   }, [isOpen, onClose, restoreFocusTo]);
@@ -81,10 +86,11 @@ export function Modal({
       <div
         ref={dialogRef}
         role="dialog"
+        tabIndex={-1}
         aria-modal="true"
         aria-labelledby={titleId}
         className={clsx(
-          "relative z-10 w-full max-h-[90vh] overflow-y-auto rounded-3xl bg-cream shadow-2xl",
+          "relative z-10 w-full max-h-[90dvh] overflow-y-auto border border-blue-dark bg-cream shadow-lg",
           "animate-[modal-in_0.18s_ease-out]",
           className
         )}

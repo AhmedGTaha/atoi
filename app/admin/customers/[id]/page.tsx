@@ -45,16 +45,16 @@ export default async function AdminCustomerDetailPage({
         <Card className="lg:col-span-2">
           <h2 className="font-bold">Projects</h2>
           <div className="mt-4 space-y-3">
-            {customer.projects.length === 0 && <p className="text-sm text-ink/50">No projects yet.</p>}
+            {customer.projects.length === 0 && <p className="text-sm text-muted">No projects yet.</p>}
             {customer.projects.map((p) => (
               <Link
                 key={p.id}
                 href={`/admin/projects/${p.id}`}
-                className="flex items-center justify-between rounded-xl border border-black/5 p-4 hover:border-black/15"
+                className="flex items-center justify-between border border-black/5 p-4 hover:border-black/15"
               >
                 <div>
                   <p className="font-semibold">{p.name}</p>
-                  <p className="text-sm text-ink/50">{p.progress}% complete</p>
+                  <p className="text-sm text-muted">{p.progress}% complete</p>
                 </div>
                 <Badge label={statusLabel("en", p.status)} tone={p.status} />
               </Link>
@@ -69,7 +69,7 @@ export default async function AdminCustomerDetailPage({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-4 border-b border-black/5 pb-2">
-      <dt className="text-ink/50">{label}</dt>
+      <dt className="text-muted">{label}</dt>
       <dd className="text-end font-medium">{value}</dd>
     </div>
   );

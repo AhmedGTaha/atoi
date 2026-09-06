@@ -25,39 +25,39 @@ export default async function PortalProjectPage({
 
   return (
     <div>
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
+      <div className="panel p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h1 className="text-2xl font-extrabold tracking-tight">{project.name}</h1>
-          <span className="rounded-full bg-blue-light/40 px-3 py-1 text-xs font-semibold text-blue-dark">
+          <h1 className="text-2xl font-semibold tracking-normal">{project.name}</h1>
+          <span className="status">
             {statusLabel(locale, project.status)}
           </span>
         </div>
         <p className="mt-3 text-ink/70">{project.description}</p>
 
         <div className="mt-5">
-          <div className="flex items-center justify-between text-sm text-ink/60">
+          <div className="flex items-center justify-between text-sm text-muted">
             <span>{dict.portal.progress}</span>
             <span>{project.progress}%</span>
           </div>
-          <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-black/10">
-            <div className="h-full rounded-full bg-blue-dark" style={{ width: `${project.progress}%` }} />
+          <div role="progressbar" aria-label={dict.portal.progress} aria-valuenow={project.progress} aria-valuemin={0} aria-valuemax={100} className="mt-1.5 h-1 w-full overflow-hidden bg-cream-dim">
+            <div className="h-full bg-blue-dark" style={{ width: `${project.progress}%` }} />
           </div>
         </div>
 
-        <p className="mt-4 text-sm text-ink/50">
+        <p className="mt-4 text-sm text-muted">
           {dict.portal.lastUpdated}: {project.updatedAt.toLocaleString()}
         </p>
       </div>
 
-      <div className="mt-6 rounded-2xl bg-white p-6 shadow-sm">
+      <div className="mt-6 panel p-6">
         <h2 className="font-bold">{dict.portal.updates}</h2>
         <div className="mt-4 space-y-4">
           {project.updates.length === 0 ? (
-            <p className="text-sm text-ink/50">{dict.portal.noUpdatesYet}</p>
+            <p className="text-sm text-muted">{dict.portal.noUpdatesYet}</p>
           ) : (
             project.updates.map((update) => (
               <div key={update.id} className="border-s-2 border-blue-light ps-4">
-                <p className="text-xs text-ink/50">{update.createdAt.toLocaleString()}</p>
+                <p className="text-xs text-muted">{update.createdAt.toLocaleString()}</p>
                 <p className="mt-1 whitespace-pre-wrap text-ink/80">{update.body}</p>
               </div>
             ))

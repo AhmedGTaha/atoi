@@ -18,16 +18,16 @@ export function SelectedWork({
   const dict = getDictionary(locale);
 
   return (
-    <section id="work" className="scroll-mt-[76px] bg-ink py-16 text-cream sm:py-24">
+    <section id="work" className="public-section work-section">
       <Container>
         <div className="flex items-center justify-between gap-4">
-          <h2 className="text-[clamp(2rem,6vw,3.25rem)] font-extrabold leading-[1.02] tracking-tight">
+          <h2 className="text-[clamp(2rem,6vw,3.25rem)] font-semibold leading-[1.02] tracking-normal">
             {t(content, "work.heading", locale)}
           </h2>
         </div>
 
         {projects.length === 0 ? (
-          <p className="mt-10 text-cream/60">{dict.work.empty}</p>
+          <p className="mt-10 empty-state">{dict.work.empty}</p>
         ) : (
           <WorkGrid projects={projects} locale={locale} seeAllLabel={t(content, "work.seeAllLabel", locale)} />
         )}

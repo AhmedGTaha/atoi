@@ -11,11 +11,11 @@ export default async function PrivacyPage() {
   const settings = await getCompanySettings();
 
   return (
-    <div className="mx-auto max-w-2xl px-5 py-16">
+    <main id="main-content" className="legal-page">
       <Link href="/" className="text-sm font-semibold text-blue-dark hover:underline">
         ← Back home
       </Link>
-      <h1 className="mt-6 text-3xl font-extrabold tracking-tight">Privacy Policy</h1>
+      <h1 className="mt-6 text-3xl font-semibold tracking-normal">Privacy Policy</h1>
       <div className="mt-6 space-y-4 text-ink/70">
         <p>
           {settings.companyName} collects the information you provide when you submit a project
@@ -35,6 +35,6 @@ export default async function PrivacyPage() {
           with any questions about your data.
         </p>
       </div>
-    </div>
+    </main>
   );
 }

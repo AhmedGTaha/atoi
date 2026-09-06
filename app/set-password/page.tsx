@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { AuthCard } from "@/components/auth/AuthCard";
 import { SetPasswordForm } from "@/components/portal/SetPasswordForm";
@@ -18,6 +19,7 @@ export default async function SetPasswordPage({
         <p className="text-ink/70">
           This link is missing its token. Please use the link from your email, or request a new one.
         </p>
+        <Link className="btn btn-primary mt-6" href="/forgot-password">Request a new link</Link>
       </AuthCard>
     );
   }

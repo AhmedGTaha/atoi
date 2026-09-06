@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Cairo } from "next/font/google";
+import { Barlow, Barlow_Condensed, Cairo } from "next/font/google";
 import "./globals.css";
 import { getLocale } from "@/lib/i18n/getLocale";
 import { dirFor } from "@/lib/i18n/locale";
@@ -7,12 +7,14 @@ import { I18nProvider } from "@/lib/i18n/I18nProvider";
 import { getCompanySettings } from "@/lib/services/settingsService";
 import { appUrl } from "@/lib/utils/appUrl";
 
-const latin = Plus_Jakarta_Sans({
+const latin = Barlow({
   variable: "--font-latin",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
+
+const condensed = Barlow_Condensed({ variable: "--font-condensed", subsets: ["latin"], weight: ["400", "600"], display: "swap" });
 
 const arabic = Cairo({
   variable: "--font-arabic",
@@ -51,8 +53,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const locale = await getLocale();
 
   return (
-    <html lang={locale} dir={dirFor(locale)} className={`${latin.variable} ${arabic.variable} h-full antialiased`}>
+    <html lang={locale} dir={dirFor(locale)} className={`${latin.variable} ${condensed.variable} ${arabic.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-cream text-ink">
+        <a href="#main-content" className="skip-link">{locale === "ar" ? "انتقل إلى المحتوى" : "Skip to content"}</a>
         <I18nProvider locale={locale}>{children}</I18nProvider>
       </body>
     </html>

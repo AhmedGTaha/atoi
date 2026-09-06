@@ -9,7 +9,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { WorkDetailModal } from "./WorkDetailModal";
 
 const INITIAL_COUNT = 4;
-const CARD_TINTS = ["bg-blue-dark", "bg-blue-light"] as const;
+
 
 export function WorkGrid({
   projects,
@@ -31,49 +31,29 @@ export function WorkGrid({
 
   return (
     <>
-      <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">
-        {visible.map((project, index) => {
+      <div className="work-grid">
+        {visible.map((project) => {
           const mainImage = project.images.find((img) => img.isMain) ?? project.images[0];
-          const tint = CARD_TINTS[index % 2]!;
+
 
           return (
             <button
               key={project.id}
               type="button"
               onClick={() => setSelected(project)}
-              className={`group relative flex aspect-[4/3] flex-col overflow-hidden rounded-[1.75rem] p-6 text-start ${
-                project.featured ? tint : "bg-blue-dark/70"
-              } sm:p-7`}
+              className="work-item group"
             >
-              {project.category && (
-                <span className="text-xs font-bold uppercase tracking-wider text-cream/90">
-                  {project.category}
-                </span>
-              )}
-
-              {mainImage ? (
-                <div className="relative mt-4 flex-1 overflow-hidden rounded-2xl bg-cream">
-                  <Image
-                    src={mainImage.publicUrl}
-                    alt={localize(locale, { valueEn: mainImage.altEn ?? "", valueAr: mainImage.altAr ?? "" }) || (locale === "ar" ? project.titleAr : project.titleEn)}
-                    fill
-                    sizes="(min-width: 640px) 45vw, 90vw"
-                    className="object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
-                  />
-                </div>
-              ) : (
-                <div className="relative mt-4 flex-1 overflow-hidden rounded-2xl">
-                  <span className="absolute -bottom-10 -end-10 h-40 w-40 rounded-full border-[22px] border-ink/25" aria-hidden="true" />
-                </div>
-              )}
-
-              <div className="mt-4 flex items-end justify-between">
-                <span className="text-xl font-bold text-cream sm:text-2xl">
-                  {locale === "ar" ? project.titleAr : project.titleEn}
-                </span>
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-cream text-ink">
-                  <ArrowIcon />
-                </span>
+              <div>
+                {project.category && <p className="section-marker mb-4">{project.category}</p>}
+                <h3 className="work-title">{locale === "ar" ? project.titleAr : project.titleEn}</h3>
+                <p className="mt-4 text-muted">{locale === "ar" ? project.descriptionAr : project.descriptionEn}</p>
+                <span className="mt-6 inline-flex items-center gap-4 text-blue-dark text-sm">{locale === "ar" ? "تفاصيل المشروع" : "View project"}<ArrowIcon /></span>
+              </div>
+              <div className="work-image">
+                {mainImage ? <Image src={mainImage.publicUrl}
+                  alt={localize(locale, { valueEn: mainImage.altEn ?? "", valueAr: mainImage.altAr ?? "" }) || (locale === "ar" ? project.titleAr : project.titleEn)}
+                  fill sizes="(min-width: 768px) 60vw, 90vw" className="object-cover object-top" />
+                  : <span className="absolute inset-0 grid place-items-center section-marker">{locale === "ar" ? "لا توجد صورة للمشروع" : "Project image unavailable"}</span>}
               </div>
             </button>
           );
@@ -85,7 +65,7 @@ export function WorkGrid({
           <button
             type="button"
             onClick={() => setExpanded((v) => !v)}
-            className="text-sm font-semibold underline decoration-cream/40 underline-offset-4 hover:decoration-cream"
+            className="text-sm font-semibold underline decoration-ink/40 underline-offset-4 hover:decoration-ink"
           >
             {expanded ? dict.work.showLess : seeAllLabel}
           </button>

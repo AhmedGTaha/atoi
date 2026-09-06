@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import Link from "next/link";
+import { BlueprintPanel } from "@/components/ui/BlueprintPanel";
 
 export function PageHeader({
   title,
@@ -11,10 +12,10 @@ export function PageHeader({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div className="page-header">
       <div>
-        <h1 className="text-2xl font-extrabold tracking-tight">{title}</h1>
-        {description && <p className="mt-1 text-ink/60">{description}</p>}
+        <h1>{title}</h1>
+        {description && <p className="mt-1 text-muted">{description}</p>}
       </div>
       {action}
     </div>
@@ -22,37 +23,18 @@ export function PageHeader({
 }
 
 export function Card({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={clsx("rounded-2xl bg-white p-5 shadow-sm", className)}>{children}</div>;
+  const isTable = className?.includes("overflow-x-auto");
+  return <BlueprintPanel className={clsx(!isTable && "p-5", className?.replace("overflow-x-auto", ""))}>
+    {isTable ? <><p className="table-hint">Scroll horizontally to view all columns →</p><div className="table-scroll" role="region" aria-label="Data table" tabIndex={0}>{children}</div></> : children}
+  </BlueprintPanel>;
 }
 
 export function EmptyState({ children }: { children: React.ReactNode }) {
-  return <p className="rounded-2xl bg-white p-8 text-center text-ink/50">{children}</p>;
+  return <p className="empty-state">{children}</p>;
 }
 
-const statusStyles: Record<string, string> = {
-  PENDING_TEAM_APPROVAL: "bg-amber-100 text-amber-800",
-  DEVELOPMENT: "bg-blue-100 text-blue-800",
-  TESTING: "bg-purple-100 text-purple-800",
-  DONE: "bg-green-100 text-green-800",
-  NEW: "bg-amber-100 text-amber-800",
-  CONVERTED: "bg-green-100 text-green-800",
-  ARCHIVED: "bg-gray-100 text-gray-600",
-  INVITED: "bg-amber-100 text-amber-800",
-  ACTIVE: "bg-green-100 text-green-800",
-  DISABLED: "bg-gray-100 text-gray-600",
-};
-
 export function Badge({ label, tone }: { label: string; tone: string }) {
-  return (
-    <span
-      className={clsx(
-        "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold",
-        statusStyles[tone] ?? "bg-gray-100 text-gray-700"
-      )}
-    >
-      {label}
-    </span>
-  );
+  return <span className={clsx("status", ["DONE", "ACTIVE", "CONVERTED"].includes(tone) && "status-complete", ["ARCHIVED", "DISABLED"].includes(tone) && "status-muted")}>{label}</span>;
 }
 
 export function AdminInput({
@@ -67,11 +49,11 @@ export function AdminInput({
       <input
         {...props}
         aria-invalid={!!error}
-        className="w-full rounded-xl border border-black/10 bg-white px-3.5 py-2.5 outline-none focus-visible:border-blue-dark"
+        className="input"
       />
-      {hint && !error && <span className="mt-1 block text-xs text-ink/50">{hint}</span>}
+      {hint && !error && <span className="mt-1 block text-xs text-muted">{hint}</span>}
       {error && (
-        <span role="alert" className="mt-1 block text-sm text-red-600">
+        <span role="alert" className="mt-1 block text-sm text-danger">
           {error}
         </span>
       )}
@@ -90,10 +72,10 @@ export function AdminTextarea({
       <textarea
         {...props}
         aria-invalid={!!error}
-        className="w-full rounded-xl border border-black/10 bg-white px-3.5 py-2.5 outline-none focus-visible:border-blue-dark"
+        className="input"
       />
       {error && (
-        <span role="alert" className="mt-1 block text-sm text-red-600">
+        <span role="alert" className="mt-1 block text-sm text-danger">
           {error}
         </span>
       )}
@@ -113,12 +95,12 @@ export function AdminSelect({
       <select
         {...props}
         aria-invalid={!!error}
-        className="w-full rounded-xl border border-black/10 bg-white px-3.5 py-2.5 outline-none focus-visible:border-blue-dark"
+        className="input"
       >
         {children}
       </select>
       {error && (
-        <span role="alert" className="mt-1 block text-sm text-red-600">
+        <span role="alert" className="mt-1 block text-sm text-danger">
           {error}
         </span>
       )}
@@ -130,7 +112,7 @@ export function LinkButtonSmall({ href, children }: { href: string; children: Re
   return (
     <Link
       href={href}
-      className="inline-flex items-center justify-center rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white hover:bg-black/80"
+      className="btn btn-primary"
     >
       {children}
     </Link>

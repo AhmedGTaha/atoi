@@ -17,9 +17,9 @@ export function PortalShell({
   const dict = getDictionary(locale);
 
   return (
-    <div className="min-h-dvh bg-cream-dim/30">
+    <div className="min-h-dvh">
       <header className="border-b border-black/10 bg-cream">
-        <div className="mx-auto flex max-w-4xl items-center justify-between px-5 py-4">
+        <div className="site-container flex flex-wrap items-center justify-between gap-4 py-4">
           <Link href="/portal">
             <Logo name={companyName} />
           </Link>
@@ -33,7 +33,11 @@ export function PortalShell({
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-4xl px-5 py-8">{children}</main>
+      <div className="site-container border-b py-3 flex justify-between text-sm">
+        <Link href="/portal" className="text-blue-dark">{dict.portal.yourProjects}</Link>
+        <Link href="/" className="text-muted">{locale === "ar" ? "الموقع الرئيسي" : "Public website"} ↗</Link>
+      </div>
+      <main id="main-content" className="site-container app-main">{children}</main>
     </div>
   );
 }

@@ -17,7 +17,7 @@ export function CustomerLoginForm({ justSetPassword }: { justSetPassword: boolea
   return (
     <form action={formAction} className="space-y-4">
       {justSetPassword && (
-        <p className="rounded-xl bg-green-50 px-3.5 py-2.5 text-sm text-green-700">
+        <p className="bg-cream-dim px-3.5 py-2.5 text-sm text-success">
           Your password has been set. You can sign in now.
         </p>
       )}
@@ -32,7 +32,7 @@ export function CustomerLoginForm({ justSetPassword }: { justSetPassword: boolea
       />
       <AuthInput label="Password" name="password" type="password" autoComplete="current-password" required />
       {state.error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-danger">
           {state.error}
         </p>
       )}

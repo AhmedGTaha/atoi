@@ -23,7 +23,7 @@ export function SetPasswordForm({ token }: { token: string }) {
         minLength={8}
       />
       {state.error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-danger">
           {state.error}
         </p>
       )}

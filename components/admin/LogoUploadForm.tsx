@@ -23,11 +23,11 @@ export function LogoUploadForm({ currentLogoUrl }: { currentLogoUrl: string | nu
         className="block text-sm"
       />
       {state.error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-danger">
           {state.error}
         </p>
       )}
-      {state.success && <p className="text-sm text-green-700">Logo updated.</p>}
+      {state.success && <p role="status" className="text-sm text-success">Logo updated.</p>}
       <Button type="submit" variant="outline" disabled={isPending}>
         {isPending ? "Uploading…" : "Upload logo"}
       </Button>

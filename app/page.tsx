@@ -25,9 +25,9 @@ export default async function HomePage() {
       <Navbar locale={locale} companyName={settings.companyName} />
       <main id="main-content">
         <Hero locale={locale} content={content} />
+        <SelectedWork locale={locale} content={content} projects={portfolio} />
         <Services locale={locale} content={content} />
         <Process locale={locale} content={content} />
-        <SelectedWork locale={locale} content={content} projects={portfolio} />
         <About locale={locale} content={content} />
         <FinalCta locale={locale} content={content} />
       </main>

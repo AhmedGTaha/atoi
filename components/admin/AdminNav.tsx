@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import clsx from "clsx";
+
 
 const NAV_ITEMS = [
   { href: "/admin", label: "Dashboard" },
@@ -19,7 +19,7 @@ export function AdminNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex flex-col gap-1" aria-label="Admin">
+    <nav className="app-nav" aria-label="Admin">
       {NAV_ITEMS.map((item) => {
         const active =
           item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
@@ -27,10 +27,7 @@ export function AdminNav() {
           <Link
             key={item.href}
             href={item.href}
-            className={clsx(
-              "rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors",
-              active ? "bg-ink text-white" : "text-ink/70 hover:bg-black/5"
-            )}
+            aria-current={active ? "page" : undefined}
           >
             {item.label}
           </Link>

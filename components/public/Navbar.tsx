@@ -20,17 +20,17 @@ export function Navbar({ locale, companyName }: { locale: Locale; companyName: s
 
   return (
     <header className="sticky top-0 z-40 border-b border-black/10 bg-cream/90 backdrop-blur">
-      <Container className="flex h-[76px] items-center justify-between gap-4">
+      <Container className="flex h-[66px] items-center justify-between gap-4">
         <Link href="/#home" className="shrink-0">
           <Logo name={companyName} />
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-5 xl:gap-8 lg:flex" aria-label="Primary">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.key}
               href={item.href}
-              className="text-[15px] font-medium text-ink/80 transition-colors hover:text-ink"
+              className="text-xs uppercase tracking-wider font-medium text-ink/80 transition-colors hover:text-ink"
             >
               {dict.nav[item.key]}
             </Link>
@@ -38,8 +38,9 @@ export function Navbar({ locale, companyName }: { locale: Locale; companyName: s
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
+          <Link href="/login" className="text-xs uppercase tracking-wider text-blue-dark">{locale === "ar" ? "تسجيل الدخول" : "Sign in"}</Link>
           <LanguageToggle locale={locale} />
-          <StartProjectTrigger className="inline-flex min-h-11 items-center justify-center rounded-full bg-blue-dark px-6 py-3.5 text-[15px] font-semibold text-white transition-colors hover:bg-blue-dark/90">
+          <StartProjectTrigger className="btn btn-primary">
             {dict.nav.startProject}
           </StartProjectTrigger>
         </div>

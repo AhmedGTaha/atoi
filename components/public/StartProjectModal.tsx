@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
+import { BlueprintPanel } from "@/components/ui/BlueprintPanel";
 import { Modal } from "@/components/ui/Modal";
 import { PhoneInput } from "./PhoneInput";
 import { useStartProjectModal } from "./StartProjectModalContext";
@@ -13,7 +14,7 @@ import { Button } from "@/components/ui/Button";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export function StartProjectModal({ locale }: { locale: Locale }) {
+export function StartProjectModal({ locale, inline = false }: { locale: Locale; inline?: boolean }) {
   const { isOpen, close, triggerRef } = useStartProjectModal();
   const dict = getDictionary(locale);
   const titleId = useId();
@@ -43,11 +44,11 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
   }
 
   useEffect(() => {
-    if (!isOpen) {
+    if (!isOpen && !inline) {
       const timeout = setTimeout(resetForm, 200);
       return () => clearTimeout(timeout);
     }
-  }, [isOpen]);
+  }, [isOpen, inline]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -83,38 +84,37 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
     }
   }
 
-  return (
-    <Modal isOpen={isOpen} onClose={close} titleId={titleId} restoreFocusTo={triggerRef} className="max-w-[560px]">
+  const contents = (
       <div className="relative p-6 sm:p-8">
-        <button
+        {!inline && <button
           type="button"
           onClick={close}
           aria-label={dict.modal.close}
-          className="absolute end-5 top-5 flex h-9 w-9 items-center justify-center rounded-full bg-ink text-white hover:bg-black/80"
+          className="absolute z-20 end-5 top-5 flex h-11 w-11 items-center justify-center bg-ink text-white hover:bg-black/80"
         >
           <CloseIcon />
-        </button>
+        </button>}
 
         {status === "success" ? (
           <SuccessView
             dict={dict}
             confirmationEmailSent={confirmationEmailSent}
-            onDone={close}
+            onDone={inline ? resetForm : close}
             titleId={titleId}
           />
         ) : (
           <form onSubmit={handleSubmit} noValidate>
             <p className="text-sm font-semibold text-blue-dark">{dict.modal.eyebrow}</p>
-            <h2 id={titleId} className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            <h2 id={titleId} className="mt-2 pe-10 text-3xl font-semibold tracking-normal sm:text-4xl">
               {dict.modal.heading}
             </h2>
-            <p className="mt-2 text-black/60">{dict.modal.subheading}</p>
+            <p className="mt-2 text-muted">{dict.modal.subheading}</p>
 
             {/* Honeypot: hidden from real users, catches naive bots. */}
             <div className="absolute -left-[9999px]" aria-hidden="true">
-              <label htmlFor="website">Website</label>
+              <label htmlFor={`${titleId}-website`}>Website</label>
               <input
-                id="website"
+                id={`${titleId}-website`}
                 name="website"
                 type="text"
                 tabIndex={-1}
@@ -129,7 +129,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
                 <select
                   value={businessType}
                   onChange={(e) => setBusinessType(e.target.value)}
-                  className="w-full rounded-2xl border border-black/10 bg-white px-3.5 py-3.5 outline-none"
+                  className="input"
                 >
                   <option value="">{dict.modal.businessTypePlaceholder}</option>
                   {BUSINESS_TYPES.map((type) => (
@@ -146,7 +146,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder={dict.modal.namePlaceholder}
-                  className="w-full rounded-2xl border border-black/10 bg-white px-3.5 py-3.5 outline-none placeholder:text-black/40"
+                  className="input"
                 />
               </Field>
             </div>
@@ -162,7 +162,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
                   maxLength={5000}
                   rows={4}
                   aria-invalid={!!fieldErrors.description}
-                  className="w-full resize-none rounded-2xl border border-black/10 bg-white px-3.5 py-3.5 outline-none placeholder:text-black/40"
+                  className="input"
                 />
               </Field>
             </div>
@@ -176,7 +176,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
                   placeholder={dict.modal.emailPlaceholder}
                   required
                   aria-invalid={!!fieldErrors.email}
-                  className="w-full rounded-2xl border border-black/10 bg-white px-3.5 py-3.5 outline-none placeholder:text-black/40"
+                  className="input"
                 />
               </Field>
 
@@ -193,7 +193,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
             </div>
 
             {fieldErrors.form && (
-              <p role="alert" className="mt-4 text-sm text-red-600">
+              <p role="alert" className="mt-4 text-sm text-danger">
                 {fieldErrors.form}
               </p>
             )}
@@ -209,8 +209,8 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
           </form>
         )}
       </div>
-    </Modal>
   );
+  return inline ? <BlueprintPanel>{contents}</BlueprintPanel> : <Modal isOpen={isOpen} onClose={close} titleId={titleId} restoreFocusTo={triggerRef} className="max-w-[560px]">{contents}</Modal>;
 }
 
 function Field({
@@ -231,7 +231,7 @@ function Field({
       </span>
       {children}
       {error && (
-        <span role="alert" className="mt-1 block text-sm text-red-600">
+        <span role="alert" className="mt-1 block text-sm text-danger">
           {error}
         </span>
       )}
@@ -252,10 +252,10 @@ function SuccessView({
 }) {
   return (
     <div className="flex flex-col items-center py-6 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-light">
+      <div className="flex h-16 w-16 items-center justify-center bg-blue-light">
         <CheckIcon />
       </div>
-      <h2 id={titleId} className="mt-6 text-3xl font-extrabold tracking-tight">
+      <h2 id={titleId} className="mt-6 text-3xl font-semibold tracking-normal">
         {dict.success.heading}
       </h2>
       <p className="mt-3 max-w-sm text-black/70">
@@ -271,7 +271,7 @@ function SuccessView({
 function CloseIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M1 1L15 15M15 1L1 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M1 1L15 15M15 1L1 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
@@ -279,7 +279,7 @@ function CloseIcon() {
 function CheckIcon() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M5 13L10 18L19 7" stroke="black" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 13L10 18L19 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

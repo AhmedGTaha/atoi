@@ -55,10 +55,10 @@ export default async function AdminProjectDetailPage({
           <Card>
             <h2 className="font-bold">Update history</h2>
             <div className="mt-4 space-y-3">
-              {project.updates.length === 0 && <p className="text-sm text-ink/50">No updates yet.</p>}
+              {project.updates.length === 0 && <p className="text-sm text-muted">No updates yet.</p>}
               {project.updates.map((update) => (
-                <div key={update.id} className="rounded-xl border border-black/5 p-4">
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-ink/50">
+                <div key={update.id} className="border border-black/5 p-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
                     <span>{update.createdAt.toLocaleString()}</span>
                     <span>
                       {statusLabel("en", update.statusSnapshot)} · {update.progressSnapshot}% ·{" "}
@@ -66,7 +66,7 @@ export default async function AdminProjectDetailPage({
                     </span>
                   </div>
                   <p className="mt-2 whitespace-pre-wrap text-sm">{update.body}</p>
-                  <p className="mt-2 text-xs text-ink/40">by {update.author.name}</p>
+                  <p className="mt-2 text-xs text-muted">by {update.author.name}</p>
                 </div>
               ))}
             </div>
@@ -76,11 +76,11 @@ export default async function AdminProjectDetailPage({
             <h2 className="font-bold">Support requests</h2>
             <div className="mt-4 space-y-3">
               {project.supportRequests.length === 0 && (
-                <p className="text-sm text-ink/50">No support requests for this project.</p>
+                <p className="text-sm text-muted">No support requests for this project.</p>
               )}
               {project.supportRequests.map((s) => (
-                <div key={s.id} className="rounded-xl border border-black/5 p-4">
-                  <p className="text-xs text-ink/50">{s.createdAt.toLocaleString()}</p>
+                <div key={s.id} className="border border-black/5 p-4">
+                  <p className="text-xs text-muted">{s.createdAt.toLocaleString()}</p>
                   <p className="mt-2 whitespace-pre-wrap text-sm">{s.message}</p>
                 </div>
               ))}
@@ -115,7 +115,7 @@ export default async function AdminProjectDetailPage({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-4 border-b border-black/5 pb-2">
-      <dt className="text-ink/50">{label}</dt>
+      <dt className="text-muted">{label}</dt>
       <dd className="text-end font-medium">{value}</dd>
     </div>
   );

@@ -17,7 +17,7 @@ export default async function AdminCustomersPage() {
         <Card className="overflow-x-auto p-0">
           <table className="w-full min-w-[640px] text-sm">
             <thead>
-              <tr className="border-b border-black/10 text-ink/50">
+              <tr className="border-b border-black/10 text-muted">
                 <th className="px-5 py-3 text-start font-medium">Customer</th>
                 <th className="px-5 py-3 text-start font-medium">Email</th>
                 <th className="px-5 py-3 text-start font-medium">Phone</th>

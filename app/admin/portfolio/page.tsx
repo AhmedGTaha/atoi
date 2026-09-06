@@ -29,7 +29,7 @@ export default async function AdminPortfolioPage() {
             const mainImage = project.images.find((i) => i.isMain) ?? project.images[0];
             return (
               <Card key={project.id} className="flex flex-wrap items-center gap-4">
-                <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-lg bg-cream-dim">
+                <div className="relative h-16 w-24 shrink-0 overflow-hidden bg-cream-dim">
                   {mainImage && (
                     <Image src={mainImage.publicUrl} alt="" fill sizes="96px" className="object-cover" />
                   )}
@@ -39,7 +39,7 @@ export default async function AdminPortfolioPage() {
                   <Link href={`/admin/portfolio/${project.id}`} className="font-semibold hover:underline">
                     {project.titleEn}
                   </Link>
-                  <p className="text-sm text-ink/50">{project.category || "—"}</p>
+                  <p className="text-sm text-muted">{project.category || "—"}</p>
                 </div>
 
                 <Badge label={project.published ? "Published" : "Hidden"} tone={project.published ? "ACTIVE" : "DISABLED"} />
@@ -47,15 +47,15 @@ export default async function AdminPortfolioPage() {
 
                 <div className="flex items-center gap-1">
                   <form action={movePortfolioProjectAction.bind(null, project.id, "up")}>
-                    <button type="submit" disabled={index === 0} className="rounded-lg border border-black/10 px-2 py-1 text-xs disabled:opacity-30">
+                    <button type="submit" aria-label={`Move ${project.titleEn} up`} disabled={index === 0} className="border border-black/10 px-2 py-1 text-xs disabled:opacity-30">
                       ↑
                     </button>
                   </form>
                   <form action={movePortfolioProjectAction.bind(null, project.id, "down")}>
                     <button
                       type="submit"
-                      disabled={index === projects.length - 1}
-                      className="rounded-lg border border-black/10 px-2 py-1 text-xs disabled:opacity-30"
+                      aria-label={`Move ${project.titleEn} down`} disabled={index === projects.length - 1}
+                      className="border border-black/10 px-2 py-1 text-xs disabled:opacity-30"
                     >
                       ↓
                     </button>

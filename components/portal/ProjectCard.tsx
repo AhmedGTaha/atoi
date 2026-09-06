@@ -10,26 +10,26 @@ export function ProjectCard({ project, locale }: { project: Project; locale: Loc
   return (
     <Link
       href={`/portal/projects/${project.id}`}
-      className="block rounded-2xl bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+      className="block panel p-6 transition-colors hover:border-blue-dark"
     >
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-lg font-bold">{project.name}</h3>
-        <span className="rounded-full bg-blue-light/40 px-3 py-1 text-xs font-semibold text-blue-dark">
+        <span className="status">
           {statusLabel(locale, project.status)}
         </span>
       </div>
 
       <div className="mt-4">
-        <div className="flex items-center justify-between text-sm text-ink/60">
+        <div className="flex items-center justify-between text-sm text-muted">
           <span>{dict.portal.progress}</span>
           <span>{project.progress}%</span>
         </div>
-        <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-black/10">
-          <div className="h-full rounded-full bg-blue-dark" style={{ width: `${project.progress}%` }} />
+        <div role="progressbar" aria-label={dict.portal.progress} aria-valuenow={project.progress} aria-valuemin={0} aria-valuemax={100} className="mt-1.5 h-1 w-full overflow-hidden bg-cream-dim">
+          <div className="h-full bg-blue-dark" style={{ width: `${project.progress}%` }} />
         </div>
       </div>
 
-      <p className="mt-4 text-sm text-ink/50">
+      <p className="mt-4 text-sm text-muted">
         {dict.portal.lastUpdated}: {project.updatedAt.toLocaleDateString()}
       </p>
     </Link>

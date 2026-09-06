@@ -45,7 +45,7 @@ export function ConvertRequestForm({
             <select
               name="phoneCountry"
               defaultValue={request.phoneCountry}
-              className="rounded-xl border border-black/10 bg-white px-2.5 py-2.5 outline-none"
+              className="border border-black/10 bg-cream px-2.5 py-2.5"
             >
               {GCC_COUNTRY_CODES.map((code) => (
                 <option key={code} value={code}>
@@ -56,7 +56,7 @@ export function ConvertRequestForm({
             <input
               name="phoneNumber"
               defaultValue={request.phoneE164.replace(GCC_COUNTRIES[request.phoneCountry].dialCode, "")}
-              className="w-full rounded-xl border border-black/10 bg-white px-3.5 py-2.5 outline-none"
+              className="input"
             />
           </div>
         </div>
@@ -65,11 +65,11 @@ export function ConvertRequestForm({
       <div>
         <span className="mb-1.5 block text-sm font-semibold">Assigned project members</span>
         {teamMembers.length === 0 ? (
-          <p className="text-sm text-ink/50">No active team members yet. Add one under Team first.</p>
+          <p className="text-sm text-muted">No active team members yet. Add one under Team first.</p>
         ) : (
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {teamMembers.map((member) => (
-              <label key={member.id} className="flex items-center gap-2 rounded-xl border border-black/10 px-3 py-2.5">
+              <label key={member.id} className="flex items-center gap-2 border border-black/10 px-3 py-2.5">
                 <input type="checkbox" name="memberIds" value={member.id} />
                 <span className="text-sm">{member.name}</span>
               </label>
@@ -79,7 +79,7 @@ export function ConvertRequestForm({
       </div>
 
       {state.error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-danger">
           {state.error}
         </p>
       )}

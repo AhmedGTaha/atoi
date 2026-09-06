@@ -21,7 +21,7 @@ export function PhoneInput({
 }) {
   return (
     <div
-      className={`flex overflow-hidden rounded-2xl border bg-white ${
+      className={`flex overflow-hidden  border bg-cream ${
         error ? "border-red-500" : "border-black/10"
       }`}
     >
@@ -32,7 +32,7 @@ export function PhoneInput({
         id="phone-country"
         value={country}
         onChange={(e) => onCountryChange(e.target.value as GccCountryCode)}
-        className="shrink-0 border-r border-black/10 bg-blue-light/40 px-2.5 text-sm font-medium text-ink outline-none"
+        className="shrink-0 border-r border-black/10 bg-blue-light/40 px-2.5 text-sm font-medium text-ink"
         aria-label="Country code"
       >
         {GCC_COUNTRY_CODES.map((code) => (
@@ -50,7 +50,7 @@ export function PhoneInput({
         placeholder={placeholder}
         aria-describedby={describedById}
         aria-invalid={!!error}
-        className="w-full min-w-0 flex-1 px-3.5 py-3.5 outline-none placeholder:text-black/40"
+        className="w-full min-w-0 flex-1 px-3.5 py-3.5 placeholder:text-muted"
       />
     </div>
   );

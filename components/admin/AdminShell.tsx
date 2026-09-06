@@ -10,19 +10,20 @@ export function AdminShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-dvh bg-cream-dim/40 lg:flex">
-      <aside className="border-b border-black/10 bg-white p-5 lg:w-64 lg:shrink-0 lg:border-b-0 lg:border-e lg:p-6">
-        <Link href="/admin" className="text-xl font-extrabold tracking-tight">
-          atrio <span className="text-ink/40">admin</span>
+    <div className="app-shell">
+      <aside className="app-sidebar">
+        <Link href="/admin" className="brand">
+          ATOI <span className="section-marker">/ Admin</span>
         </Link>
+        <Link href="/" className="mt-3 block text-xs text-muted hover:text-ink">← Public website</Link>
         <div className="mt-6">
           <AdminNav />
         </div>
       </aside>
 
-      <div className="flex-1">
-        <header className="flex items-center justify-between border-b border-black/10 bg-white px-5 py-4 lg:px-8">
-          <p className="text-sm text-ink/60">
+      <div className="min-w-0">
+        <header className="app-topbar">
+          <p className="text-sm text-muted">
             Signed in as <span className="font-semibold text-ink">{adminName}</span>
           </p>
           <form action={logoutAdminAction}>
@@ -31,7 +32,7 @@ export function AdminShell({
             </button>
           </form>
         </header>
-        <main className="p-5 lg:p-8">{children}</main>
+        <main id="main-content" className="app-main">{children}</main>
       </div>
     </div>
   );

@@ -11,11 +11,11 @@ export default async function TermsPage() {
   const settings = await getCompanySettings();
 
   return (
-    <div className="mx-auto max-w-2xl px-5 py-16">
+    <main id="main-content" className="legal-page">
       <Link href="/" className="text-sm font-semibold text-blue-dark hover:underline">
         ← Back home
       </Link>
-      <h1 className="mt-6 text-3xl font-extrabold tracking-tight">Terms of Service</h1>
+      <h1 className="mt-6 text-3xl font-semibold tracking-normal">Terms of Service</h1>
       <div className="mt-6 space-y-4 text-ink/70">
         <p>
           By submitting a project request or using the {settings.companyName} customer portal,
@@ -34,6 +34,6 @@ export default async function TermsPage() {
           with any questions.
         </p>
       </div>
-    </div>
+    </main>
   );
 }

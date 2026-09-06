@@ -53,11 +53,11 @@ export function SettingsForm({ settings }: { settings: CompanySettings }) {
       </div>
 
       {state.error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-danger">
           {state.error}
         </p>
       )}
-      {state.success && <p className="text-sm text-green-700">Settings saved.</p>}
+      {state.success && <p role="status" className="text-sm text-success">Settings saved.</p>}
 
       <Button type="submit" variant="primaryDark" disabled={isPending}>
         {isPending ? "Saving…" : "Save settings"}

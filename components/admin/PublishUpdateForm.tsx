@@ -23,12 +23,12 @@ export function PublishUpdateForm({ projectId }: { projectId: string }) {
       <AdminTextarea label="Project update" name="body" required rows={4} placeholder="What changed since the last update?" />
 
       {state.error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-danger">
           {state.error}
         </p>
       )}
       {state.success && (
-        <p className={state.emailSent ? "text-sm text-green-700" : "text-sm text-amber-700"}>
+        <p role="status" className={state.emailSent ? "text-sm text-success" : "text-sm text-warning"}>
           {state.emailSent
             ? "Update published and emailed to the customer."
             : "Update published, but the email failed to send. It's still visible in the portal."}

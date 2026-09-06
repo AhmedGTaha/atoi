@@ -42,11 +42,11 @@ export function ProjectEditForm({
       <div>
         <span className="mb-1.5 block text-sm font-semibold">Assigned project members</span>
         {teamMembers.length === 0 ? (
-          <p className="text-sm text-ink/50">No active team members.</p>
+          <p className="text-sm text-muted">No active team members.</p>
         ) : (
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {teamMembers.map((member) => (
-              <label key={member.id} className="flex items-center gap-2 rounded-xl border border-black/10 px-3 py-2.5">
+              <label key={member.id} className="flex items-center gap-2 border border-black/10 px-3 py-2.5">
                 <input
                   type="checkbox"
                   name="memberIds"
@@ -55,7 +55,7 @@ export function ProjectEditForm({
                 />
                 <span className="text-sm">
                   {member.name}
-                  {!member.isActive && <span className="text-ink/40"> (inactive)</span>}
+                  {!member.isActive && <span className="text-muted"> (inactive)</span>}
                 </span>
               </label>
             ))}
@@ -64,11 +64,11 @@ export function ProjectEditForm({
       </div>
 
       {state.error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-danger">
           {state.error}
         </p>
       )}
-      {state.success && <p className="text-sm text-green-700">Saved.</p>}
+      {state.success && <p role="status" className="text-sm text-success">Saved.</p>}
 
       <Button type="submit" variant="primaryDark" disabled={isPending}>
         {isPending ? "Saving…" : "Save changes"}

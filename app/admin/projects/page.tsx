@@ -22,12 +22,13 @@ export default async function AdminProjectsPage({
       <form className="mb-5 flex flex-wrap gap-3">
         <input
           type="search"
+          aria-label="Search projects"
           name="q"
           defaultValue={q}
           placeholder="Search by project, customer, email…"
-          className="min-w-[240px] flex-1 rounded-xl border border-black/10 bg-white px-3.5 py-2.5 outline-none"
+          className="min-w-[240px] flex-1 border border-black/10 bg-cream px-3.5 py-2.5"
         />
-        <select name="status" defaultValue={validStatus ?? ""} className="rounded-xl border border-black/10 bg-white px-3.5 py-2.5">
+        <select aria-label="Project status" name="status" defaultValue={validStatus ?? ""} className="border border-black/10 bg-cream px-3.5 py-2.5">
           <option value="">All statuses</option>
           {PROJECT_STATUSES.map((s) => (
             <option key={s} value={s}>
@@ -35,7 +36,7 @@ export default async function AdminProjectsPage({
             </option>
           ))}
         </select>
-        <button type="submit" className="rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-white">
+        <button type="submit" className="btn btn-primary">
           Filter
         </button>
       </form>
@@ -46,7 +47,7 @@ export default async function AdminProjectsPage({
         <Card className="overflow-x-auto p-0">
           <table className="w-full min-w-[720px] text-sm">
             <thead>
-              <tr className="border-b border-black/10 text-ink/50">
+              <tr className="border-b border-black/10 text-muted">
                 <th className="px-5 py-3 text-start font-medium">Project</th>
                 <th className="px-5 py-3 text-start font-medium">Customer</th>
                 <th className="px-5 py-3 text-start font-medium">Status</th>
@@ -73,7 +74,7 @@ export default async function AdminProjectsPage({
                   <td className="px-5 py-3 text-ink/70">
                     {p.members.map((m) => m.teamMember.name).join(", ") || "—"}
                   </td>
-                  <td className="px-5 py-3 text-ink/60">{p.updatedAt.toLocaleDateString()}</td>
+                  <td className="px-5 py-3 text-muted">{p.updatedAt.toLocaleDateString()}</td>
                 </tr>
               ))}
             </tbody>

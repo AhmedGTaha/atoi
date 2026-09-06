@@ -34,13 +34,13 @@ export function WorkDetailModal({
           type="button"
           onClick={onClose}
           aria-label={dict.modal.close}
-          className="absolute end-5 top-5 flex h-9 w-9 items-center justify-center rounded-full bg-ink text-white hover:bg-black/80"
+          className="absolute z-20 end-5 top-5 flex h-11 w-11 items-center justify-center bg-ink text-white hover:bg-black/80"
         >
           <CloseIcon />
         </button>
 
         {project.images[0] && (
-          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl">
+          <div className="relative aspect-[16/10] w-full overflow-hidden">
             <Image
               src={project.images[0].publicUrl}
               alt={title}
@@ -56,7 +56,7 @@ export function WorkDetailModal({
             {project.category}
           </p>
         )}
-        <h2 id={titleId} className="mt-2 text-3xl font-extrabold tracking-tight">
+        <h2 id={titleId} className="mt-2 pe-10 text-3xl font-semibold tracking-normal">
           {title}
         </h2>
         <p className="mt-3 text-ink/70">{description}</p>
@@ -64,7 +64,7 @@ export function WorkDetailModal({
         {project.images.length > 1 && (
           <div className="mt-6 grid grid-cols-3 gap-3">
             {project.images.slice(1).map((img) => (
-              <div key={img.id} className="relative aspect-square overflow-hidden rounded-xl">
+              <div key={img.id} className="relative aspect-square overflow-hidden">
                 <Image
                   src={img.publicUrl}
                   alt={locale === "ar" ? img.altAr ?? "" : img.altEn ?? ""}
@@ -88,7 +88,7 @@ export function WorkDetailModal({
             href={project.liveUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-blue-dark px-6 text-sm font-semibold text-white"
+            className="mt-6 btn btn-primary"
           >
             {dict.work.liveSite}
           </a>
@@ -100,8 +100,8 @@ export function WorkDetailModal({
 
 function DetailBlock({ label, text }: { label: string; text: string }) {
   return (
-    <div className="rounded-2xl bg-cream-dim/70 p-4">
-      <p className="text-xs font-bold uppercase tracking-wide text-ink/50">{label}</p>
+    <div className="bg-cream-dim/70 p-4">
+      <p className="text-xs font-bold uppercase tracking-wide text-muted">{label}</p>
       <p className="mt-2 text-sm text-ink/80">{text}</p>
     </div>
   );
@@ -110,7 +110,7 @@ function DetailBlock({ label, text }: { label: string; text: string }) {
 function CloseIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M1 1L15 15M15 1L1 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M1 1L15 15M15 1L1 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
