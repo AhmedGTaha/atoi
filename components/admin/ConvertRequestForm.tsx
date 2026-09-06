@@ -69,6 +69,7 @@ export function ConvertRequestForm({
           <div className="flex gap-2">
             <select
               name="phoneCountry"
+              aria-label="Country code"
               defaultValue={request.phoneCountry}
               className="border border-rule bg-cream px-2.5 py-2.5"
             >
@@ -80,6 +81,9 @@ export function ConvertRequestForm({
             </select>
             <input
               name="phoneNumber"
+              aria-label="Phone number"
+              type="tel"
+              autoComplete="tel-national"
               defaultValue={request.phoneE164.replace(
                 GCC_COUNTRIES[request.phoneCountry].dialCode,
                 "",

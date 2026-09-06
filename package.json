@@ -17,8 +17,11 @@
     "test:watch": "vitest",
     "test:e2e:seed": "tsx --env-file=.env.e2e tests/e2e/seed.ts",
     "test:e2e": "npm run test:e2e:seed && playwright test",
-    "format": "prettier --write \"app/**/{page,layout,loading,error,not-found}.tsx\" app/globals.css \"components/**/*.tsx\" tests/e2e/design-system.spec.ts",
-    "format:check": "prettier --check \"app/**/{page,layout,loading,error,not-found}.tsx\" app/globals.css \"components/**/*.tsx\" tests/e2e/design-system.spec.ts"
+    "format": "prettier --write \"app/**/{page,layout,loading,error,not-found}.tsx\" app/globals.css \"components/**/*.tsx\" tests/e2e/design-system.spec.ts \"scripts/**/*.mjs\" package.json docs/ATOI-design-system.md",
+    "format:check": "prettier --check \"app/**/{page,layout,loading,error,not-found}.tsx\" app/globals.css \"components/**/*.tsx\" tests/e2e/design-system.spec.ts \"scripts/**/*.mjs\" package.json docs/ATOI-design-system.md",
+    "prebuild": "node scripts/prepare-data-cache.mjs",
+    "predev": "node scripts/prepare-data-cache.mjs",
+    "prestart": "node scripts/prepare-data-cache.mjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

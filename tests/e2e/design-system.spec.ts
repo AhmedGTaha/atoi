@@ -103,6 +103,7 @@ async function reviewRoutes(
         .toEqual([]);
       if (width === 1440 || width === 390)
         await page.screenshot({
+          animations: "disabled",
           path: outputPath(
             `${route.replace(/[^a-z0-9]/gi, "-") || "home"}-${width}.png`,
           ),
@@ -197,6 +198,7 @@ test("portal routes and Arabic layout remain usable", async ({
     ).toBe(true);
   }
   await page.screenshot({
+    animations: "disabled",
     path: info.outputPath("portal-arabic-390.png"),
     fullPage: true,
   });
@@ -215,12 +217,18 @@ test("mobile navigation and dialogs trap focus and restore it", async ({
   expect(
     await dialog.evaluate((el) => el.contains(document.activeElement)),
   ).toBe(true);
-  await page.screenshot({ path: info.outputPath("mobile-menu.png") });
+  await page.screenshot({
+    animations: "disabled",
+    path: info.outputPath("mobile-menu.png"),
+  });
   await page.keyboard.press("Escape");
   await expect(menu).toBeFocused();
   await page.getByRole("button", { name: "Start a project" }).first().click();
   await expect(page.getByRole("dialog")).toBeVisible();
-  await page.screenshot({ path: info.outputPath("enquiry-mobile.png") });
+  await page.screenshot({
+    animations: "disabled",
+    path: info.outputPath("enquiry-mobile.png"),
+  });
   expect(
     await page.evaluate(() =>
       [...document.querySelectorAll("[id]")]
@@ -233,5 +241,8 @@ test("mobile navigation and dialogs trap focus and restore it", async ({
   await expect(
     page.getByRole("dialog").getByRole("heading", { name: "Review fixture" }),
   ).toBeVisible();
-  await page.screenshot({ path: info.outputPath("portfolio-dialog.png") });
+  await page.screenshot({
+    animations: "disabled",
+    path: info.outputPath("portfolio-dialog.png"),
+  });
 });
