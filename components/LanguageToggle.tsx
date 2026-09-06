@@ -1,28 +1,31 @@
 "use client";
 
 import { useTransition } from "react";
-import { useRouter } from "next/navigation";
 import { setLocaleAction } from "@/lib/i18n/actions";
 import type { Locale } from "@/lib/i18n/locale";
 import clsx from "clsx";
 
-export function LanguageToggle({ locale, className }: { locale: Locale; className?: string }) {
-  const router = useRouter();
+export function LanguageToggle({
+  locale,
+  className,
+}: {
+  locale: Locale;
+  className?: string;
+}) {
   const [isPending, startTransition] = useTransition();
 
   function switchTo(next: Locale) {
     if (next === locale || isPending) return;
     startTransition(async () => {
       await setLocaleAction(next);
-      router.refresh();
     });
   }
 
   return (
     <div
       className={clsx(
-        "inline-flex items-center gap-1  border border-black/15 px-1 py-1 text-sm font-medium",
-        className
+        "inline-flex items-center gap-1  border border-rule px-1 py-1 text-sm font-medium",
+        className,
       )}
       role="group"
       aria-label="Language"
@@ -34,7 +37,9 @@ export function LanguageToggle({ locale, className }: { locale: Locale; classNam
         aria-pressed={locale === "en"}
         className={clsx(
           " px-2.5 py-1 transition-colors",
-          locale === "en" ? "bg-blue-dark text-white" : "text-muted hover:text-ink"
+          locale === "en"
+            ? "bg-blue-dark text-cream"
+            : "text-muted hover:text-ink",
         )}
       >
         EN
@@ -49,7 +54,9 @@ export function LanguageToggle({ locale, className }: { locale: Locale; classNam
         aria-pressed={locale === "ar"}
         className={clsx(
           " px-2.5 py-1 transition-colors",
-          locale === "ar" ? "bg-blue-dark text-white" : "text-muted hover:text-ink"
+          locale === "ar"
+            ? "bg-blue-dark text-cream"
+            : "text-muted hover:text-ink",
         )}
       >
         عربي

@@ -67,6 +67,15 @@ async function main() {
     },
   });
 
+  await prisma.portfolioProject.create({
+    data: {
+      titleEn: "Review fixture", titleAr: "مشروع تجريبي",
+      descriptionEn: "A portfolio record used only in the test database.",
+      descriptionAr: "مشروع لاختبار الواجهة فقط.",
+      published: true, problemEn: "Test problem", builtEn: "Test build", resultEn: "Test result",
+    },
+  });
+
   console.log("E2E fixtures seeded.");
 }
 

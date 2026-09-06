@@ -11,15 +11,21 @@ export default async function SetPasswordPage({
 }: {
   searchParams: Promise<{ token?: string; mode?: string }>;
 }) {
-  const [settings, { token, mode }] = await Promise.all([getCompanySettings(), searchParams]);
+  const [settings, { token, mode }] = await Promise.all([
+    getCompanySettings(),
+    searchParams,
+  ]);
 
   if (!token) {
     return (
       <AuthCard title="Invalid link" companyName={settings.companyName}>
         <p className="text-ink/70">
-          This link is missing its token. Please use the link from your email, or request a new one.
+          This link is missing its token. Please use the link from your email,
+          or request a new one.
         </p>
-        <Link className="btn btn-primary mt-6" href="/forgot-password">Request a new link</Link>
+        <Link className="btn btn-primary mt-6" href="/forgot-password">
+          Request a new link
+        </Link>
       </AuthCard>
     );
   }

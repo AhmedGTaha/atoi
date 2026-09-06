@@ -7,14 +7,23 @@ import { PhoneInput } from "./PhoneInput";
 import { useStartProjectModal } from "./StartProjectModalContext";
 import { submitProjectRequestAction } from "@/app/actions/projectRequestActions";
 import { BUSINESS_TYPES } from "@/lib/validation/shared";
-import { DEFAULT_GCC_COUNTRY, type GccCountryCode } from "@/lib/validation/phone";
+import {
+  DEFAULT_GCC_COUNTRY,
+  type GccCountryCode,
+} from "@/lib/validation/phone";
 import type { Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Button } from "@/components/ui/Button";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export function StartProjectModal({ locale, inline = false }: { locale: Locale; inline?: boolean }) {
+export function StartProjectModal({
+  locale,
+  inline = false,
+}: {
+  locale: Locale;
+  inline?: boolean;
+}) {
   const { isOpen, close, triggerRef } = useStartProjectModal();
   const dict = getDictionary(locale);
   const titleId = useId();
@@ -23,7 +32,8 @@ export function StartProjectModal({ locale, inline = false }: { locale: Locale; 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneCountry, setPhoneCountry] = useState<GccCountryCode>(DEFAULT_GCC_COUNTRY);
+  const [phoneCountry, setPhoneCountry] =
+    useState<GccCountryCode>(DEFAULT_GCC_COUNTRY);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [website, setWebsite] = useState("");
 
@@ -85,132 +95,165 @@ export function StartProjectModal({ locale, inline = false }: { locale: Locale; 
   }
 
   const contents = (
-      <div className="relative p-6 sm:p-8">
-        {!inline && <button
+    <div className="relative p-6 sm:p-8">
+      {!inline && (
+        <button
           type="button"
           onClick={close}
           aria-label={dict.modal.close}
-          className="absolute z-20 end-5 top-5 flex h-11 w-11 items-center justify-center bg-ink text-white hover:bg-black/80"
+          className="absolute z-20 end-5 top-5 flex h-11 w-11 items-center justify-center bg-ink text-cream hover:bg-blue-dark"
         >
           <CloseIcon />
-        </button>}
+        </button>
+      )}
 
-        {status === "success" ? (
-          <SuccessView
-            dict={dict}
-            confirmationEmailSent={confirmationEmailSent}
-            onDone={inline ? resetForm : close}
-            titleId={titleId}
-          />
-        ) : (
-          <form onSubmit={handleSubmit} noValidate>
-            <p className="text-sm font-semibold text-blue-dark">{dict.modal.eyebrow}</p>
-            <h2 id={titleId} className="mt-2 pe-10 text-3xl font-semibold tracking-normal sm:text-4xl">
-              {dict.modal.heading}
-            </h2>
-            <p className="mt-2 text-muted">{dict.modal.subheading}</p>
+      {status === "success" ? (
+        <SuccessView
+          dict={dict}
+          confirmationEmailSent={confirmationEmailSent}
+          onDone={inline ? resetForm : close}
+          titleId={titleId}
+        />
+      ) : (
+        <form onSubmit={handleSubmit} noValidate>
+          <p className="text-sm font-semibold text-blue-dark">
+            {dict.modal.eyebrow}
+          </p>
+          <h2
+            id={titleId}
+            className="mt-2 pe-10 text-3xl font-semibold tracking-normal sm:text-4xl"
+          >
+            {dict.modal.heading}
+          </h2>
+          <p className="mt-2 text-muted">{dict.modal.subheading}</p>
 
-            {/* Honeypot: hidden from real users, catches naive bots. */}
-            <div className="absolute -left-[9999px]" aria-hidden="true">
-              <label htmlFor={`${titleId}-website`}>Website</label>
+          {/* Honeypot: hidden from real users, catches naive bots. */}
+          <div className="absolute -left-[9999px]" aria-hidden="true">
+            <label htmlFor={`${titleId}-website`}>Website</label>
+            <input
+              id={`${titleId}-website`}
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+            />
+          </div>
+
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <Field label={dict.modal.businessTypeLabel}>
+              <select
+                value={businessType}
+                onChange={(e) => setBusinessType(e.target.value)}
+                className="input"
+              >
+                <option value="">{dict.modal.businessTypePlaceholder}</option>
+                {BUSINESS_TYPES.map((type) => (
+                  <option key={type} value={type}>
+                    {dict.businessTypes[type]}
+                  </option>
+                ))}
+              </select>
+            </Field>
+
+            <Field label={dict.modal.nameLabel}>
               <input
-                id={`${titleId}-website`}
-                name="website"
                 type="text"
-                tabIndex={-1}
-                autoComplete="off"
-                value={website}
-                onChange={(e) => setWebsite(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder={dict.modal.namePlaceholder}
+                className="input"
               />
-            </div>
+            </Field>
+          </div>
 
-            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Field label={dict.modal.businessTypeLabel}>
-                <select
-                  value={businessType}
-                  onChange={(e) => setBusinessType(e.target.value)}
-                  className="input"
-                >
-                  <option value="">{dict.modal.businessTypePlaceholder}</option>
-                  {BUSINESS_TYPES.map((type) => (
-                    <option key={type} value={type}>
-                      {dict.businessTypes[type]}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-
-              <Field label={dict.modal.nameLabel}>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder={dict.modal.namePlaceholder}
-                  className="input"
-                />
-              </Field>
-            </div>
-
-            <div className="mt-4">
-              <Field label={dict.modal.descriptionLabel} required error={fieldErrors.description}>
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder={dict.modal.descriptionPlaceholder}
-                  required
-                  minLength={10}
-                  maxLength={5000}
-                  rows={4}
-                  aria-invalid={!!fieldErrors.description}
-                  className="input"
-                />
-              </Field>
-            </div>
-
-            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Field label={dict.modal.emailLabel} required error={fieldErrors.email}>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={dict.modal.emailPlaceholder}
-                  required
-                  aria-invalid={!!fieldErrors.email}
-                  className="input"
-                />
-              </Field>
-
-              <Field label={dict.modal.phoneLabel} required error={fieldErrors.phoneNumber}>
-                <PhoneInput
-                  country={phoneCountry}
-                  onCountryChange={setPhoneCountry}
-                  number={phoneNumber}
-                  onNumberChange={setPhoneNumber}
-                  placeholder={dict.modal.phonePlaceholder}
-                  error={fieldErrors.phoneNumber}
-                />
-              </Field>
-            </div>
-
-            {fieldErrors.form && (
-              <p role="alert" className="mt-4 text-sm text-danger">
-                {fieldErrors.form}
-              </p>
-            )}
-
-            <Button
-              type="submit"
-              variant="primaryBlue"
-              disabled={status === "submitting"}
-              className="mt-6 w-full"
+          <div className="mt-4">
+            <Field
+              label={dict.modal.descriptionLabel}
+              required
+              error={fieldErrors.description}
             >
-              {status === "submitting" ? dict.modal.submitting : dict.modal.submit}
-            </Button>
-          </form>
-        )}
-      </div>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder={dict.modal.descriptionPlaceholder}
+                required
+                minLength={10}
+                maxLength={5000}
+                rows={4}
+                aria-invalid={!!fieldErrors.description}
+                className="input"
+              />
+            </Field>
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <Field
+              label={dict.modal.emailLabel}
+              required
+              error={fieldErrors.email}
+            >
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={dict.modal.emailPlaceholder}
+                required
+                aria-invalid={!!fieldErrors.email}
+                className="input"
+              />
+            </Field>
+
+            <Field
+              label={dict.modal.phoneLabel}
+              required
+              error={fieldErrors.phoneNumber}
+            >
+              <PhoneInput
+                country={phoneCountry}
+                onCountryChange={setPhoneCountry}
+                number={phoneNumber}
+                onNumberChange={setPhoneNumber}
+                placeholder={dict.modal.phonePlaceholder}
+                error={fieldErrors.phoneNumber}
+              />
+            </Field>
+          </div>
+
+          {fieldErrors.form && (
+            <p role="alert" className="mt-4 text-sm text-danger">
+              {fieldErrors.form}
+            </p>
+          )}
+
+          <Button
+            type="submit"
+            variant="primaryBlue"
+            disabled={status === "submitting"}
+            className="mt-6 w-full"
+          >
+            {status === "submitting"
+              ? dict.modal.submitting
+              : dict.modal.submit}
+          </Button>
+        </form>
+      )}
+    </div>
   );
-  return inline ? <BlueprintPanel>{contents}</BlueprintPanel> : <Modal isOpen={isOpen} onClose={close} titleId={titleId} restoreFocusTo={triggerRef} className="max-w-[560px]">{contents}</Modal>;
+  return inline ? (
+    <BlueprintPanel>{contents}</BlueprintPanel>
+  ) : (
+    <Modal
+      isOpen={isOpen}
+      onClose={close}
+      titleId={titleId}
+      restoreFocusTo={triggerRef}
+      className="max-w-[560px]"
+    >
+      {contents}
+    </Modal>
+  );
 }
 
 function Field({
@@ -259,7 +302,9 @@ function SuccessView({
         {dict.success.heading}
       </h2>
       <p className="mt-3 max-w-sm text-black/70">
-        {confirmationEmailSent ? dict.success.bodyWithEmail : dict.success.bodyWithoutEmail}
+        {confirmationEmailSent
+          ? dict.success.bodyWithEmail
+          : dict.success.bodyWithoutEmail}
       </p>
       <Button variant="primaryBlue" onClick={onDone} className="mt-8">
         {dict.success.done}
@@ -270,16 +315,39 @@ function SuccessView({
 
 function CloseIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M1 1L15 15M15 1L1 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M1 1L15 15M15 1L1 15"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
 function CheckIcon() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M5 13L10 18L19 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M5 13L10 18L19 7"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

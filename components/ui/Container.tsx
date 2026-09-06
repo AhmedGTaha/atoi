@@ -9,9 +9,5 @@ export function Container({
   className?: string;
   as?: React.ElementType;
 }) {
-  return (
-    <As className={clsx("site-container", className)}>
-      {children}
-    </As>
-  );
+  return <As className={clsx("site-container", className)}>{children}</As>;
 }

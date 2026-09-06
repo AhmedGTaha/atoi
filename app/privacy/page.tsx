@@ -12,20 +12,27 @@ export default async function PrivacyPage() {
 
   return (
     <main id="main-content" className="legal-page">
-      <Link href="/" className="text-sm font-semibold text-blue-dark hover:underline">
+      <Link
+        href="/"
+        className="text-sm font-semibold text-blue-dark hover:underline"
+      >
         ← Back home
       </Link>
-      <h1 className="mt-6 text-3xl font-semibold tracking-normal">Privacy Policy</h1>
+      <h1 className="mt-6 text-3xl font-semibold tracking-normal">
+        Privacy Policy
+      </h1>
       <div className="mt-6 space-y-4 text-ink/70">
         <p>
-          {settings.companyName} collects the information you provide when you submit a project
-          request or use the customer portal — such as your name, business name, email address
-          and phone number — solely to respond to your request and deliver our services.
+          {settings.companyName} collects the information you provide when you
+          submit a project request or use the customer portal — such as your
+          name, business name, email address and phone number — solely to
+          respond to your request and deliver our services.
         </p>
         <p>
-          We do not sell your information. We use Resend to send transactional emails (request
-          confirmations, account setup, project updates, and support notifications) and a
-          PostgreSQL database to store your request and project information securely.
+          We do not sell your information. We use Resend to send transactional
+          emails (request confirmations, account setup, project updates, and
+          support notifications) and a PostgreSQL database to store your request
+          and project information securely.
         </p>
         <p>
           Contact us at{" "}

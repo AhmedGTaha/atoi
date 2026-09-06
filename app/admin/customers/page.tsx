@@ -9,7 +9,10 @@ export default async function AdminCustomersPage() {
 
   return (
     <div>
-      <PageHeader title="Customers" description="Customer accounts created from project requests." />
+      <PageHeader
+        title="Customers"
+        description="Customer accounts created from project requests."
+      />
 
       {customers.length === 0 ? (
         <EmptyState>No customers yet.</EmptyState>
@@ -17,7 +20,7 @@ export default async function AdminCustomersPage() {
         <Card className="overflow-x-auto p-0">
           <table className="w-full min-w-[640px] text-sm">
             <thead>
-              <tr className="border-b border-black/10 text-muted">
+              <tr className="border-b border-rule text-muted">
                 <th className="px-5 py-3 text-start font-medium">Customer</th>
                 <th className="px-5 py-3 text-start font-medium">Email</th>
                 <th className="px-5 py-3 text-start font-medium">Phone</th>
@@ -27,9 +30,15 @@ export default async function AdminCustomersPage() {
             </thead>
             <tbody>
               {customers.map((c) => (
-                <tr key={c.id} className="border-b border-black/5 last:border-0 hover:bg-black/[0.02]">
+                <tr
+                  key={c.id}
+                  className="border-b border-rule-soft last:border-0 hover:bg-cream-dim"
+                >
                   <td className="px-5 py-3">
-                    <Link href={`/admin/customers/${c.id}`} className="font-semibold hover:underline">
+                    <Link
+                      href={`/admin/customers/${c.id}`}
+                      className="font-semibold hover:underline"
+                    >
                       {c.businessName || c.name || c.email}
                     </Link>
                   </td>

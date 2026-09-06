@@ -10,18 +10,21 @@ export default async function AdminSettingsPage() {
 
   return (
     <div>
-      <PageHeader title="Settings" description="Company details used across the public site and emails." />
+      <PageHeader
+        title="Settings"
+        description="Company details used across the public site and emails."
+      />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Card>
-          <h2 className="font-bold">Logo</h2>
+          <h2 className="font-semibold">Logo</h2>
           <div className="mt-4">
             <LogoUploadForm currentLogoUrl={settings.logoPublicUrl} />
           </div>
         </Card>
 
         <Card className="lg:col-span-2">
-          <h2 className="font-bold">Company details</h2>
+          <h2 className="font-semibold">Company details</h2>
           <div className="mt-4">
             <SettingsForm settings={settings} />
           </div>

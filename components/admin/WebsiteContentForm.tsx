@@ -1,7 +1,10 @@
 "use client";
 
 import { useActionState } from "react";
-import { saveWebsiteContentAction, type WebsiteContentFormState } from "@/app/actions/websiteContentActions";
+import {
+  saveWebsiteContentAction,
+  type WebsiteContentFormState,
+} from "@/app/actions/websiteContentActions";
 import { Button } from "@/components/ui/Button";
 import type { WebsiteContentField } from "@/lib/content/defaultWebsiteContent";
 import type { WebsiteContentMap } from "@/lib/services/websiteContentService";
@@ -25,7 +28,10 @@ export function WebsiteContentForm({
   fields: WebsiteContentField[];
   content: WebsiteContentMap;
 }) {
-  const [state, formAction, isPending] = useActionState(saveWebsiteContentAction, initialState);
+  const [state, formAction, isPending] = useActionState(
+    saveWebsiteContentAction,
+    initialState,
+  );
 
   const sections = Array.from(new Set(fields.map((f) => f.section)));
 
@@ -33,17 +39,27 @@ export function WebsiteContentForm({
     <form action={formAction} className="space-y-8">
       {sections.map((section) => (
         <section key={section}>
-          <h2 className="mb-4 text-lg font-bold">{SECTION_LABELS[section]}</h2>
+          <h2 className="mb-4 text-lg font-semibold">
+            {SECTION_LABELS[section]}
+          </h2>
           <div className="space-y-5">
             {fields
               .filter((f) => f.section === section)
               .map((field) => {
-                const current = content[field.key] ?? { valueEn: field.valueEn, valueAr: field.valueAr };
+                const current = content[field.key] ?? {
+                  valueEn: field.valueEn,
+                  valueAr: field.valueAr,
+                };
                 const Control = field.multiline ? "textarea" : "input";
                 return (
-                  <div key={field.key} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div
+                    key={field.key}
+                    className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+                  >
                     <label className="block">
-                      <span className="mb-1.5 block text-sm font-semibold">{field.label} (English)</span>
+                      <span className="mb-1.5 block text-sm font-semibold">
+                        {field.label} (English)
+                      </span>
                       <Control
                         name={`${field.key}__en`}
                         defaultValue={current.valueEn}
@@ -52,7 +68,9 @@ export function WebsiteContentForm({
                       />
                     </label>
                     <label className="block">
-                      <span className="mb-1.5 block text-sm font-semibold">{field.label} (Arabic)</span>
+                      <span className="mb-1.5 block text-sm font-semibold">
+                        {field.label} (Arabic)
+                      </span>
                       <Control
                         name={`${field.key}__ar`}
                         dir="rtl"
@@ -73,7 +91,11 @@ export function WebsiteContentForm({
           {state.error}
         </p>
       )}
-      {state.success && <p role="status" className="text-sm text-success">Content saved and published.</p>}
+      {state.success && (
+        <p role="status" className="text-sm text-success">
+          Content saved and published.
+        </p>
+      )}
 
       <Button type="submit" variant="primaryDark" disabled={isPending}>
         {isPending ? "Saving…" : "Save & publish"}

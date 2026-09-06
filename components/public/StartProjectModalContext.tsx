@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useCallback, useContext, useRef, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 
 interface ModalContextValue {
   isOpen: boolean;
@@ -11,7 +17,11 @@ interface ModalContextValue {
 
 const ModalContext = createContext<ModalContextValue | null>(null);
 
-export function StartProjectModalContextProvider({ children }: { children: React.ReactNode }) {
+export function StartProjectModalContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLElement | null>(null);
 
@@ -33,6 +43,9 @@ export function StartProjectModalContextProvider({ children }: { children: React
 
 export function useStartProjectModal() {
   const ctx = useContext(ModalContext);
-  if (!ctx) throw new Error("useStartProjectModal must be used within StartProjectModalContextProvider");
+  if (!ctx)
+    throw new Error(
+      "useStartProjectModal must be used within StartProjectModalContextProvider",
+    );
   return ctx;
 }

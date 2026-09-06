@@ -23,21 +23,33 @@ export function Footer({
       <Container className="flex flex-col gap-10 sm:flex-row sm:justify-between">
         <div className="max-w-xs">
           <Logo name={settings.companyName} logoUrl={settings.logoPublicUrl} />
-          <p className="mt-4 text-muted">{t(content, "footer.tagline", locale)}</p>
+          <p className="mt-4 text-muted">
+            {t(content, "footer.tagline", locale)}
+          </p>
           <p className="mt-1 text-muted">{location}</p>
         </div>
 
         <div className="flex flex-wrap gap-12">
           <div>
-            <p className="text-sm font-bold text-muted">{dict.footer.contactHeading}</p>
+            <p className="text-sm font-bold text-muted">
+              {dict.footer.contactHeading}
+            </p>
             <ul className="mt-3 space-y-2">
               <li>
-                <a href={`mailto:${settings.companyEmail}`} className="hover:underline" dir="ltr">
+                <a
+                  href={`mailto:${settings.companyEmail}`}
+                  className="hover:underline"
+                  dir="ltr"
+                >
                   {settings.companyEmail}
                 </a>
               </li>
               <li>
-                <a href={`tel:${settings.companyPhone.replace(/\s/g, "")}`} className="hover:underline" dir="ltr">
+                <a
+                  href={`tel:${settings.companyPhone.replace(/\s/g, "")}`}
+                  className="hover:underline"
+                  dir="ltr"
+                >
                   {settings.companyPhone}
                 </a>
               </li>
@@ -58,18 +70,30 @@ export function Footer({
 
           {(settings.instagramUrl || settings.linkedinUrl) && (
             <div>
-              <p className="text-sm font-bold text-muted">{dict.footer.elsewhereHeading}</p>
+              <p className="text-sm font-bold text-muted">
+                {dict.footer.elsewhereHeading}
+              </p>
               <ul className="mt-3 space-y-2">
                 {settings.instagramUrl && (
                   <li>
-                    <a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                    <a
+                      href={settings.instagramUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline"
+                    >
                       {dict.footer.instagram}
                     </a>
                   </li>
                 )}
                 {settings.linkedinUrl && (
                   <li>
-                    <a href={settings.linkedinUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                    <a
+                      href={settings.linkedinUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline"
+                    >
                       {dict.footer.linkedin}
                     </a>
                   </li>
@@ -80,9 +104,10 @@ export function Footer({
         </div>
       </Container>
 
-      <Container className="mt-10 border-t border-black/10 pt-6">
+      <Container className="mt-10 border-t border-rule pt-6">
         <p className="text-sm text-muted">
-          © {new Date().getFullYear()} {settings.companyName}. {dict.footer.rights}
+          © {new Date().getFullYear()} {settings.companyName}.{" "}
+          {dict.footer.rights}
         </p>
       </Container>
     </footer>

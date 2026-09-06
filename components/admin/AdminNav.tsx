@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-
 const NAV_ITEMS = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/requests", label: "Requests" },
@@ -22,7 +21,9 @@ export function AdminNav() {
     <nav className="app-nav" aria-label="Admin">
       {NAV_ITEMS.map((item) => {
         const active =
-          item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
+          item.href === "/admin"
+            ? pathname === "/admin"
+            : pathname.startsWith(item.href);
         return (
           <Link
             key={item.href}

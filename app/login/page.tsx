@@ -15,10 +15,17 @@ export default async function CustomerLoginPage({
   const session = await getCustomerSession();
   if (session) redirect("/portal");
 
-  const [settings, { passwordSet }] = await Promise.all([getCompanySettings(), searchParams]);
+  const [settings, { passwordSet }] = await Promise.all([
+    getCompanySettings(),
+    searchParams,
+  ]);
 
   return (
-    <AuthCard title="Sign in" subtitle="Access your project portal." companyName={settings.companyName}>
+    <AuthCard
+      title="Sign in"
+      subtitle="Access your project portal."
+      companyName={settings.companyName}
+    >
       <CustomerLoginForm justSetPassword={passwordSet === "1"} />
     </AuthCard>
   );

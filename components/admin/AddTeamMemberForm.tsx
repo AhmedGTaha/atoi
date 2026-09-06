@@ -1,14 +1,20 @@
 "use client";
 
 import { useActionState, useEffect, useRef } from "react";
-import { createTeamMemberAction, type TeamFormState } from "@/app/actions/teamActions";
+import {
+  createTeamMemberAction,
+  type TeamFormState,
+} from "@/app/actions/teamActions";
 import { AdminInput } from "@/components/admin/ui";
 import { Button } from "@/components/ui/Button";
 
 const initialState: TeamFormState = {};
 
 export function AddTeamMemberForm() {
-  const [state, formAction, isPending] = useActionState(createTeamMemberAction, initialState);
+  const [state, formAction, isPending] = useActionState(
+    createTeamMemberAction,
+    initialState,
+  );
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -16,7 +22,11 @@ export function AddTeamMemberForm() {
   }, [state]);
 
   return (
-    <form ref={formRef} action={formAction} className="flex flex-wrap items-end gap-3">
+    <form
+      ref={formRef}
+      action={formAction}
+      className="flex flex-wrap items-end gap-3"
+    >
       <div className="w-48">
         <AdminInput label="Name" name="name" required />
       </div>

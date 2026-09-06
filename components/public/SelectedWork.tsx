@@ -29,7 +29,11 @@ export function SelectedWork({
         {projects.length === 0 ? (
           <p className="mt-10 empty-state">{dict.work.empty}</p>
         ) : (
-          <WorkGrid projects={projects} locale={locale} seeAllLabel={t(content, "work.seeAllLabel", locale)} />
+          <WorkGrid
+            projects={projects}
+            locale={locale}
+            seeAllLabel={t(content, "work.seeAllLabel", locale)}
+          />
         )}
       </Container>
     </section>

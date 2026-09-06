@@ -1,6 +1,11 @@
 "use client";
 
-import { GCC_COUNTRIES, GCC_COUNTRY_CODES, type GccCountryCode } from "@/lib/validation/phone";
+import { useId } from "react";
+import {
+  GCC_COUNTRIES,
+  GCC_COUNTRY_CODES,
+  type GccCountryCode,
+} from "@/lib/validation/phone";
 
 export function PhoneInput({
   country,
@@ -19,20 +24,18 @@ export function PhoneInput({
   error?: string;
   describedById?: string;
 }) {
+  const countryId = useId();
   return (
     <div
       className={`flex overflow-hidden  border bg-cream ${
-        error ? "border-red-500" : "border-black/10"
+        error ? "border-danger" : "border-rule"
       }`}
     >
-      <label className="sr-only" htmlFor="phone-country">
-        Country code
-      </label>
       <select
-        id="phone-country"
+        id={countryId}
         value={country}
         onChange={(e) => onCountryChange(e.target.value as GccCountryCode)}
-        className="shrink-0 border-r border-black/10 bg-blue-light/40 px-2.5 text-sm font-medium text-ink"
+        className="shrink-0 border-r border-rule bg-blue-light/40 px-2.5 text-sm font-medium text-ink"
         aria-label="Country code"
       >
         {GCC_COUNTRY_CODES.map((code) => (
@@ -43,6 +46,7 @@ export function PhoneInput({
       </select>
       <input
         type="tel"
+        aria-label={placeholder}
         inputMode="numeric"
         autoComplete="tel-national"
         value={number}

@@ -31,6 +31,6 @@ test.describe("Customer portal", () => {
     await expect(page).toHaveURL(/\/portal$/);
 
     await page.goto("/portal/projects/00000000-0000-0000-0000-000000000000");
-    await expect(page.getByText(/this page could not be found/i)).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Page not found" })).toBeVisible();
   });
 });

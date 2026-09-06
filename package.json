@@ -16,7 +16,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e:seed": "tsx --env-file=.env.e2e tests/e2e/seed.ts",
-    "test:e2e": "npm run test:e2e:seed && playwright test"
+    "test:e2e": "npm run test:e2e:seed && playwright test",
+    "format": "prettier --write \"app/**/{page,layout,loading,error,not-found}.tsx\" app/globals.css \"components/**/*.tsx\" tests/e2e/design-system.spec.ts",
+    "format:check": "prettier --check \"app/**/{page,layout,loading,error,not-found}.tsx\" app/globals.css \"components/**/*.tsx\" tests/e2e/design-system.spec.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -36,6 +38,7 @@
     "zod": "^4.5.4"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@eslint/eslintrc": "^3.3.7",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4",

@@ -1,6 +1,12 @@
 import Image from "next/image";
 
-export function Logo({ name, logoUrl }: { name: string; logoUrl?: string | null }) {
+export function Logo({
+  name,
+  logoUrl,
+}: {
+  name: string;
+  logoUrl?: string | null;
+}) {
   if (logoUrl) {
     return (
       <Image
@@ -14,5 +20,9 @@ export function Logo({ name, logoUrl }: { name: string; logoUrl?: string | null 
     );
   }
 
-  return <span className="brand">{name}</span>;
+  return (
+    <span className="brand">
+      {name.toLowerCase() === "atrio" ? "ATOI" : name}
+    </span>
+  );
 }

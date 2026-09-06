@@ -33,55 +33,79 @@ export default async function AdminProjectDetailPage({
       <PageHeader
         title={project.name}
         description={`Customer: ${project.customer.businessName || project.customer.name || project.customer.email}`}
-        action={<Badge label={statusLabel("en", project.status)} tone={project.status} />}
+        action={
+          <Badge
+            label={statusLabel("en", project.status)}
+            tone={project.status}
+          />
+        }
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <Card>
-            <h2 className="font-bold">Project information</h2>
+            <h2 className="font-semibold">Project information</h2>
             <div className="mt-4">
-              <ProjectEditForm project={project} teamMembers={teamMembers} currentMemberIds={currentMemberIds} />
+              <ProjectEditForm
+                project={project}
+                teamMembers={teamMembers}
+                currentMemberIds={currentMemberIds}
+              />
             </div>
           </Card>
 
           <Card>
-            <h2 className="font-bold">Send project update</h2>
+            <h2 className="font-semibold">Send project update</h2>
             <div className="mt-4">
               <PublishUpdateForm projectId={project.id} />
             </div>
           </Card>
 
           <Card>
-            <h2 className="font-bold">Update history</h2>
+            <h2 className="font-semibold">Update history</h2>
             <div className="mt-4 space-y-3">
-              {project.updates.length === 0 && <p className="text-sm text-muted">No updates yet.</p>}
+              {project.updates.length === 0 && (
+                <p className="text-sm text-muted">No updates yet.</p>
+              )}
               {project.updates.map((update) => (
-                <div key={update.id} className="border border-black/5 p-4">
+                <div key={update.id} className="border border-rule-soft p-4">
                   <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
                     <span>{update.createdAt.toLocaleString()}</span>
                     <span>
-                      {statusLabel("en", update.statusSnapshot)} · {update.progressSnapshot}% ·{" "}
-                      {update.emailDeliveryState === "SENT" ? "Emailed" : "Email failed"}
+                      {statusLabel("en", update.statusSnapshot)} ·{" "}
+                      {update.progressSnapshot}% ·{" "}
+                      {update.emailDeliveryState === "SENT"
+                        ? "Emailed"
+                        : "Email failed"}
                     </span>
                   </div>
-                  <p className="mt-2 whitespace-pre-wrap text-sm">{update.body}</p>
-                  <p className="mt-2 text-xs text-muted">by {update.author.name}</p>
+                  <p className="mt-2 whitespace-pre-wrap text-sm">
+                    {update.body}
+                  </p>
+                  <p className="mt-2 text-xs text-muted">
+                    by {update.author.name}
+                  </p>
                 </div>
               ))}
             </div>
           </Card>
 
           <Card>
-            <h2 className="font-bold">Support requests</h2>
+            <h2 className="font-semibold">Support requests</h2>
             <div className="mt-4 space-y-3">
               {project.supportRequests.length === 0 && (
-                <p className="text-sm text-muted">No support requests for this project.</p>
+                <p className="text-sm text-muted">
+                  No support requests for this project.
+                </p>
               )}
               {project.supportRequests.map((s) => (
-                <div key={s.id} className="border border-black/5 p-4">
-                  <p className="text-xs text-muted">{s.createdAt.toLocaleString()}</p>
-                  <p className="mt-2 whitespace-pre-wrap text-sm">{s.message}</p>
+                <div key={s.id} className="border border-rule-soft p-4">
+                  <p className="text-xs text-muted">
+                    {s.createdAt.toLocaleString()}
+                  </p>
+                  <p className="mt-2 whitespace-pre-wrap text-sm">
+                    {s.message}
+                  </p>
                 </div>
               ))}
             </div>
@@ -90,20 +114,32 @@ export default async function AdminProjectDetailPage({
 
         <div className="space-y-6">
           <Card>
-            <h2 className="font-bold">Customer contact</h2>
+            <h2 className="font-semibold">Customer contact</h2>
             <dl className="mt-4 space-y-3 text-sm">
               <Row label="Name" value={project.customer.name ?? "—"} />
-              <Row label="Business" value={project.customer.businessName ?? "—"} />
+              <Row
+                label="Business"
+                value={project.customer.businessName ?? "—"}
+              />
               <Row label="Email" value={project.customer.email} />
               <Row label="Phone" value={project.customer.phoneE164} />
-              <Row label="Account status" value={project.customer.accountStatus} />
+              <Row
+                label="Account status"
+                value={project.customer.accountStatus}
+              />
             </dl>
           </Card>
           <Card>
-            <h2 className="font-bold">Timeline</h2>
+            <h2 className="font-semibold">Timeline</h2>
             <dl className="mt-4 space-y-3 text-sm">
-              <Row label="Created" value={project.createdAt.toLocaleDateString()} />
-              <Row label="Last updated" value={project.updatedAt.toLocaleDateString()} />
+              <Row
+                label="Created"
+                value={project.createdAt.toLocaleDateString()}
+              />
+              <Row
+                label="Last updated"
+                value={project.updatedAt.toLocaleDateString()}
+              />
             </dl>
           </Card>
         </div>
@@ -114,7 +150,7 @@ export default async function AdminProjectDetailPage({
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-4 border-b border-black/5 pb-2">
+    <div className="flex items-center justify-between gap-4 border-b border-rule-soft pb-2">
       <dt className="text-muted">{label}</dt>
       <dd className="text-end font-medium">{value}</dd>
     </div>

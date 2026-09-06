@@ -27,11 +27,17 @@ export function Modal({
   useEffect(() => {
     if (!isOpen) return;
 
-    const previouslyFocused = restoreFocusTo?.current ?? (document.activeElement as HTMLElement | null);
+    const previouslyFocused =
+      restoreFocusTo?.current ?? (document.activeElement as HTMLElement | null);
     const dialog = dialogRef.current;
-    const siblings = Array.from(document.body.children).filter((el): el is HTMLElement => el instanceof HTMLElement && !el.contains(dialog));
-    const previousInert = siblings.map(el => el.inert);
-    siblings.forEach(el => { el.inert = true; });
+    const siblings = Array.from(document.body.children).filter(
+      (el): el is HTMLElement =>
+        el instanceof HTMLElement && !el.contains(dialog),
+    );
+    const previousInert = siblings.map((el) => el.inert);
+    siblings.forEach((el) => {
+      el.inert = true;
+    });
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -47,10 +53,14 @@ export function Modal({
       }
       if (e.key !== "Tab" || !dialog) return;
 
-      const nodes = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
-        (el) => el.offsetParent !== null
-      );
-      if (nodes.length === 0) { e.preventDefault(); dialog.focus(); return; }
+      const nodes = Array.from(
+        dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+      ).filter((el) => el.offsetParent !== null);
+      if (nodes.length === 0) {
+        e.preventDefault();
+        dialog.focus();
+        return;
+      }
 
       const first = nodes[0]!;
       const last = nodes[nodes.length - 1]!;
@@ -69,7 +79,9 @@ export function Modal({
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true);
       document.body.style.overflow = originalOverflow;
-      siblings.forEach((el, index) => { el.inert = previousInert[index]; });
+      siblings.forEach((el, index) => {
+        el.inert = previousInert[index];
+      });
       previouslyFocused?.focus?.();
     };
   }, [isOpen, onClose, restoreFocusTo]);
@@ -77,9 +89,12 @@ export function Modal({
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" role="presentation">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+      role="presentation"
+    >
       <div
-        className="absolute inset-0 bg-black/60"
+        className="absolute inset-0 bg-overlay"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -92,12 +107,12 @@ export function Modal({
         className={clsx(
           "relative z-10 w-full max-h-[90dvh] overflow-y-auto border border-blue-dark bg-cream shadow-lg",
           "animate-[modal-in_0.18s_ease-out]",
-          className
+          className,
         )}
       >
         {children}
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

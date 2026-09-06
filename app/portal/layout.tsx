@@ -6,9 +6,16 @@ import { PortalShell } from "@/components/portal/PortalShell";
 
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
-export default async function PortalLayout({ children }: { children: React.ReactNode }) {
+export default async function PortalLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   await requireCustomer();
-  const [locale, settings] = await Promise.all([getLocale(), getCompanySettings()]);
+  const [locale, settings] = await Promise.all([
+    getLocale(),
+    getCompanySettings(),
+  ]);
 
   return (
     <PortalShell locale={locale} companyName={settings.companyName}>

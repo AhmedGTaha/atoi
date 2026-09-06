@@ -22,11 +22,40 @@ export function PageHeader({
   );
 }
 
-export function Card({ children, className }: { children: React.ReactNode; className?: string }) {
+export function Card({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   const isTable = className?.includes("overflow-x-auto");
-  return <BlueprintPanel className={clsx(!isTable && "p-5", className?.replace("overflow-x-auto", ""))}>
-    {isTable ? <><p className="table-hint">Scroll horizontally to view all columns →</p><div className="table-scroll" role="region" aria-label="Data table" tabIndex={0}>{children}</div></> : children}
-  </BlueprintPanel>;
+  return (
+    <BlueprintPanel
+      className={clsx(
+        !isTable && "p-5",
+        className?.replace("overflow-x-auto", ""),
+      )}
+    >
+      {isTable ? (
+        <>
+          <p className="table-hint">
+            Scroll horizontally to view all columns →
+          </p>
+          <div
+            className="table-scroll"
+            role="region"
+            aria-label="Data table"
+            tabIndex={0}
+          >
+            {children}
+          </div>
+        </>
+      ) : (
+        children
+      )}
+    </BlueprintPanel>
+  );
 }
 
 export function EmptyState({ children }: { children: React.ReactNode }) {
@@ -34,7 +63,17 @@ export function EmptyState({ children }: { children: React.ReactNode }) {
 }
 
 export function Badge({ label, tone }: { label: string; tone: string }) {
-  return <span className={clsx("status", ["DONE", "ACTIVE", "CONVERTED"].includes(tone) && "status-complete", ["ARCHIVED", "DISABLED"].includes(tone) && "status-muted")}>{label}</span>;
+  return (
+    <span
+      className={clsx(
+        "status",
+        ["DONE", "ACTIVE", "CONVERTED"].includes(tone) && "status-complete",
+        ["ARCHIVED", "DISABLED"].includes(tone) && "status-muted",
+      )}
+    >
+      {label}
+    </span>
+  );
 }
 
 export function AdminInput({
@@ -42,18 +81,42 @@ export function AdminInput({
   error,
   hint,
   ...props
-}: React.InputHTMLAttributes<HTMLInputElement> & { label: string; error?: string; hint?: string }) {
+}: React.InputHTMLAttributes<HTMLInputElement> & {
+  label: string;
+  error?: string;
+  hint?: string;
+}) {
+  const feedbackId =
+    props.id || props.name ? `${props.id ?? props.name}-feedback` : undefined;
   return (
     <label className="block">
-      <span className="mb-1.5 block text-sm font-semibold">{label}</span>
+      <span className="mb-1.5 block text-sm font-semibold">
+        {label}
+        {props.required && (
+          <span aria-hidden="true" className="ms-1 text-blue-dark">
+            *
+          </span>
+        )}
+      </span>
       <input
         {...props}
         aria-invalid={!!error}
+        aria-describedby={
+          error || hint ? feedbackId : props["aria-describedby"]
+        }
         className="input"
       />
-      {hint && !error && <span className="mt-1 block text-xs text-muted">{hint}</span>}
+      {hint && !error && (
+        <span id={feedbackId} className="mt-1 block text-xs text-muted">
+          {hint}
+        </span>
+      )}
       {error && (
-        <span role="alert" className="mt-1 block text-sm text-danger">
+        <span
+          id={feedbackId}
+          role="alert"
+          className="mt-1 block text-sm text-danger"
+        >
           {error}
         </span>
       )}
@@ -65,17 +128,34 @@ export function AdminTextarea({
   label,
   error,
   ...props
-}: React.TextareaHTMLAttributes<HTMLTextAreaElement> & { label: string; error?: string }) {
+}: React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+  label: string;
+  error?: string;
+}) {
+  const feedbackId =
+    props.id || props.name ? `${props.id ?? props.name}-feedback` : undefined;
   return (
     <label className="block">
-      <span className="mb-1.5 block text-sm font-semibold">{label}</span>
+      <span className="mb-1.5 block text-sm font-semibold">
+        {label}
+        {props.required && (
+          <span aria-hidden="true" className="ms-1 text-blue-dark">
+            *
+          </span>
+        )}
+      </span>
       <textarea
         {...props}
         aria-invalid={!!error}
+        aria-describedby={error ? feedbackId : props["aria-describedby"]}
         className="input"
       />
       {error && (
-        <span role="alert" className="mt-1 block text-sm text-danger">
+        <span
+          id={feedbackId}
+          role="alert"
+          className="mt-1 block text-sm text-danger"
+        >
           {error}
         </span>
       )}
@@ -88,19 +168,36 @@ export function AdminSelect({
   error,
   children,
   ...props
-}: React.SelectHTMLAttributes<HTMLSelectElement> & { label: string; error?: string }) {
+}: React.SelectHTMLAttributes<HTMLSelectElement> & {
+  label: string;
+  error?: string;
+}) {
+  const feedbackId =
+    props.id || props.name ? `${props.id ?? props.name}-feedback` : undefined;
   return (
     <label className="block">
-      <span className="mb-1.5 block text-sm font-semibold">{label}</span>
+      <span className="mb-1.5 block text-sm font-semibold">
+        {label}
+        {props.required && (
+          <span aria-hidden="true" className="ms-1 text-blue-dark">
+            *
+          </span>
+        )}
+      </span>
       <select
         {...props}
         aria-invalid={!!error}
+        aria-describedby={error ? feedbackId : props["aria-describedby"]}
         className="input"
       >
         {children}
       </select>
       {error && (
-        <span role="alert" className="mt-1 block text-sm text-danger">
+        <span
+          id={feedbackId}
+          role="alert"
+          className="mt-1 block text-sm text-danger"
+        >
           {error}
         </span>
       )}
@@ -108,12 +205,15 @@ export function AdminSelect({
   );
 }
 
-export function LinkButtonSmall({ href, children }: { href: string; children: React.ReactNode }) {
+export function LinkButtonSmall({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
   return (
-    <Link
-      href={href}
-      className="btn btn-primary"
-    >
+    <Link href={href} className="btn btn-primary">
       {children}
     </Link>
   );

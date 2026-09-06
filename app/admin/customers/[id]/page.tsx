@@ -21,18 +21,23 @@ export default async function AdminCustomerDetailPage({
       <PageHeader
         title={customer.businessName || customer.name || customer.email}
         description={customer.email}
-        action={<Badge label={customer.accountStatus} tone={customer.accountStatus} />}
+        action={
+          <Badge label={customer.accountStatus} tone={customer.accountStatus} />
+        }
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Card>
-          <h2 className="font-bold">Contact information</h2>
+          <h2 className="font-semibold">Contact information</h2>
           <dl className="mt-4 space-y-3 text-sm">
             <Row label="Name" value={customer.name ?? "—"} />
             <Row label="Business" value={customer.businessName ?? "—"} />
             <Row label="Email" value={customer.email} />
             <Row label="Phone" value={customer.phoneE164} />
-            <Row label="Preferred language" value={customer.preferredLocale === "ar" ? "Arabic" : "English"} />
+            <Row
+              label="Preferred language"
+              value={customer.preferredLocale === "ar" ? "Arabic" : "English"}
+            />
           </dl>
 
           {customer.accountStatus === "INVITED" && (
@@ -43,14 +48,16 @@ export default async function AdminCustomerDetailPage({
         </Card>
 
         <Card className="lg:col-span-2">
-          <h2 className="font-bold">Projects</h2>
+          <h2 className="font-semibold">Projects</h2>
           <div className="mt-4 space-y-3">
-            {customer.projects.length === 0 && <p className="text-sm text-muted">No projects yet.</p>}
+            {customer.projects.length === 0 && (
+              <p className="text-sm text-muted">No projects yet.</p>
+            )}
             {customer.projects.map((p) => (
               <Link
                 key={p.id}
                 href={`/admin/projects/${p.id}`}
-                className="flex items-center justify-between border border-black/5 p-4 hover:border-black/15"
+                className="flex items-center justify-between border border-rule-soft p-4 hover:border-blue-dark"
               >
                 <div>
                   <p className="font-semibold">{p.name}</p>
@@ -68,7 +75,7 @@ export default async function AdminCustomerDetailPage({
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-4 border-b border-black/5 pb-2">
+    <div className="flex items-center justify-between gap-4 border-b border-rule-soft pb-2">
       <dt className="text-muted">{label}</dt>
       <dd className="text-end font-medium">{value}</dd>
     </div>

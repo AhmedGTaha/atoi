@@ -14,7 +14,12 @@ const latin = Barlow({
   display: "swap",
 });
 
-const condensed = Barlow_Condensed({ variable: "--font-condensed", subsets: ["latin"], weight: ["400", "600"], display: "swap" });
+const condensed = Barlow_Condensed({
+  variable: "--font-condensed",
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  display: "swap",
+});
 
 const arabic = Cairo({
   variable: "--font-arabic",
@@ -24,9 +29,13 @@ const arabic = Cairo({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const [locale, settings] = await Promise.all([getLocale(), getCompanySettings()]);
+  const [locale, settings] = await Promise.all([
+    getLocale(),
+    getCompanySettings(),
+  ]);
   const title = locale === "ar" ? settings.seoTitleAr : settings.seoTitleEn;
-  const description = locale === "ar" ? settings.seoDescriptionAr : settings.seoDescriptionEn;
+  const description =
+    locale === "ar" ? settings.seoDescriptionAr : settings.seoDescriptionEn;
 
   return {
     metadataBase: new URL(appUrl()),
@@ -53,9 +62,15 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const locale = await getLocale();
 
   return (
-    <html lang={locale} dir={dirFor(locale)} className={`${latin.variable} ${condensed.variable} ${arabic.variable} h-full antialiased`}>
+    <html
+      lang={locale}
+      dir={dirFor(locale)}
+      className={`${latin.variable} ${condensed.variable} ${arabic.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col bg-cream text-ink">
-        <a href="#main-content" className="skip-link">{locale === "ar" ? "انتقل إلى المحتوى" : "Skip to content"}</a>
+        <a href="#main-content" className="skip-link">
+          {locale === "ar" ? "انتقل إلى المحتوى" : "Skip to content"}
+        </a>
         <I18nProvider locale={locale}>{children}</I18nProvider>
       </body>
     </html>

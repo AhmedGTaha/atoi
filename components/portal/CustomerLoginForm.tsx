@@ -1,15 +1,25 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { loginCustomerAction, type CustomerLoginState } from "@/app/actions/customerAuthActions";
+import {
+  loginCustomerAction,
+  type CustomerLoginState,
+} from "@/app/actions/customerAuthActions";
 import { AuthInput } from "@/components/auth/AuthCard";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 
 const initialState: CustomerLoginState = {};
 
-export function CustomerLoginForm({ justSetPassword }: { justSetPassword: boolean }) {
-  const [state, formAction, isPending] = useActionState(loginCustomerAction, initialState);
+export function CustomerLoginForm({
+  justSetPassword,
+}: {
+  justSetPassword: boolean;
+}) {
+  const [state, formAction, isPending] = useActionState(
+    loginCustomerAction,
+    initialState,
+  );
   // Controlled so a failed attempt doesn't wipe the email the person just
   // typed — React resets uncontrolled fields once a form action settles.
   const [email, setEmail] = useState("");
@@ -30,17 +40,31 @@ export function CustomerLoginForm({ justSetPassword }: { justSetPassword: boolea
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <AuthInput label="Password" name="password" type="password" autoComplete="current-password" required />
+      <AuthInput
+        label="Password"
+        name="password"
+        type="password"
+        autoComplete="current-password"
+        required
+      />
       {state.error && (
         <p role="alert" className="text-sm text-danger">
           {state.error}
         </p>
       )}
-      <Button type="submit" variant="primaryBlue" className="w-full" disabled={isPending}>
+      <Button
+        type="submit"
+        variant="primaryBlue"
+        className="w-full"
+        disabled={isPending}
+      >
         {isPending ? "Signing in…" : "Sign in"}
       </Button>
       <p className="text-center text-sm">
-        <Link href="/forgot-password" className="font-semibold text-blue-dark hover:underline">
+        <Link
+          href="/forgot-password"
+          className="font-semibold text-blue-dark hover:underline"
+        >
           Forgot your password?
         </Link>
       </p>

@@ -18,7 +18,7 @@ export function PortalShell({
 
   return (
     <div className="min-h-dvh">
-      <header className="border-b border-black/10 bg-cream">
+      <header className="border-b border-rule bg-cream">
         <div className="site-container flex flex-wrap items-center justify-between gap-4 py-4">
           <Link href="/portal">
             <Logo name={companyName} />
@@ -26,7 +26,10 @@ export function PortalShell({
           <div className="flex items-center gap-3">
             <LanguageToggle locale={locale} />
             <form action={logoutCustomerAction}>
-              <button type="submit" className="text-sm font-semibold text-ink/70 hover:text-ink">
+              <button
+                type="submit"
+                className="text-sm font-semibold text-ink/70 hover:text-ink"
+              >
                 {dict.portal.signOut}
               </button>
             </form>
@@ -34,10 +37,16 @@ export function PortalShell({
         </div>
       </header>
       <div className="site-container border-b py-3 flex justify-between text-sm">
-        <Link href="/portal" className="text-blue-dark">{dict.portal.yourProjects}</Link>
-        <Link href="/" className="text-muted">{locale === "ar" ? "الموقع الرئيسي" : "Public website"} ↗</Link>
+        <Link href="/portal" className="text-blue-dark">
+          {dict.portal.yourProjects}
+        </Link>
+        <Link href="/" className="text-muted">
+          {locale === "ar" ? "الموقع الرئيسي" : "Public website"} ↗
+        </Link>
       </div>
-      <main id="main-content" className="site-container app-main">{children}</main>
+      <main id="main-content" className="site-container app-main">
+        {children}
+      </main>
     </div>
   );
 }
