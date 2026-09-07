@@ -37,7 +37,7 @@ Dark is the default regardless of OS preference. The `atoi-theme` localStorage p
 
 `tests/e2e/design-system.spec.ts` reviews both themes at 1440×900, 1280×800, 1024×768, 768×1024, 430×932 and 390×844. It checks document overflow, actual fonts, canvas color, duplicate IDs, browser exceptions and axe accessibility; it saves full-page screenshots at desktop and mobile sizes.
 
-Coverage: `/`, `/login`, `/admin/login`, `/forgot-password`, `/set-password` (missing token and reset mode), `/privacy`, `/terms`, not-found, `/portal`, `/portal/projects/[id]`, `/admin`, `/admin/requests`, `/admin/requests/[id]`, `/admin/projects`, `/admin/projects/[id]`, `/admin/customers`, `/admin/customers/[id]`, `/admin/portfolio`, `/admin/portfolio/new`, `/admin/portfolio/[id]`, `/admin/content`, `/admin/settings`, `/admin/team`. The additional existing browser suites cover real inquiry validation/submission, sign-in, conversion, project updates, support and Arabic RTL.
+Coverage: `/`, `/login`, `/forgot-password`, `/set-password` (missing token and reset mode), `/privacy`, `/terms`, not-found, `/portal`, `/portal/projects/[id]`, `/admin`, `/admin/requests`, `/admin/requests/[id]`, `/admin/projects`, `/admin/projects/[id]`, `/admin/customers`, `/admin/customers/[id]`, `/admin/portfolio`, `/admin/portfolio/new`, `/admin/portfolio/[id]`, `/admin/content`, `/admin/settings`, `/admin/team`. The additional existing browser suites cover real inquiry validation/submission, sign-in, conversion, project updates, support and Arabic RTL.
 
 Use only isolated databases for automated tests: the test helpers reset their data. `.env.test` and `.env.e2e` are ignored local configuration. External email and storage credentials are intentionally omitted during local validation.
 

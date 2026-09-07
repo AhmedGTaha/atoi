@@ -4,17 +4,24 @@ import { useActionState } from "react";
 import {
   setPasswordAction,
   type SetPasswordState,
-} from "@/app/actions/customerAuthActions";
+} from "@/app/actions/authActions";
 import { AuthInput } from "@/components/auth/AuthCard";
 import { Button } from "@/components/ui/Button";
 
 const initialState: SetPasswordState = {};
 
-export function SetPasswordForm({ token }: { token: string }) {
+export function SetPasswordForm({
+  token,
+  mode,
+}: {
+  token: string;
+  mode?: string;
+}) {
   const [state, formAction, isPending] = useActionState(
     setPasswordAction,
     initialState,
   );
+  const submitLabel = mode === "team" ? "Set password & sign in" : "Set password";
 
   return (
     <form action={formAction} className="space-y-4">
@@ -46,7 +53,7 @@ export function SetPasswordForm({ token }: { token: string }) {
         className="w-full"
         disabled={isPending}
       >
-        {isPending ? "Saving…" : "Set password"}
+        {isPending ? "Saving…" : submitLabel}
       </Button>
     </form>
   );

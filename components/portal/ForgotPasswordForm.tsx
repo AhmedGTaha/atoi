@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import {
   forgotPasswordAction,
   type ForgotPasswordState,
-} from "@/app/actions/customerAuthActions";
+} from "@/app/actions/authActions";
 import { AuthInput } from "@/components/auth/AuthCard";
 import { Button } from "@/components/ui/Button";
 

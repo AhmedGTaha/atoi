@@ -36,7 +36,7 @@ describe("website content update", () => {
     const content = await getWebsiteContent();
     expect(content["hero.heading"]).toEqual({
       valueEn: "Give us the problem. We ship the software.",
-      valueAr: "برمجيات مصممة حول أعمالك.",
+      valueAr: "أعطنا المشكلة. سنشحن لك البرمجيات.",
     });
   });
 

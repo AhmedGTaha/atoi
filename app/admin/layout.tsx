@@ -13,15 +13,17 @@ export default async function AdminLayout({
 }) {
   const session = await getAdminSession();
 
-  // /admin/login renders its own minimal layout (no session yet at that point).
+  // Middleware already redirects unauthenticated /admin/* requests to
+  // /login before they reach this layout — this is a defense-in-depth
+  // fallback for the (should-never-happen) case where it didn't.
   if (!session) {
-    return children;
+    redirect("/login");
   }
 
   const admin = await prisma.adminUser.findUnique({
     where: { id: session.adminId },
   });
-  if (!admin || !admin.isActive) redirect("/admin/login");
+  if (!admin || !admin.isActive) redirect("/login");
 
   return <AdminShell adminName={admin.name}>{children}</AdminShell>;
 }

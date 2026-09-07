@@ -9,6 +9,7 @@ import { getCompanySettings } from "./settingsService";
 import { appUrl } from "@/lib/utils/appUrl";
 import type { Locale } from "@/lib/i18n/locale";
 import type { Customer } from "@prisma/client";
+import { assertEmailAvailableForRole } from "./accountIdentityService";
 
 export interface CustomerUpsertInput {
   name: string | null;
@@ -32,10 +33,13 @@ export interface FindOrCreateResult {
 export async function findOrCreateCustomer(
   input: CustomerUpsertInput
 ): Promise<FindOrCreateResult> {
-  const existing = await prisma.customer.findUnique({ where: { email: input.email } });
+  const email = input.email.trim().toLowerCase();
+  const existing = await prisma.customer.findUnique({ where: { email } });
   if (existing) {
     return { customer: existing, createdNew: false };
   }
+
+  await assertEmailAvailableForRole(email, "customer");
 
   const phone = normalizeGccPhone(input.phoneCountry, input.phoneNumber);
   if (!phone.ok) {
@@ -46,7 +50,7 @@ export async function findOrCreateCustomer(
     data: {
       name: input.name,
       businessName: input.businessName,
-      email: input.email,
+      email,
       phoneCountry: input.phoneCountry,
       phoneE164: phone.e164!,
       preferredLocale: input.preferredLocale,
@@ -107,7 +111,7 @@ export async function sendCustomerInvitation(customerId: string): Promise<"SENT"
 }
 
 export async function requestPasswordReset(email: string): Promise<void> {
-  const customer = await prisma.customer.findUnique({ where: { email } });
+  const customer = await prisma.customer.findUnique({ where: { email: email.trim().toLowerCase() } });
   // Always behave the same whether or not the account exists, so the form
   // can't be used to enumerate registered emails.
   if (!customer || customer.accountStatus !== "ACTIVE") return;
@@ -135,7 +139,7 @@ export async function authenticateCustomer(
   email: string,
   password: string
 ): Promise<Customer | null> {
-  const customer = await prisma.customer.findUnique({ where: { email } });
+  const customer = await prisma.customer.findUnique({ where: { email: email.trim().toLowerCase() } });
   if (!customer || !customer.passwordHash) return null;
   if (customer.accountStatus !== "ACTIVE") return null;
 

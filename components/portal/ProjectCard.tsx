@@ -7,15 +7,17 @@ import type { Project } from "@prisma/client";
 export function ProjectCard({
   project,
   locale,
+  hrefBase = "/portal/projects",
 }: {
   project: Project;
   locale: Locale;
+  hrefBase?: string;
 }) {
   const dict = getDictionary(locale);
 
   return (
     <Link
-      href={`/portal/projects/${project.id}`}
+      href={`${hrefBase}/${project.id}`}
       className="block panel p-6 transition-colors hover:border-accent"
     >
       <div className="flex flex-wrap items-center justify-between gap-3">

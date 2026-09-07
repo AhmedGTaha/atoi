@@ -2,7 +2,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
 import { AdminBreadcrumbs } from "./AdminBreadcrumbs";
 import { AdminNav } from "./AdminNav";
-import { logoutAdminAction } from "@/app/actions/adminAuthActions";
+import { logoutAction } from "@/app/actions/authActions";
 
 export function AdminShell({
   adminName,
@@ -36,7 +36,7 @@ export function AdminShell({
           </p>
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <form action={logoutAdminAction}>
+            <form action={logoutAction}>
               <button
                 type="submit"
                 className="text-sm font-semibold text-foreground/70 hover:text-foreground"

@@ -58,7 +58,7 @@ test.afterAll(async () => {
 
 async function signIn(page: Page, admin: boolean) {
   const account = admin ? E2E_FIXTURES.admin : E2E_FIXTURES.customer;
-  await page.goto(admin ? "/admin/login" : "/login");
+  await page.goto("/login");
   await page
     .getByRole("textbox", { name: "Email", exact: true })
     .fill(account.email);
@@ -152,7 +152,6 @@ test("all public and account routes use the design system at six widths", async 
     [
       "/",
       "/login",
-      "/admin/login",
       "/forgot-password",
       "/set-password",
       "/set-password?token=test&mode=reset",

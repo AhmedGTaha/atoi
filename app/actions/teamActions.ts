@@ -29,11 +29,20 @@ export async function createTeamMemberAction(
     return { error: parsed.error.issues[0]?.message ?? "Invalid input." };
   }
 
+  let memberId: string;
   try {
-    await createTeamMember(parsed.data);
-  } catch {
+    const member = await createTeamMember(parsed.data);
+    memberId = member.id;
+  } catch (err) {
+    if (err instanceof Error && err.message.startsWith("This email is already registered")) {
+      return { error: err.message };
+    }
     return { error: "A team member with this email already exists." };
   }
+
+  // The invitation is sent immediately on creation — the admin only needs
+  // "resend invitation" for a later re-send, never a first send.
+  await sendTeamMemberInvitation(memberId);
 
   revalidatePath("/admin/team");
   return { success: true };
@@ -53,7 +62,14 @@ export async function updateTeamMemberAction(
     return { error: parsed.error.issues[0]?.message ?? "Invalid input." };
   }
 
-  await updateTeamMember(memberId, parsed.data);
+  try {
+    await updateTeamMember(memberId, parsed.data);
+  } catch (err) {
+    if (err instanceof Error && err.message.startsWith("This email is already registered")) {
+      return { error: err.message };
+    }
+    return { error: "A team member with this email already exists." };
+  }
   revalidatePath("/admin/team");
   return { success: true };
 }

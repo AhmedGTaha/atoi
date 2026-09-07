@@ -16,14 +16,14 @@ test.describe("Admin login and request conversion", () => {
       .fill("We need a loyalty app for our coffee shop chain.");
     await modal.getByLabel(/^Email/).fill(email);
     await modal.getByPlaceholder("Phone number").fill("36009999");
-    await modal.getByRole("button", { name: "Send request" }).click();
+    await modal.getByRole("button", { name: "send inquiry" }).click();
     await expect(
       modal.getByRole("heading", { name: "Request received." }),
     ).toBeVisible();
     await modal.getByRole("button", { name: "Done" }).click();
 
-    // 2. Admin login rejects wrong credentials.
-    await page.goto("/admin/login");
+    // 2. Universal login rejects wrong credentials.
+    await page.goto("/login");
     await page.getByLabel("Email").fill(E2E_FIXTURES.admin.email);
     await page.getByLabel("Password").fill("wrong-password");
     await page.getByRole("button", { name: "Sign in" }).click();

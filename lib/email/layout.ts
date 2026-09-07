@@ -22,6 +22,9 @@ export function emailShell(opts: EmailShellOptions): string {
   const dir = opts.locale === "ar" ? "rtl" : "ltr";
   const align = opts.locale === "ar" ? "right" : "left";
 
+  // Every actionable email needs a fallback: some clients strip button
+  // styling or block the link entirely, so the raw URL is always printed
+  // as plain, selectable text right under the button.
   const cta =
     opts.ctaUrl && opts.ctaLabel
       ? `<div style="margin-top:28px;">
@@ -31,7 +34,12 @@ export function emailShell(opts: EmailShellOptions): string {
                      border-radius:999px;font-size:15px;">
              ${escapeHtml(opts.ctaLabel)}
            </a>
-         </div>`
+         </div>
+         <p style="margin-top:14px;font-size:12px;line-height:1.6;color:#8a8a8a;word-break:break-all;">
+           ${opts.locale === "ar" ? "أو انسخ هذا الرابط:" : "Or copy this link:"}
+           <br />
+           <a href="${escapeAttr(opts.ctaUrl)}" style="color:${COLORS.darkBlue};">${escapeHtml(opts.ctaUrl)}</a>
+         </p>`
       : "";
 
   return `<!doctype html>

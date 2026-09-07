@@ -23,6 +23,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
 
   const [businessType, setBusinessType] = useState("");
   const [name, setName] = useState("");
+  const [businessName, setBusinessName] = useState("");
   const [description, setDescription] = useState("");
   const [email, setEmail] = useState("");
   const [phoneCountry, setPhoneCountry] =
@@ -33,10 +34,12 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
   const [status, setStatus] = useState<Status>("idle");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [confirmationEmailSent, setConfirmationEmailSent] = useState(true);
+  const [reference, setReference] = useState("");
 
   function resetForm() {
     setBusinessType("");
     setName("");
+    setBusinessName("");
     setDescription("");
     setEmail("");
     setPhoneCountry(DEFAULT_GCC_COUNTRY);
@@ -62,6 +65,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
     const formData = new FormData();
     formData.set("businessType", businessType);
     formData.set("name", name);
+    formData.set("businessName", businessName);
     formData.set("description", description);
     formData.set("email", email);
     formData.set("phoneCountry", phoneCountry);
@@ -73,6 +77,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
       const result = await submitProjectRequestAction(formData);
       if (result.ok) {
         setConfirmationEmailSent(result.confirmationEmailSent);
+        setReference(result.reference);
         setStatus("success");
       } else if ("blocked" in result) {
         // Pretend success to bots without persisting/emailing anything.
@@ -89,7 +94,11 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
 
   const contents = (
     <div className="inquiry-panel relative">
-      {
+      <p className="panel-strip pe-16">
+        <span aria-hidden="true" className="text-accent">
+          ●
+        </span>{" "}
+        atoi ~ new-project.inquiry
         <button
           type="button"
           onClick={close}
@@ -98,22 +107,22 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
         >
           <CloseIcon />
         </button>
-      }
+      </p>
 
       {status === "success" ? (
-        <SuccessView
+        <ReceiptView
           dict={dict}
           confirmationEmailSent={confirmationEmailSent}
+          reference={reference}
+          email={email}
           onDone={close}
           titleId={titleId}
         />
       ) : (
-        <form onSubmit={handleSubmit} noValidate>
-          <p className="panel-strip pe-16">atoi ~ new-project.inquiry</p>
-          <h2 id={titleId} className="mt-6 text-xl">
-            {dict.modal.heading}
-          </h2>
-          <p className="mt-2 text-muted">{dict.modal.subheading}</p>
+        <form onSubmit={handleSubmit} noValidate className="p-6 sm:p-7">
+          <p id={titleId} className="font-display text-sm text-muted">
+            <span className="text-accent">$</span> atoi new-project
+          </p>
 
           {/* Honeypot: hidden from real users, catches naive bots. */}
           <div className="absolute -left-[9999px]" aria-hidden="true">
@@ -129,23 +138,9 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
             />
           </div>
 
-          <div className="mt-6 grid grid-cols-1">
-            <Field label={dict.modal.businessTypeLabel}>
-              <select
-                value={businessType}
-                onChange={(e) => setBusinessType(e.target.value)}
-                className="input"
-              >
-                <option value="">{dict.modal.businessTypePlaceholder}</option>
-                {BUSINESS_TYPES.map((type) => (
-                  <option key={type} value={type}>
-                    {dict.businessTypes[type]}
-                  </option>
-                ))}
-              </select>
-            </Field>
-
-            <Field label={dict.modal.nameLabel}>
+          <div className="mt-4">
+            <label className="terminal-row">
+              <span className="terminal-label">{dict.modal.nameLabel}</span>
               <input
                 type="text"
                 value={name}
@@ -153,35 +148,21 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
                 placeholder={dict.modal.namePlaceholder}
                 className="input"
               />
-            </Field>
-          </div>
-
-          <div className="mt-4">
-            <Field
-              label={dict.modal.descriptionLabel}
-              required
-              error={fieldErrors.description}
-            >
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder={dict.modal.descriptionPlaceholder}
-                required
-                minLength={10}
-                maxLength={5000}
-                rows={4}
-                aria-invalid={!!fieldErrors.description}
+            </label>
+            <label className="terminal-row">
+              <span className="terminal-label">{dict.modal.businessNameLabel}</span>
+              <input
+                type="text"
+                value={businessName}
+                onChange={(e) => setBusinessName(e.target.value)}
+                placeholder={dict.modal.businessNamePlaceholder}
                 className="input"
               />
-            </Field>
-          </div>
-
-          <div className="mt-4 grid grid-cols-1">
-            <Field
-              label={dict.modal.emailLabel}
-              required
-              error={fieldErrors.email}
-            >
+            </label>
+            <label className="terminal-row">
+              <span className="terminal-label">
+                {dict.modal.emailLabel} <span className="text-accent">*</span>
+              </span>
               <input
                 type="email"
                 value={email}
@@ -191,13 +172,16 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
                 aria-invalid={!!fieldErrors.email}
                 className="input"
               />
-            </Field>
-
-            <Field
-              label={dict.modal.phoneLabel}
-              required
-              error={fieldErrors.phoneNumber}
-            >
+              {fieldErrors.email && (
+                <span role="alert" className="text-sm text-danger">
+                  {fieldErrors.email}
+                </span>
+              )}
+            </label>
+            <div className="terminal-row">
+              <span className="terminal-label">
+                {dict.modal.phoneLabel} <span className="text-accent">*</span>
+              </span>
               <PhoneInput
                 country={phoneCountry}
                 onCountryChange={setPhoneCountry}
@@ -206,7 +190,52 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
                 placeholder={dict.modal.phonePlaceholder}
                 error={fieldErrors.phoneNumber}
               />
-            </Field>
+              {fieldErrors.phoneNumber && (
+                <span role="alert" className="text-sm text-danger">
+                  {fieldErrors.phoneNumber}
+                </span>
+              )}
+            </div>
+            <label className="terminal-row items-start">
+              <span className="terminal-label pt-0.5">
+                {dict.modal.descriptionLabel} <span className="text-accent">*</span>
+              </span>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder={dict.modal.descriptionPlaceholder}
+                required
+                minLength={10}
+                maxLength={5000}
+                rows={3}
+                aria-invalid={!!fieldErrors.description}
+                className="input resize-none"
+              />
+              {fieldErrors.description && (
+                <span role="alert" className="text-sm text-danger">
+                  {fieldErrors.description}
+                </span>
+              )}
+            </label>
+          </div>
+
+          <div className="mt-5">
+            <p className="mb-2 font-display text-sm text-faint">
+              {dict.modal.businessTypeLabel}
+            </p>
+            <div className="columns-2 gap-6">
+              {BUSINESS_TYPES.map((type) => (
+                <label key={type} className="type-option">
+                  <input
+                    type="radio"
+                    name="businessType"
+                    checked={businessType === type}
+                    onChange={() => setBusinessType(type)}
+                  />
+                  {dict.businessTypes[type]}
+                </label>
+              ))}
+            </div>
           </div>
 
           {fieldErrors.form && (
@@ -215,16 +244,12 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
             </p>
           )}
 
-          <Button
-            type="submit"
-            variant="primary"
-            disabled={status === "submitting"}
-            className="mt-6 ms-auto flex"
-          >
-            {status === "submitting"
-              ? dict.modal.submitting
-              : dict.modal.submit}
-          </Button>
+          <div className="mt-6 flex justify-end border-t pt-5">
+            <Button type="submit" variant="primary" disabled={status === "submitting"}>
+              {status === "submitting" ? dict.modal.submitting : dict.modal.submit}
+              <ArrowIcon />
+            </Button>
+          </div>
         </form>
       )}
     </div>
@@ -242,63 +267,51 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
   );
 }
 
-function Field({
-  label,
-  required,
-  error,
-  children,
-}: {
-  label: string;
-  required?: boolean;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <label className="terminal-row">
-      <span className="terminal-label">
-        {label} {required && <span className="text-accent">*</span>}
-        <span className="text-accent" aria-hidden="true">
-          {" "}
-          ?
-        </span>
-      </span>
-      {children}
-      {error && (
-        <span role="alert" className="mt-1 block text-sm text-danger">
-          {error}
-        </span>
-      )}
-    </label>
-  );
-}
-
-function SuccessView({
+function ReceiptView({
   dict,
   confirmationEmailSent,
+  reference,
+  email,
   onDone,
   titleId,
 }: {
   dict: ReturnType<typeof getDictionary>;
   confirmationEmailSent: boolean;
+  reference: string;
+  email: string;
   onDone: () => void;
   titleId: string;
 }) {
+  const lines = [
+    "$ atoi send --inquiry",
+    "> validating fields … ok",
+    `> transmitting to ${email || "our team"} … ok`,
+    `✓ received · ref ${reference}`,
+  ];
+
   return (
-    <div className="flex flex-col items-center py-6 text-center">
-      <div className="flex h-16 w-16 items-center justify-center bg-accent-soft">
-        <CheckIcon />
-      </div>
-      <h2 id={titleId} className="mt-6 text-3xl font-semibold tracking-normal">
+    <div className="p-6 sm:p-7">
+      <h2 id={titleId} className="sr-only">
         {dict.success.heading}
       </h2>
-      <p className="mt-3 max-w-sm text-muted">
+      <div className="font-display text-sm leading-loose text-muted">
+        {lines.map((line, i) => (
+          <div key={i}>{line}</div>
+        ))}
+      </div>
+      <p className="mt-5 max-w-md text-muted">
         {confirmationEmailSent
           ? dict.success.bodyWithEmail
           : dict.success.bodyWithoutEmail}
       </p>
-      <Button variant="primary" onClick={onDone} className="mt-8">
-        {dict.success.done}
-      </Button>
+      <div className="mt-6 flex flex-wrap gap-3 border-t pt-5">
+        <Button variant="primary" onClick={onDone}>
+          {dict.success.done}
+        </Button>
+        <a href="mailto:info@atoi.online" className="btn btn-secondary">
+          {dict.modal.emailUsInstead}
+        </a>
+      </div>
     </div>
   );
 }
@@ -322,17 +335,24 @@ function CloseIcon() {
   );
 }
 
-function CheckIcon() {
+function ArrowIcon() {
   return (
     <svg
-      width="24"
-      height="24"
+      width="16"
+      height="16"
       viewBox="0 0 24 24"
       fill="none"
       aria-hidden="true"
+      className="ms-2 inline rtl:-scale-x-100"
     >
       <path
-        d="M5 13L10 18L19 7"
+        d="M4 12h13"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M12 5l7 7-7 7"
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"

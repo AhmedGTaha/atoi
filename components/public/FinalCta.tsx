@@ -7,9 +7,11 @@ import { t } from "@/lib/content/helpers";
 export function FinalCta({
   locale,
   content,
+  companyEmail,
 }: {
   locale: Locale;
   content: WebsiteContentMap;
+  companyEmail: string;
 }) {
   return (
     <section id="contact" className="public-section contact-section">
@@ -25,9 +27,14 @@ export function FinalCta({
             {t(content, "finalCta.body", locale)}
           </p>
         </div>
-        <StartProjectTrigger className="btn btn-primary">
-          {t(content, "finalCta.ctaLabel", locale)}
-        </StartProjectTrigger>
+        <div className="flex flex-wrap items-center gap-4">
+          <StartProjectTrigger className="btn btn-primary">
+            {t(content, "finalCta.ctaLabel", locale)}
+          </StartProjectTrigger>
+          <a href={`mailto:${companyEmail}`} className="text-sm text-muted hover:text-foreground" dir="ltr">
+            {locale === "ar" ? "أو راسلنا على" : "or email"} {companyEmail}
+          </a>
+        </div>
       </Container>
     </section>
   );

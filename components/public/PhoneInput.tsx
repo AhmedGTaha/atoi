@@ -26,21 +26,17 @@ export function PhoneInput({
 }) {
   const countryId = useId();
   return (
-    <div
-      className={`flex overflow-hidden  border bg-canvas ${
-        error ? "border-danger" : "border-rule"
-      }`}
-    >
+    <div className="flex items-baseline gap-2.5">
       <select
         id={countryId}
         value={country}
         onChange={(e) => onCountryChange(e.target.value as GccCountryCode)}
-        className="shrink-0 border-r border-rule bg-accent-soft/40 px-2.5 text-sm font-medium text-foreground"
+        className="dial-select shrink-0"
         aria-label="Country code"
       >
         {GCC_COUNTRY_CODES.map((code) => (
           <option key={code} value={code}>
-            {GCC_COUNTRIES[code].flag} {GCC_COUNTRIES[code].dialCode}
+            {GCC_COUNTRIES[code].dialCode} {GCC_COUNTRIES[code].label.toLowerCase()}
           </option>
         ))}
       </select>
@@ -50,11 +46,11 @@ export function PhoneInput({
         inputMode="numeric"
         autoComplete="tel-national"
         value={number}
-        onChange={(e) => onNumberChange(e.target.value)}
+        onChange={(e) => onNumberChange(e.target.value.replace(/[^0-9]/g, ""))}
         placeholder={placeholder}
         aria-describedby={describedById}
         aria-invalid={!!error}
-        className="w-full min-w-0 flex-1 px-3.5 py-3.5 placeholder:text-muted"
+        className="input min-w-0 flex-1"
       />
     </div>
   );

@@ -1,4 +1,5 @@
 import { emailShell, escapeHtml } from "./layout";
+import { appUrl } from "@/lib/utils/appUrl";
 import type { Locale } from "@/lib/i18n/locale";
 import { statusLabel } from "@/lib/i18n/labels";
 import type { ProjectStatusValue } from "@/lib/validation/shared";
@@ -18,12 +19,13 @@ const COPY = {
          ${escapeHtml(description)}
        </p>
        <p style="margin-top:16px;">We'll be in touch soon.</p>`,
-    invitationSubject: "Set up your Atrio customer account",
-    invitationHeading: "You've been invited to Atrio.",
-    invitationBody:
-      "<p>An Atrio team member has created a project for you. Set a password to access your customer portal and follow your project's progress.</p>",
-    invitationCta: "Set your password",
-    resetSubject: "Reset your Atrio password",
+    requestConfirmationCta: (companyName: string) => `Visit ${companyName}`,
+    invitationSubject: (companyName: string) => `Set up your ${companyName} customer account`,
+    invitationHeading: (companyName: string) => `You've been invited to ${companyName}.`,
+    invitationBody: (companyName: string) =>
+      `<p>A ${escapeHtml(companyName)} team member has created a project for you. Set a password to access your customer portal and follow your project's progress.</p>`,
+    invitationCta: "Set password",
+    resetSubject: (companyName: string) => `Reset your ${companyName} password`,
     resetHeading: "Reset your password.",
     resetBody:
       "<p>We received a request to reset your password. If you didn't request this, you can safely ignore this email.</p>",
@@ -39,11 +41,16 @@ const COPY = {
       `<p><strong>${escapeHtml(projectName)}</strong></p>
        <p style="margin-top:12px;">${escapeHtml(body)}</p>
        <p style="margin-top:16px;color:#555;">Status: ${escapeHtml(status)} · Progress: ${progress}%</p>`,
-    updateCta: "View in portal",
+    updateCta: "View project",
     internalRequestSubject: "New project request",
     internalRequestHeading: "New project request received.",
     supportSubject: (projectName: string) => `Support request: ${projectName}`,
     supportHeading: "New support request.",
+    teamInvitationSubject: (companyName: string) => `Set up your ${companyName} team account`,
+    teamInvitationHeading: (companyName: string) => `You've been invited to the ${companyName} team.`,
+    teamInvitationBody:
+      "<p>An admin has added you as a team member. Set a password to activate your account — you'll be signed in automatically once it's set.</p>",
+    teamInvitationCta: "Set password & sign in",
   },
   ar: {
     requestConfirmationSubject: "لقد استلمنا طلبك",
@@ -54,12 +61,13 @@ const COPY = {
          ${escapeHtml(description)}
        </p>
        <p style="margin-top:16px;">سنتواصل معك قريباً.</p>`,
-    invitationSubject: "قم بإعداد حساب العميل الخاص بك في أتريو",
-    invitationHeading: "تمت دعوتك إلى أتريو.",
-    invitationBody:
-      "<p>قام أحد أعضاء فريق أتريو بإنشاء مشروع لك. قم بتعيين كلمة مرور للوصول إلى بوابة العملاء الخاصة بك ومتابعة تقدم مشروعك.</p>",
+    requestConfirmationCta: (companyName: string) => `زيارة ${companyName}`,
+    invitationSubject: (companyName: string) => `قم بإعداد حساب العميل الخاص بك في ${companyName}`,
+    invitationHeading: (companyName: string) => `تمت دعوتك إلى ${companyName}.`,
+    invitationBody: (companyName: string) =>
+      `<p>قام أحد أعضاء فريق ${escapeHtml(companyName)} بإنشاء مشروع لك. قم بتعيين كلمة مرور للوصول إلى بوابة العملاء الخاصة بك ومتابعة تقدم مشروعك.</p>`,
     invitationCta: "تعيين كلمة المرور",
-    resetSubject: "إعادة تعيين كلمة مرور أتريو",
+    resetSubject: (companyName: string) => `إعادة تعيين كلمة مرور ${companyName}`,
     resetHeading: "إعادة تعيين كلمة المرور.",
     resetBody:
       "<p>تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بك. إذا لم تطلب ذلك، يمكنك تجاهل هذه الرسالة.</p>",
@@ -75,7 +83,7 @@ const COPY = {
       `<p><strong>${escapeHtml(projectName)}</strong></p>
        <p style="margin-top:12px;">${escapeHtml(body)}</p>
        <p style="margin-top:16px;color:#555;">الحالة: ${escapeHtml(status)} · نسبة الإنجاز: ${progress}%</p>`,
-    updateCta: "عرض في البوابة",
+    updateCta: "عرض المشروع",
     internalRequestSubject: "طلب مشروع جديد",
     internalRequestHeading: "تم استلام طلب مشروع جديد.",
     supportSubject: (projectName: string) => `طلب دعم: ${projectName}`,
@@ -96,6 +104,8 @@ export function requestConfirmationEmail(
       companyName,
       heading: c.requestConfirmationHeading,
       bodyHtml: c.requestConfirmationBody(description),
+      ctaUrl: appUrl("/"),
+      ctaLabel: c.requestConfirmationCta(companyName),
     }),
   };
 }
@@ -107,12 +117,12 @@ export function customerInvitationEmail(
 ): EmailContent {
   const c = COPY[locale];
   return {
-    subject: c.invitationSubject,
+    subject: c.invitationSubject(companyName),
     html: emailShell({
       locale,
       companyName,
-      heading: c.invitationHeading,
-      bodyHtml: c.invitationBody,
+      heading: c.invitationHeading(companyName),
+      bodyHtml: c.invitationBody(companyName),
       ctaUrl: setupUrl,
       ctaLabel: c.invitationCta,
     }),
@@ -121,16 +131,16 @@ export function customerInvitationEmail(
 
 /** Team member invitations are internal, so always sent in English. */
 export function teamMemberInvitationEmail(companyName: string, setupUrl: string): EmailContent {
+  const c = COPY.en;
   return {
-    subject: "Set up your Atrio team account",
+    subject: c.teamInvitationSubject(companyName),
     html: emailShell({
       locale: "en",
       companyName,
-      heading: "You've been invited to the Atrio team.",
-      bodyHtml:
-        "<p>An admin has added you as a team member. Set a password to activate your account.</p>",
+      heading: c.teamInvitationHeading(companyName),
+      bodyHtml: c.teamInvitationBody,
       ctaUrl: setupUrl,
-      ctaLabel: "Set your password",
+      ctaLabel: c.teamInvitationCta,
     }),
   };
 }
@@ -142,7 +152,7 @@ export function passwordResetEmail(
 ): EmailContent {
   const c = COPY[locale];
   return {
-    subject: c.resetSubject,
+    subject: c.resetSubject(companyName),
     html: emailShell({
       locale,
       companyName,
@@ -177,7 +187,7 @@ export function projectUpdateEmail(
   };
 }
 
-/** Internal emails (to the Atrio team) are always sent in English. */
+/** Internal emails (to the ATOI team) are always sent in English. */
 export function internalNewRequestEmail(
   companyName: string,
   fields: {

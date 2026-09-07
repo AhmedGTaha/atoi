@@ -9,11 +9,9 @@ import type { Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
 const NAV_ITEMS = [
-  { href: "/#home", key: "home" as const },
-  { href: "/#services", key: "services" as const },
   { href: "/#work", key: "work" as const },
+  { href: "/#services", key: "services" as const },
   { href: "/#about", key: "about" as const },
-  { href: "/#contact", key: "contact" as const },
 ];
 
 export function Navbar({

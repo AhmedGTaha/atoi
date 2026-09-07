@@ -1,6 +1,6 @@
 export const DEFAULT_COMPANY_SETTINGS = {
-  companyName: "Atrio",
-  companyEmail: "hello@atrio.bh",
+  companyName: "ATOI",
+  companyEmail: "info@atoi.online",
   companyPhone: "+973 17 000 000",
   whatsappPhone: null as string | null,
   locationEn: "Manama, Bahrain.",
@@ -11,10 +11,10 @@ export const DEFAULT_COMPANY_SETTINGS = {
   logoPublicUrl: null as string | null,
   requestNotificationRecipients: [] as string[],
   supportFallbackRecipients: [] as string[],
-  seoTitleEn: "Atrio — Software built around your business",
-  seoTitleAr: "أتريو — برمجيات مصممة حول أعمالك",
+  seoTitleEn: "ATOI — Give us the problem. We ship the software.",
+  seoTitleAr: "ATOI — برمجيات مصممة حول أعمالك",
   seoDescriptionEn:
-    "Atrio is a Bahrain-based digital studio building websites, business software, automation and AI solutions for small businesses.",
+    "ATOI is a Bahrain-based software studio building websites, web applications and internal software for businesses in Bahrain and beyond.",
   seoDescriptionAr:
-    "أتريو استوديو رقمي مقره البحرين يبني مواقع وبرمجيات أعمال وحلول أتمتة وذكاء اصطناعي للشركات الصغيرة.",
+    "ATOI استوديو برمجيات مقره البحرين يبني مواقع إلكترونية وتطبيقات ويب وبرمجيات داخلية للشركات في البحرين وخارجها.",
 };

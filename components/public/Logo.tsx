@@ -20,9 +20,5 @@ export function Logo({
     );
   }
 
-  return (
-    <span className="brand">
-      {name.toLowerCase() === "atrio" ? "ATOI" : name}
-    </span>
-  );
+  return <span className="brand">{name}</span>;
 }

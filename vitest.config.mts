@@ -22,6 +22,7 @@ export default defineConfig({
     alias: {
       "server-only": path.resolve(__dirname, "tests/stubs/server-only.ts"),
       "next/cache": path.resolve(__dirname, "tests/stubs/next-cache.ts"),
+      "next/headers": path.resolve(__dirname, "tests/stubs/next-headers.ts"),
       "@": path.resolve(__dirname, "."),
     },
   },

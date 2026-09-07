@@ -15,8 +15,7 @@ export function AuthCard({
   children: React.ReactNode;
   footer?: React.ReactNode;
 }) {
-  const brandName =
-    companyName.toLowerCase() === "atrio" ? "ATOI" : companyName;
+  const brandName = companyName;
   return (
     <main id="main-content" className="auth-layout">
       <div className="auth-context">

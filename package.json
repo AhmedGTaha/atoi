@@ -13,6 +13,8 @@
     "db:migrate:deploy": "prisma migrate deploy",
     "db:generate": "prisma generate",
     "db:seed": "tsx prisma/seed.ts",
+    "db:fix-branding": "tsx scripts/fix-atoi-branding.ts",
+    "db:sync-mockup-content": "tsx scripts/sync-mockup-content.ts",
     "db:studio": "prisma studio",
     "test": "vitest run",
     "test:watch": "vitest",

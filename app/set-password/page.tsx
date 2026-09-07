@@ -36,7 +36,7 @@ export default async function SetPasswordPage({
       subtitle="This link can only be used once."
       companyName={settings.companyName}
     >
-      <SetPasswordForm token={token} />
+      <SetPasswordForm token={token} mode={mode} />
     </AuthCard>
   );
 }

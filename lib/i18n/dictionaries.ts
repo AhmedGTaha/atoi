@@ -3,11 +3,11 @@ import type { Locale } from "./locale";
 export const dictionaries = {
   en: {
     nav: {
-      home: "Home",
-      services: "Services",
-      work: "Previous Work",
-      about: "About",
-      contact: "Contact",
+      home: "home",
+      services: "services",
+      work: "work",
+      about: "about",
+      contact: "contact",
       startProject: "Start a project",
       langToggle: "EN",
       skipToContent: "Skip to content",
@@ -31,10 +31,11 @@ export const dictionaries = {
       emailPlaceholder: "you@business.com",
       phoneLabel: "Phone / WhatsApp",
       phonePlaceholder: "Phone number",
-      submit: "Send request",
-      submitting: "Sending…",
+      submit: "send inquiry",
+      submitting: "transmitting…",
       genericError: "Something went wrong. Please try again.",
       close: "Close",
+      emailUsInstead: "email us instead",
     },
     success: {
       heading: "Request received.",
@@ -132,6 +133,7 @@ export const dictionaries = {
       submitting: "جارِ الإرسال…",
       genericError: "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
       close: "إغلاق",
+      emailUsInstead: "راسلنا بدلاً من ذلك",
     },
     success: {
       heading: "تم استلام الطلب.",

@@ -16,7 +16,7 @@ import type { BusinessType } from "@/lib/validation/shared";
 import { appUrl } from "@/lib/utils/appUrl";
 
 export type SubmitProjectRequestResult =
-  | { ok: true; confirmationEmailSent: boolean }
+  | { ok: true; confirmationEmailSent: boolean; reference: string }
   | { ok: false; fieldErrors: Record<string, string> }
   | { ok: false; blocked: true };
 
@@ -104,7 +104,8 @@ export async function submitProjectRequest(
     },
   });
 
-  return { ok: true, confirmationEmailSent: confirmationState === "SENT" };
+  const reference = `ATOI-${request.id.replace(/-/g, "").slice(0, 8).toUpperCase()}`;
+  return { ok: true, confirmationEmailSent: confirmationState === "SENT", reference };
 }
 
 // Local alias to avoid importing the Prisma enum type just for this cast.

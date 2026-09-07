@@ -49,7 +49,9 @@ describe("submitProjectRequest", () => {
     mockSendEmail.mockResolvedValue("FAILED");
 
     const result = await submitProjectRequest(validInput);
-    expect(result).toEqual({ ok: true, confirmationEmailSent: false });
+    expect(result.ok).toBe(true);
+    expect(result).toMatchObject({ ok: true, confirmationEmailSent: false });
+    if (result.ok) expect(result.reference).toMatch(/^ATOI-[A-F0-9]{8}$/);
 
     const stored = await prisma.projectRequest.findFirst({ where: { email: "sara@example.com" } });
     expect(stored).not.toBeNull();

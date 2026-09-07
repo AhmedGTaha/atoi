@@ -17,6 +17,7 @@ function getSecretKey() {
 
 export const ADMIN_SESSION_COOKIE = "atoi_admin_session";
 export const CUSTOMER_SESSION_COOKIE = "atoi_customer_session";
+export const TEAM_SESSION_COOKIE = "atoi_team_session";
 
 const SESSION_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
 
@@ -33,6 +34,14 @@ export interface CustomerSessionPayload {
   role: "customer";
   customerId: string;
   email: string;
+}
+
+export interface TeamSessionPayload {
+  [key: string]: unknown;
+  role: "team";
+  teamMemberId: string;
+  email: string;
+  name: string;
 }
 
 async function signSession(payload: Record<string, unknown>): Promise<string> {
@@ -79,6 +88,12 @@ export async function createCustomerSession(payload: CustomerSessionPayload) {
   store.set(CUSTOMER_SESSION_COOKIE, token, cookieOptions);
 }
 
+export async function createTeamSession(payload: TeamSessionPayload) {
+  const token = await signSession(payload);
+  const store = await cookies();
+  store.set(TEAM_SESSION_COOKIE, token, cookieOptions);
+}
+
 export async function getAdminSession(): Promise<AdminSessionPayload | null> {
   const store = await cookies();
   const token = store.get(ADMIN_SESSION_COOKIE)?.value;
@@ -93,6 +108,13 @@ export async function getCustomerSession(): Promise<CustomerSessionPayload | nul
   return verifySession<CustomerSessionPayload>(token);
 }
 
+export async function getTeamSession(): Promise<TeamSessionPayload | null> {
+  const store = await cookies();
+  const token = store.get(TEAM_SESSION_COOKIE)?.value;
+  if (!token) return null;
+  return verifySession<TeamSessionPayload>(token);
+}
+
 export async function destroyAdminSession() {
   const store = await cookies();
   store.delete(ADMIN_SESSION_COOKIE);
@@ -103,6 +125,19 @@ export async function destroyCustomerSession() {
   store.delete(CUSTOMER_SESSION_COOKIE);
 }
 
+export async function destroyTeamSession() {
+  const store = await cookies();
+  store.delete(TEAM_SESSION_COOKIE);
+}
+
+/** Clears every role's session cookie regardless of which one is active. */
+export async function destroyAllSessions() {
+  const store = await cookies();
+  store.delete(ADMIN_SESSION_COOKIE);
+  store.delete(CUSTOMER_SESSION_COOKIE);
+  store.delete(TEAM_SESSION_COOKIE);
+}
+
 /** Edge-safe verification used by middleware (no `next/headers`). */
 export async function verifyAdminToken(token: string) {
   return verifySession<AdminSessionPayload>(token);
@@ -110,4 +145,8 @@ export async function verifyAdminToken(token: string) {
 
 export async function verifyCustomerToken(token: string) {
   return verifySession<CustomerSessionPayload>(token);
+}
+
+export async function verifyTeamToken(token: string) {
+  return verifySession<TeamSessionPayload>(token);
 }

@@ -4,7 +4,7 @@ import { verifyPassword } from "@/lib/auth/password";
 import type { AdminUser } from "@prisma/client";
 
 export async function authenticateAdmin(email: string, password: string): Promise<AdminUser | null> {
-  const admin = await prisma.adminUser.findUnique({ where: { email } });
+  const admin = await prisma.adminUser.findUnique({ where: { email: email.trim().toLowerCase() } });
   if (!admin || !admin.isActive) return null;
 
   const valid = await verifyPassword(password, admin.passwordHash);

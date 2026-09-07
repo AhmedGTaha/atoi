@@ -16,23 +16,24 @@ export function Services({
         <p className="section-marker mb-5">
           [02] {locale === "ar" ? "ما نبنيه" : "what we build"}
         </p>
-        <div className="mb-8 flex flex-wrap justify-between gap-6 border-b pb-8">
-          <h2>{t(content, "services.heading", locale)}</h2>
-          <p className="max-w-sm text-muted">
-            {t(content, "services.body", locale)}
-          </p>
+        <h2 className="mb-8 max-w-[24ch]">
+          {t(content, "services.heading", locale)}
+        </h2>
+        <div className="services-table">
+          {[1, 2, 3, 4, 5, 6].map((n) => (
+            <div key={n} className="service-row">
+              <span className="text-accent font-display">
+                {t(content, `services.item${n}.name`, locale)}
+              </span>
+              <p className="text-muted">
+                {t(content, `services.item${n}.description`, locale)}
+              </p>
+              <span className="service-duration font-display text-faint">
+                {t(content, `services.item${n}.duration`, locale)}
+              </span>
+            </div>
+          ))}
         </div>
-        {[1, 2, 3, 4].map((n) => (
-          <div key={n} className="service-row">
-            <span className="section-marker">0{n}</span>
-            <h3 className="service-name">
-              {t(content, `services.item${n}.name`, locale)}
-            </h3>
-            <p className="text-muted">
-              {t(content, `services.item${n}.description`, locale)}
-            </p>
-          </div>
-        ))}
       </Container>
     </section>
   );

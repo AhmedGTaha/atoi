@@ -35,6 +35,7 @@ export function TeamMembersTable({ members }: { members: TeamMemberRow[] }) {
             <th className="px-5 py-3 text-start font-medium">Email</th>
             <th className="px-5 py-3 text-start font-medium">Projects</th>
             <th className="px-5 py-3 text-start font-medium">Status</th>
+            <th className="px-5 py-3 text-start font-medium">Account</th>
             <th className="px-5 py-3 text-start font-medium"></th>
           </tr>
         </thead>
@@ -48,6 +49,18 @@ export function TeamMembersTable({ members }: { members: TeamMemberRow[] }) {
                 <Badge
                   label={m.isActive ? "Active" : "Inactive"}
                   tone={m.isActive ? "ACTIVE" : "DISABLED"}
+                />
+              </td>
+              <td className="px-5 py-3">
+                <Badge
+                  label={
+                    m.accountStatus === "ACTIVE"
+                      ? "Active"
+                      : m.accountStatus === "INVITED"
+                        ? "Invited"
+                        : "Disabled"
+                  }
+                  tone={m.accountStatus}
                 />
               </td>
               <td className="px-5 py-3 text-end">

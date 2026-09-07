@@ -1,49 +1,46 @@
 import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
 import { Logo } from "@/components/public/Logo";
-import { LanguageToggle } from "@/components/LanguageToggle";
 import { logoutAction } from "@/app/actions/authActions";
-import type { Locale } from "@/lib/i18n/locale";
-import { getDictionary } from "@/lib/i18n/dictionaries";
 
-export function PortalShell({
-  locale,
+export function TeamShell({
   companyName,
+  memberName,
   children,
 }: {
-  locale: Locale;
   companyName: string;
+  memberName: string;
   children: React.ReactNode;
 }) {
-  const dict = getDictionary(locale);
-
   return (
     <div className="portal-shell min-h-dvh">
       <header className="border-b border-rule bg-canvas">
         <div className="site-container flex flex-wrap items-center justify-between gap-4 py-4">
-          <Link href="/portal">
+          <Link href="/team">
             <Logo name={companyName} />
           </Link>
-          <div className="flex items-center gap-3">
-            <ThemeToggle locale={locale} />
-            <LanguageToggle locale={locale} />
+          <div className="flex items-center gap-4">
+            <p className="text-sm text-muted">
+              Signed in as <span className="font-semibold text-foreground">{memberName}</span>
+            </p>
+            <ThemeToggle />
             <form action={logoutAction}>
               <button
                 type="submit"
                 className="text-sm font-semibold text-foreground/70 hover:text-foreground"
               >
-                {dict.portal.signOut}
+                Sign out
               </button>
             </form>
           </div>
         </div>
       </header>
       <div className="site-container border-b py-3 flex justify-between text-sm">
-        <Link href="/portal" className="text-accent">
-          {dict.portal.yourProjects}
+        <Link href="/team" className="text-accent">
+          Your projects
         </Link>
         <Link href="/" className="text-muted">
-          {locale === "ar" ? "الموقع الرئيسي" : "Public website"} ↗
+          Public website ↗
         </Link>
       </div>
       <main id="main-content" className="site-container app-main">

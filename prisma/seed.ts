@@ -14,7 +14,7 @@ async function main() {
     if (!existing) {
       await prisma.adminUser.create({
         data: {
-          name: "Atrio Admin",
+          name: "ATOI Admin",
           email: adminEmail,
           passwordHash: await hashPassword(adminPassword),
           isActive: true,

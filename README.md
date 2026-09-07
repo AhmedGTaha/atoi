@@ -1,4 +1,4 @@
-# Atrio
+# ATOI
 
 Bahrain-based software studio platform: a one-page marketing site, a customer
 project portal, and an internal admin system — all in a single Next.js app.
@@ -32,7 +32,7 @@ See `docs/SRS.md` for the full product specification.
    ```bash
    npm run dev
    ```
-5. Sign in to `/admin/login` with `INITIAL_ADMIN_EMAIL` /
+5. Sign in to `/login` with `INITIAL_ADMIN_EMAIL` /
    `INITIAL_ADMIN_PASSWORD` from your `.env`.
 
 ## Environment variables
