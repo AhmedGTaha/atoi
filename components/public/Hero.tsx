@@ -1,54 +1,42 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import { Panel } from "@/components/ui/Panel";
 import { StartProjectTrigger } from "./StartProjectTrigger";
 import type { Locale } from "@/lib/i18n/locale";
 import type { WebsiteContentMap } from "@/lib/services/websiteContentService";
 import { t } from "@/lib/content/helpers";
-import type { PortfolioProjectWithImages } from "@/lib/services/portfolioService.types";
 
 export function Hero({
   locale,
   content,
-  projects,
 }: {
   locale: Locale;
   content: WebsiteContentMap;
-  projects: PortfolioProjectWithImages[];
 }) {
+  const heading = t(content, "hero.heading", locale);
+  const softwareMatch = heading.match(/software\.?/i);
+
   return (
     <section id="home" className="hero">
       <Container className="hero-grid">
         <div>
-          <p className="terminal-prompt" dir="ltr">
-            <span>atoi</span>
-            <span className="text-faint">@manama:~$</span> build --for you
-            <span className="cursor" aria-hidden="true" />
+          <p className="terminal-prompt">
+            {t(content, "hero.eyebrow", locale)}
           </p>
           <h1 className="hero-title">
-            {t(content, "hero.heading", locale) ===
-            "Give us the problem. We ship the software." ? (
+            {softwareMatch ? (
               <>
-                <span className="block">Give us the problem.</span>
-                <span className="block">We ship the</span>
-                <span className="block text-accent">software.</span>
+                {heading.slice(0, softwareMatch.index)}
+                <span className="text-accent">{softwareMatch[0]}</span>
+                {heading.slice(
+                  (softwareMatch.index ?? 0) + softwareMatch[0].length,
+                )}
               </>
             ) : (
-              t(content, "hero.heading", locale)
-                .split(/(software\.?)/i)
-                .map((part, i) =>
-                  /software/i.test(part) ? (
-                    <span className="text-accent" key={i}>
-                      {part}
-                    </span>
-                  ) : (
-                    part
-                  ),
-                )
+              heading
             )}
           </h1>
-          <p className="mt-8 max-w-lg text-lg leading-relaxed text-foreground/80">
+          <p className="mt-8 max-w-lg text-lg leading-relaxed text-muted">
             {t(content, "hero.body", locale)}
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
@@ -59,57 +47,50 @@ export function Hero({
               {t(content, "hero.ctaSecondary", locale)}
             </Link>
           </div>
-          <p className="mt-6 text-xs text-muted font-display">
-            {t(content, "hero.eyebrow", locale)}
-          </p>
         </div>
-        <Panel className="studio-overview">
-          <div className="panel-strip">
-            <span className="status">
-              atoi — {locale === "ar" ? "أعمالنا" : "studio work"}
-            </span>
-            <span>{locale === "ar" ? "منشور" : "published"}</span>
-          </div>
-          <div className="studio-metrics">
-            <div>
-              <strong>{projects.length}</strong>
-              <span>
-                {locale === "ar" ? "مشاريع منشورة" : "published projects"}
-              </span>
+        <div className="hero-code" dir="ltr">
+          <div className="code-window">
+            <div className="code-bar" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+              <span className="code-filename">inquiry.json</span>
             </div>
-            <div>
-              <strong>
-                {new Set(projects.map((p) => p.category).filter(Boolean)).size}
-              </strong>
-              <span>{locale === "ar" ? "مجالات" : "categories"}</span>
-            </div>
+            <pre className="code-body">
+              <code>
+                <span className="tok-p">{"{"}</span>
+                {"\n  "}
+                <span className="tok-k">&quot;business&quot;</span>
+                <span className="tok-p">:</span>{" "}
+                <span className="tok-s">&quot;your shop&quot;</span>
+                <span className="tok-p">,</span>
+                {"\n  "}
+                <span className="tok-k">&quot;need&quot;</span>
+                <span className="tok-p">:</span>{" "}
+                <span className="tok-s">&quot;a website that sells&quot;</span>
+                <span className="tok-p">,</span>
+                {"\n  "}
+                <span className="tok-k">&quot;reply_in&quot;</span>
+                <span className="tok-p">:</span>{" "}
+                <span className="tok-s">&quot;one working day&quot;</span>
+                {"\n"}
+                <span className="tok-p">{"}"}</span>
+              </code>
+            </pre>
           </div>
-          <div className="studio-feed">
-            {projects.length === 0 ? (
-              <p className="text-sm text-muted">
-                {locale === "ar"
-                  ? "لم تُنشر مشاريع بعد."
-                  : "No projects published yet."}
-              </p>
-            ) : (
-              projects.slice(0, 3).map((project) => (
-                <div className="activity-item" key={project.id}>
-                  <p className="font-display text-xs text-accent">
-                    {project.category ||
-                      (locale === "ar" ? "مشروع" : "project")}
-                  </p>
-                  <p className="mt-1 text-sm text-muted">
-                    {locale === "ar" ? project.titleAr : project.titleEn}
-                  </p>
-                </div>
-              ))
-            )}
-          </div>
-          <Link href="/#work" className="panel-strip text-accent">
-            {t(content, "hero.ctaSecondary", locale)}{" "}
-            <span aria-hidden="true">→</span>
-          </Link>
-        </Panel>
+          <figure className="hero-photo">
+            <Image
+              src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1200&auto=format&fit=crop"
+              alt={
+                locale === "ar"
+                  ? "اجتماع عمل مع عميل"
+                  : "A working session with a client"
+              }
+              width={1200}
+              height={800}
+            />
+          </figure>
+        </div>
       </Container>
       <Container>
         <figure className="hero-media">

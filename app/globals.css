@@ -317,6 +317,104 @@ html[dir="rtl"] {
     color: var(--color-muted);
     border-top: 1px solid var(--color-divider);
   }
+  .hero-code {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+  }
+  .code-window {
+    border: 1px solid var(--color-divider);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0d1530;
+    box-shadow: var(--shadow-brand);
+  }
+  .code-bar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .code-bar span:not(.code-filename) {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.22);
+  }
+  .code-filename {
+    margin-inline-start: 8px;
+    font: 500 12px/1 var(--font-heading);
+    color: rgba(255, 255, 255, 0.55);
+  }
+  .code-body {
+    margin: 0;
+    padding: 20px 22px;
+    font: 500 13px/2 var(--font-heading);
+    color: #dfe4ff;
+    overflow-x: auto;
+  }
+  .tok-k { color: #8f96ff; }
+  .tok-s { color: #7ee2a8; }
+  .tok-p { color: rgba(255, 255, 255, 0.55); }
+  .hero-photo {
+    margin: 0;
+    border: 1px solid var(--color-divider);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-brand);
+    background: var(--color-surface);
+  }
+  .hero-photo img {
+    display: block;
+    width: 100%;
+    height: clamp(180px, 24vw, 300px);
+    object-fit: cover;
+  }
+  .service-cards {
+    display: grid;
+    gap: 28px;
+    margin-top: 40px;
+  }
+  .service-card {
+    border: 1px solid var(--color-divider);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: var(--shadow-brand);
+    transition: transform 160ms ease, box-shadow 160ms ease;
+  }
+  html[data-theme="dark"] .service-card {
+    background: var(--color-surface);
+  }
+  .service-card:hover {
+    transform: translateY(-4px);
+  }
+  .service-photo img {
+    display: block;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  .service-card-body {
+    padding: 22px 22px 26px;
+  }
+  .service-card-body h3 {
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin: 10px 0 8px;
+    color: var(--color-text);
+  }
+  .service-card-body p:last-child {
+    color: var(--color-muted);
+  }
+  @media (min-width: 768px) {
+    .service-cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
   .contact-dark {
     background: #1a1f5c;
     color: #ffffff;
