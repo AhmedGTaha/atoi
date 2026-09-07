@@ -42,6 +42,7 @@ export function WorkDetailModal({
       onClose={onClose}
       titleId={titleId}
       className="project-detail-dialog max-w-7xl"
+      overlayClassName="project-modal-overlay"
     >
       <div className="project-detail-modal">
         <button

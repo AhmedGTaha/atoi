@@ -13,6 +13,7 @@ export function Modal({
   titleId,
   children,
   className,
+  overlayClassName,
   restoreFocusTo,
 }: {
   isOpen: boolean;
@@ -20,6 +21,7 @@ export function Modal({
   titleId: string;
   children: React.ReactNode;
   className?: string;
+  overlayClassName?: string;
   restoreFocusTo?: React.MutableRefObject<HTMLElement | null>;
 }) {
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -94,7 +96,10 @@ export function Modal({
       role="presentation"
     >
       <div
-        className="absolute inset-0 bg-overlay backdrop-blur-sm"
+        className={clsx(
+          "absolute inset-0 bg-overlay backdrop-blur-sm",
+          overlayClassName,
+        )}
         onClick={onClose}
         aria-hidden="true"
       />

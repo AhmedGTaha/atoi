@@ -30,7 +30,7 @@ export function Navbar({
 
   return (
     <header className="public-header">
-      <Container className="flex h-[64px] items-center justify-between gap-6">
+      <Container className="public-nav-container flex h-[64px] items-center justify-between gap-6">
         <Link href="/#home" className="shrink-0">
           <Logo name={companyName} />
         </Link>

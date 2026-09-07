@@ -19,7 +19,7 @@ export function SelectedWork({
 
   return (
     <section id="work" className="public-section work-section">
-      <Container>
+      <Container className="work-container">
         <p className="section-marker selected-work-marker">[ 02 ]</p>
         <div className="selected-work-heading">
           <div>

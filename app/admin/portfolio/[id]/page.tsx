@@ -27,8 +27,8 @@ export default async function EditPortfolioProjectPage({
         description="Edit public portfolio content and its ordered gallery."
       />
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <Card>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(380px,.9fr)]">
+        <Card className="portfolio-details-card">
           <h2 className="mb-5 font-display text-base">Project details</h2>
           <PortfolioForm
             project={project}
@@ -39,7 +39,6 @@ export default async function EditPortfolioProjectPage({
 
         <div className="space-y-6">
           <Card>
-            <h2 className="mb-5 font-display text-base">Project images</h2>
             <PortfolioImageManager
               projectId={project.id}
               images={project.images}

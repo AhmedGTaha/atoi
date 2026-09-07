@@ -174,6 +174,7 @@ function AllProjectsModal({
       onClose={onClose}
       titleId="all-projects-title"
       className="all-projects-dialog max-w-6xl"
+      overlayClassName="project-modal-overlay"
     >
       <div className="all-projects-modal">
         <button
