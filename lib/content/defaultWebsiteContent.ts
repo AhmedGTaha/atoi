@@ -1,7 +1,13 @@
 export interface WebsiteContentField {
   key: string;
   section:
-    "hero" | "services" | "process" | "work" | "about" | "finalCta" | "footer";
+    | "hero"
+    | "services"
+    | "process"
+    | "work"
+    | "about"
+    | "finalCta"
+    | "footer";
   label: string;
   multiline: boolean;
   valueEn: string;
@@ -9,9 +15,9 @@ export interface WebsiteContentField {
 }
 
 /**
- * Seed/default copy for the public one-page site, matching the supplied
- * ui-reference screenshots and SRS sections 11-17. Also doubles as the
- * fallback used if a key is ever missing from the database.
+ * Seed/default copy for the public one-page site.
+ * Voice: plain, confident, human. Short sentences. No buzzwords.
+ * Also doubles as the fallback used if a key is ever missing from the database.
  */
 export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
   {
@@ -19,16 +25,16 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     section: "hero",
     label: "Eyebrow",
     multiline: false,
-    valueEn: "Bahrain-based software studio",
-    valueAr: "استوديو رقمي من البحرين",
+    valueEn: "Software studio — Bahrain",
+    valueAr: "استوديو برمجيات — البحرين",
   },
   {
     key: "hero.heading",
     section: "hero",
     label: "Heading",
     multiline: false,
-    valueEn: "Give us the problem. We ship the software.",
-    valueAr: "برمجيات مصممة حول أعمالك.",
+    valueEn: "Websites and software your business can rely on.",
+    valueAr: "مواقع وبرمجيات يعتمد عليها شغلك.",
   },
   {
     key: "hero.body",
@@ -36,9 +42,9 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Body",
     multiline: true,
     valueEn:
-      "We design and build websites, web applications and internal software for businesses in Bahrain and beyond.",
+      "ATOI designs, builds, and looks after websites and business software for companies in Bahrain. One team, plain language, no surprises.",
     valueAr:
-      "نصمم مواقع إلكترونية وأنظمة أعمال وأتمتة وبرمجيات مخصصة للشركات التي تريد العمل بذكاء أكبر.",
+      "أتوي تصمم وتبني وتتابع المواقع والبرمجيات لشركات البحرين. فريق واحد، وكلام واضح، وبدون مفاجآت.",
   },
   {
     key: "hero.ctaPrimary",
@@ -46,40 +52,39 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Primary button label",
     multiline: false,
     valueEn: "Start a project",
-    valueAr: "ابدأ مشروعاً",
+    valueAr: "ابدأ مشروعك",
   },
   {
     key: "hero.ctaSecondary",
     section: "hero",
     label: "Secondary button label",
     multiline: false,
-    valueEn: "View our work",
-    valueAr: "شاهد أعمالنا",
+    valueEn: "See our work",
+    valueAr: "شوف شغلنا",
   },
   {
     key: "services.heading",
     section: "services",
     label: "Heading",
     multiline: false,
-    valueEn: "What we can take care of",
-    valueAr: "ما يمكننا الاهتمام به",
+    valueEn: "What we build",
+    valueAr: "وش نبني",
   },
   {
     key: "services.body",
     section: "services",
     label: "Supporting copy",
     multiline: true,
-    valueEn:
-      "No packages to decode. Just the right digital solution for the way you work.",
-    valueAr: "لا حزم معقدة لفك رموزها. فقط الحل الرقمي المناسب لطريقة عملك.",
+    valueEn: "Four things, done properly. Pick one or combine them.",
+    valueAr: "أربع أشياء، ونسويها صح. اختر وحدة أو اجمع بينها.",
   },
   {
     key: "services.item1.name",
     section: "services",
     label: "Service 1 name",
     multiline: false,
-    valueEn: "Websites & web applications",
-    valueAr: "مواقع وتطبيقات ويب",
+    valueEn: "Business websites",
+    valueAr: "مواقع للشركات",
   },
   {
     key: "services.item1.description",
@@ -87,24 +92,25 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 1 description",
     multiline: true,
     valueEn:
-      "A clear digital home that helps your customers take the next step.",
-    valueAr: "منزل رقمي واضح يساعد عملاءك على اتخاذ الخطوة التالية.",
+      "Fast Arabic/English sites that explain what you do and bring you customers.",
+    valueAr: "مواقع سريعة بالعربي والإنجليزي تشرح شغلك وتجيب لك عملاء.",
   },
   {
     key: "services.item2.name",
     section: "services",
     label: "Service 2 name",
     multiline: false,
-    valueEn: "Business software",
-    valueAr: "برمجيات الأعمال",
+    valueEn: "Web applications",
+    valueAr: "تطبيقات ويب",
   },
   {
     key: "services.item2.description",
     section: "services",
     label: "Service 2 description",
     multiline: true,
-    valueEn: "Practical tools designed around the way your team already works.",
-    valueAr: "أدوات عملية مصممة حول طريقة عمل فريقك الحالية.",
+    valueEn:
+      "Portals, dashboards, and booking flows your team and customers actually use.",
+    valueAr: "بوابات ولوحات تحكم وحجوزات يستخدمها فريقك وعملاؤك فعلاً.",
   },
   {
     key: "services.item3.name",
@@ -112,7 +118,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 3 name",
     multiline: false,
     valueEn: "Automation",
-    valueAr: "الأتمتة",
+    valueAr: "أتمتة",
   },
   {
     key: "services.item3.description",
@@ -120,16 +126,16 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 3 description",
     multiline: true,
     valueEn:
-      "Less repetitive work, fewer handovers and more time for what matters.",
-    valueAr: "عمل متكرر أقل، تسليمات أقل، ووقت أكبر لما يهم.",
+      "We connect your tools and remove the repetitive work eating your week.",
+    valueAr: "نربط أدواتك ببعض ونشيل الشغل المتكرر اللي ياكل أسبوعك.",
   },
   {
     key: "services.item4.name",
     section: "services",
     label: "Service 4 name",
     multiline: false,
-    valueEn: "AI solutions",
-    valueAr: "حلول الذكاء الاصطناعي",
+    valueEn: "Care plans",
+    valueAr: "خطط متابعة",
   },
   {
     key: "services.item4.description",
@@ -137,72 +143,72 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 4 description",
     multiline: true,
     valueEn:
-      "Useful intelligence applied thoughtfully to your real business tasks.",
-    valueAr: "ذكاء مفيد يُطبق بعناية على مهام عملك الحقيقية.",
+      "Updates, backups, and someone to call when anything breaks.",
+    valueAr: "تحديثات ونسخ احتياطي، وشخص تتصل عليه إذا تعطل شيء.",
   },
   {
     key: "process.heading",
     section: "process",
     label: "Heading",
     multiline: false,
-    valueEn: "Simple from the start.",
-    valueAr: "بسيط منذ البداية.",
+    valueEn: "How it goes",
+    valueAr: "كيف يمشي الشغل",
   },
   {
     key: "process.step1.name",
     section: "process",
     label: "Step 1 name",
     multiline: false,
-    valueEn: "Tell us what you need",
-    valueAr: "أخبرنا بما تحتاجه",
+    valueEn: "You talk, we listen",
+    valueAr: "انت تتكلم، وحنا نسمع",
   },
   {
     key: "process.step1.description",
     section: "process",
     label: "Step 1 description",
     multiline: true,
-    valueEn: "Describe the business problem or idea in your own words.",
-    valueAr: "صف مشكلة عملك أو فكرتك بكلماتك الخاصة.",
+    valueEn: "A short call about what you need. No jargon, no pressure.",
+    valueAr: "مكالمة قصيرة عن اللي تحتاجه. بدون مصطلحات وبدون ضغط.",
   },
   {
     key: "process.step2.name",
     section: "process",
     label: "Step 2 name",
     multiline: false,
-    valueEn: "We plan and build it",
-    valueAr: "نخطط ونبنيه",
+    valueEn: "We build it",
+    valueAr: "نبنيه",
   },
   {
     key: "process.step2.description",
     section: "process",
     label: "Step 2 description",
     multiline: true,
-    valueEn: "We determine the right approach, then get to work.",
-    valueAr: "نحدد النهج الصحيح، ثم نبدأ العمل.",
+    valueEn: "Fixed price, fixed timeline. You see progress every week.",
+    valueAr: "سعر ثابت ومدة ثابتة. وتشوف التقدم كل أسبوع.",
   },
   {
     key: "process.step3.name",
     section: "process",
     label: "Step 3 name",
     multiline: false,
-    valueEn: "Follow the progress",
-    valueAr: "تابع التقدم",
+    valueEn: "We stay around",
+    valueAr: "ونبقى معك",
   },
   {
     key: "process.step3.description",
     section: "process",
     label: "Step 3 description",
     multiline: true,
-    valueEn: "Stay close to the project without having to manage the details.",
-    valueAr: "ابق قريباً من المشروع دون الحاجة لإدارة التفاصيل.",
+    valueEn: "Launch day is the start. We keep it running and improve it.",
+    valueAr: "يوم الإطلاق هو البداية. نحافظ عليه شغال ونطوره.",
   },
   {
     key: "work.heading",
     section: "work",
     label: "Heading",
     multiline: false,
-    valueEn: "Selected work",
-    valueAr: "أعمال مختارة",
+    valueEn: "Recent work",
+    valueAr: "شغلنا الأخير",
   },
   {
     key: "work.seeAllLabel",
@@ -210,15 +216,15 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: '"See all projects" label',
     multiline: false,
     valueEn: "See all projects",
-    valueAr: "عرض كل المشاريع",
+    valueAr: "شوف كل المشاريع",
   },
   {
     key: "about.heading",
     section: "about",
     label: "Heading",
     multiline: false,
-    valueEn: "Bahrain-based. Built around your business.",
-    valueAr: "من البحرين. مصمم حول أعمالك.",
+    valueEn: "A small studio in Manama.",
+    valueAr: "استوديو صغير في المنامة.",
   },
   {
     key: "about.body",
@@ -226,25 +232,25 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Body",
     multiline: true,
     valueEn:
-      "Atrio is a Bahrain-based digital studio helping small businesses go digital without the complexity. We keep communication direct, our process simple, and our solutions practical — so you can focus on running your business while we handle the software.",
+      "We're a small team, and that's on purpose. You talk to the people building your software, in Arabic or English. No account managers relaying messages, no ticket queues.",
     valueAr:
-      "أتريو استوديو رقمي مقره البحرين يساعد الشركات الصغيرة على التحول الرقمي دون تعقيد. نحافظ على تواصل مباشر، وعملية بسيطة، وحلول عملية — لتتمكن من التركيز على إدارة أعمالك بينما نتولى نحن الجانب البرمجي.",
+      "فريقنا صغير، وهذا مقصود. تتكلم مع نفس الناس اللي تبني برمجياتك، بالعربي أو الإنجليزي. بدون وسطاء وبدون طوابير تذاكر.",
   },
   {
     key: "finalCta.eyebrow",
     section: "finalCta",
     label: "Eyebrow",
     multiline: false,
-    valueEn: "LET'S MAKE IT SIMPLER",
-    valueAr: "لنجعل الأمر أبسط",
+    valueEn: "START HERE",
+    valueAr: "ابدأ من هنا",
   },
   {
     key: "finalCta.heading",
     section: "finalCta",
     label: "Heading",
     multiline: false,
-    valueEn: "Have a problem software could solve?",
-    valueAr: "هل لديك مشكلة يمكن للبرمجيات حلها؟",
+    valueEn: "Tell us what you need.",
+    valueAr: "قل لنا وش تحتاج.",
   },
   {
     key: "finalCta.body",
@@ -252,8 +258,8 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Body",
     multiline: true,
     valueEn:
-      "Tell us what your business needs. You do not need to know the technical solution.",
-    valueAr: "أخبرنا بما تحتاجه أعمالك. لست بحاجة لمعرفة الحل التقني.",
+      "One message is enough. We reply within one working day.",
+    valueAr: "رسالة وحدة تكفي. ونرد عليك خلال يوم عمل واحد.",
   },
   {
     key: "finalCta.ctaLabel",
@@ -261,15 +267,15 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Button label",
     multiline: false,
     valueEn: "Start a project",
-    valueAr: "ابدأ مشروعاً",
+    valueAr: "ابدأ مشروعك",
   },
   {
     key: "footer.tagline",
     section: "footer",
     label: "Company tagline",
     multiline: false,
-    valueEn: "Software solutions, made straightforward.",
-    valueAr: "حلول برمجية، بأسلوب مباشر.",
+    valueEn: "Built in Bahrain.",
+    valueAr: "مصنوع في البحرين.",
   },
 ];
 
