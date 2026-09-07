@@ -30,24 +30,23 @@ export function Navbar({
 
   return (
     <header className="public-header">
-      <Container className="public-nav-container flex h-[64px] items-center justify-between gap-6">
-        <Link href="/#home" className="shrink-0">
+      <Container className="public-nav-container">
+        <Link href="/#home" className="public-brand-link">
           <Logo name={companyName} />
         </Link>
 
         <PrimaryNav items={navItems} className="hidden lg:flex" />
 
-        <div className="hidden items-center gap-5 lg:flex">
+        <div className="public-nav-actions hidden lg:flex">
           <Link
             href="/login"
-            className="text-xs font-display text-foreground/80 transition-colors hover:text-foreground"
+            className="public-sign-in"
           >
             {locale === "ar" ? "تسجيل الدخول" : "Sign in"}
           </Link>
           <span className="nav-divider" aria-hidden="true" />
-          <LanguageToggle locale={locale} />
-          <span className="nav-divider" aria-hidden="true" />
-          <StartProjectTrigger className="btn btn-primary">
+          <LanguageToggle locale={locale} className="public-language-toggle" />
+          <StartProjectTrigger className="btn btn-primary public-project-trigger">
             {dict.nav.startProject}
           </StartProjectTrigger>
         </div>

@@ -17,7 +17,9 @@ export function PrimaryNav({
   items: NavItem[];
   className?: string;
 }) {
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeId, setActiveId] = useState<string | null>(
+    items[0]?.href.replace("/#", "") ?? null,
+  );
 
   useEffect(() => {
     const sections = items

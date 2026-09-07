@@ -41,6 +41,11 @@ export function LanguageToggle({
       >
         EN
       </button>
+      {className?.includes("public-language-toggle") ? (
+        <span className="language-separator" aria-hidden="true">
+          /
+        </span>
+      ) : null}
       <button
         type="button"
         disabled={isPending}
