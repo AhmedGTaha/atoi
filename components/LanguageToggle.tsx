@@ -8,14 +8,20 @@ import clsx from "clsx";
 export function LanguageToggle({
   locale,
   className,
+  onLocaleChange,
 }: {
   locale: Locale;
   className?: string;
+  onLocaleChange?: (locale: Locale) => void;
 }) {
   const [isPending, startTransition] = useTransition();
 
   function switchTo(next: Locale) {
     if (next === locale || isPending) return;
+    if (onLocaleChange) {
+      onLocaleChange(next);
+      return;
+    }
     startTransition(async () => {
       await setLocaleAction(next);
     });

@@ -57,7 +57,43 @@ export async function createPortfolioProjectAction(
     return { error: parsed.error.issues[0]?.message ?? "Invalid input." };
   }
 
+  const files = formData
+    .getAll("images")
+    .filter((file): file is File => file instanceof File && file.size > 0);
+  if (files.length > 10) {
+    return { error: "Upload no more than 10 images at once." };
+  }
+  for (const file of files) {
+    const validation = validateImageFile(file);
+    if (!validation.ok) return { error: validation.error };
+  }
+
   const project = await createPortfolioProject(parsed.data);
+
+  if (files.length > 0) {
+    try {
+      for (const file of files) {
+        const asset = await uploadPortfolioImage(file, "portfolio");
+        await addPortfolioImage(project.id, {
+          ...asset,
+          fileName: file.name,
+          fileSize: file.size,
+        });
+      }
+      const coverIndex = Number(formData.get("coverIndex") ?? 0);
+      if (coverIndex > 0) {
+        const withImages = await getPortfolioProjectById(project.id);
+        const cover = withImages?.images[coverIndex];
+        if (cover) await setMainPortfolioImage(project.id, cover.id);
+      }
+    } catch (err) {
+      console.error(
+        "[portfolio] Image upload failed during project creation:",
+        err,
+      );
+    }
+  }
+
   redirect(`/admin/portfolio/${project.id}`);
 }
 

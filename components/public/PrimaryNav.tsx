@@ -17,13 +17,14 @@ export function PrimaryNav({
   items: NavItem[];
   className?: string;
 }) {
+  const sectionId = (href: string) => href.split("#")[1] ?? href;
   const [activeId, setActiveId] = useState<string | null>(
-    items[0]?.href.replace("/#", "") ?? null,
+    items[0] ? sectionId(items[0].href) : null,
   );
 
   useEffect(() => {
     const sections = items
-      .map((item) => document.getElementById(item.href.replace("/#", "")))
+      .map((item) => document.getElementById(sectionId(item.href)))
       .filter((el): el is HTMLElement => Boolean(el));
     if (sections.length === 0) return;
 
@@ -43,7 +44,7 @@ export function PrimaryNav({
   return (
     <nav className={clsx("nav-primary", className)} aria-label="Primary">
       {items.map((item) => {
-        const id = item.href.replace("/#", "");
+        const id = sectionId(item.href);
         const isActive = activeId === id;
         return (
           <Link

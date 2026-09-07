@@ -17,21 +17,26 @@ const NAV_ITEMS = [
 export function Navbar({
   locale,
   companyName,
+  previewMode = false,
+  onLocaleChange,
 }: {
   locale: Locale;
   companyName: string;
+  previewMode?: boolean;
+  onLocaleChange?: (locale: Locale) => void;
 }) {
   const dict = getDictionary(locale);
 
   const navItems = NAV_ITEMS.map((item) => ({
     ...item,
+    href: previewMode ? item.href.replace("/", "") : item.href,
     label: dict.nav[item.key],
   }));
 
   return (
     <header className="public-header">
       <Container className="public-nav-container">
-        <Link href="/#home" className="public-brand-link">
+        <Link href={previewMode ? "#home" : "/#home"} className="public-brand-link">
           <Logo name={companyName} />
         </Link>
 
@@ -45,14 +50,18 @@ export function Navbar({
             {locale === "ar" ? "تسجيل الدخول" : "Sign in"}
           </Link>
           <span className="nav-divider" aria-hidden="true" />
-          <LanguageToggle locale={locale} className="public-language-toggle" />
+          <LanguageToggle
+            locale={locale}
+            className="public-language-toggle"
+            onLocaleChange={onLocaleChange}
+          />
           <StartProjectTrigger className="btn btn-primary public-project-trigger">
             {dict.nav.startProject}
           </StartProjectTrigger>
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
-          <LanguageToggle locale={locale} />
+          <LanguageToggle locale={locale} onLocaleChange={onLocaleChange} />
           <MobileMenu locale={locale} navItems={NAV_ITEMS} />
         </div>
       </Container>

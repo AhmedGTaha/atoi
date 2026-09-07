@@ -79,6 +79,7 @@ export function ProjectGallery({
               : "(min-width: 1024px) 34vw, 92vw"
           }
           className="object-contain object-center"
+          unoptimized={image.publicUrl.startsWith("blob:")}
         />
         {canGoPrevious && (
           <button
@@ -143,6 +144,7 @@ export function ProjectGallery({
                 fill
                 sizes="96px"
                 className="object-cover"
+                unoptimized={galleryImage.publicUrl.startsWith("blob:")}
               />
             </button>
           ))}

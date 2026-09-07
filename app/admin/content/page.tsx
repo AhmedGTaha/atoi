@@ -3,7 +3,7 @@ import {
   getWebsiteContentForAdmin,
   websiteContentFieldDefinitions,
 } from "@/lib/services/websiteContentService";
-import { PageHeader, Card } from "@/components/admin/ui";
+import { PageHeader } from "@/components/admin/ui";
 import { WebsiteContentForm } from "@/components/admin/WebsiteContentForm";
 
 export default async function AdminContentPage() {
@@ -17,11 +17,9 @@ export default async function AdminContentPage() {
     <div>
       <PageHeader
         title="Website Content"
-        description="Edit the public homepage copy in English and Arabic."
+        description="Edit each language and review unpublished changes on the real public website."
       />
-      <Card>
-        <WebsiteContentForm fields={fields} content={content} />
-      </Card>
+      <WebsiteContentForm fields={fields} content={content} />
     </div>
   );
 }

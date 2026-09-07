@@ -8,9 +8,11 @@ import { t } from "@/lib/content/helpers";
 export function Hero({
   locale,
   content,
+  previewMode = false,
 }: {
   locale: Locale;
   content: WebsiteContentMap;
+  previewMode?: boolean;
 }) {
   return (
     <section id="home" className="hero">
@@ -45,7 +47,7 @@ export function Hero({
           <StartProjectTrigger className="btn btn-primary">
             {t(content, "hero.ctaPrimary", locale)}
           </StartProjectTrigger>
-          <Link href="/#work" className="btn btn-secondary">
+          <Link href={previewMode ? "#work" : "/#work"} className="btn btn-secondary">
             {t(content, "hero.ctaSecondary", locale)}
           </Link>
         </div>
