@@ -13,15 +13,20 @@ export function About({
   return (
     <section id="about" className="public-section about-section">
       <Container>
-        <p className="section-marker mb-6">[03] readme.md</p>
+        <p className="section-marker mb-6">[03] how-we-work.md</p>
         <div className="readme">
           <h3># {t(content, "process.heading", locale)}</h3>
           {[1, 2, 3].map((n) => (
             <div className="readme-row" key={n}>
-              <span className="text-accent" aria-hidden="true">
-                →{" "}
-              </span>
-              {t(content, `process.step${n}`, locale)}
+              <p>
+                <span className="text-accent" aria-hidden="true">
+                  →{" "}
+                </span>
+                {t(content, `process.step${n}.name`, locale)}
+              </p>
+              <p className="readme-row-description">
+                {t(content, `process.step${n}.description`, locale)}
+              </p>
             </div>
           ))}
         </div>

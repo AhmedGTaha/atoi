@@ -720,6 +720,15 @@ html[dir="rtl"] {
     font: inherit;
     color: var(--color-muted);
   }
+  .readme-row + .readme-row {
+    margin-top: 12px;
+  }
+  .readme-row-description {
+    margin-top: 2px;
+    font: 400 15px/1.6 var(--font-body);
+    letter-spacing: normal;
+    color: var(--color-faint);
+  }
   .work-image {
     position: relative;
     width: 100%;
