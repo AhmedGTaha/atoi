@@ -47,3 +47,8 @@ next-env.d.ts
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# local postgres instance (never commit)
+.pgdata/
+.pgpass
+pg.log
