@@ -1,0 +1,64 @@
+2026-09-07 14:18:58.169 +03 [8804] LOG:  starting PostgreSQL 18.1 on x86_64-windows, compiled by msvc-19.44.35219, 64-bit
+2026-09-07 14:18:58.174 +03 [8804] LOG:  listening on IPv6 address "::1", port 5433
+2026-09-07 14:18:58.174 +03 [8804] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2026-09-07 14:18:58.380 +03 [22876] LOG:  database system was shut down at 2026-09-07 14:18:18 +03
+2026-09-07 14:18:58.417 +03 [8804] LOG:  database system is ready to accept connections
+2026-09-07 14:20:57.479 +03 [8804] LOG:  client backend (PID 27460) was terminated by exception 0xC0000142
+2026-09-07 14:20:57.479 +03 [8804] HINT:  See C include file "ntstatus.h" for a description of the hexadecimal value.
+2026-09-07 14:20:57.479 +03 [8804] LOG:  terminating any other active server processes
+2026-09-07 14:20:57.486 +03 [8804] LOG:  all server processes terminated; reinitializing
+2026-09-07 14:20:57.536 +03 [8804] LOG:  startup process (PID 27004) was terminated by exception 0xC0000142
+2026-09-07 14:20:57.536 +03 [8804] HINT:  See C include file "ntstatus.h" for a description of the hexadecimal value.
+2026-09-07 14:20:57.536 +03 [8804] LOG:  aborting startup due to startup process failure
+2026-09-07 14:20:57.538 +03 [8804] LOG:  database system is shut down
+2026-09-07 14:21:31.108 +03 [18764] LOG:  starting PostgreSQL 18.1 on x86_64-windows, compiled by msvc-19.44.35219, 64-bit
+2026-09-07 14:21:31.112 +03 [18764] LOG:  listening on IPv6 address "::1", port 5433
+2026-09-07 14:21:31.112 +03 [18764] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2026-09-07 14:21:31.269 +03 [15796] LOG:  database system was interrupted; last known up at 2026-09-07 14:18:58 +03
+2026-09-07 14:21:35.693 +03 [15796] LOG:  database system was not properly shut down; automatic recovery in progress
+2026-09-07 14:21:35.720 +03 [15796] LOG:  redo starts at 0/17F16E0
+2026-09-07 14:21:35.723 +03 [15796] LOG:  invalid record length at 0/183F370: expected at least 24, got 0
+2026-09-07 14:21:35.723 +03 [15796] LOG:  redo done at 0/183F338 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-09-07 14:21:35.763 +03 [27240] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-09-07 14:21:36.445 +03 [27240] LOG:  checkpoint complete: wrote 41 buffers (0.3%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.004 s, sync=0.468 s, total=0.721 s; sync files=11, longest=0.122 s, average=0.043 s; distance=311 kB, estimate=311 kB; lsn=0/183F370, redo lsn=0/183F370
+2026-09-07 14:21:36.490 +03 [18764] LOG:  database system is ready to accept connections
+2026-09-07 14:23:49.427 +03 [17024] FATAL:  database "atoi" does not exist
+2026-09-07 14:23:49.590 +03 [19136] FATAL:  database "atoi" does not exist
+2026-09-07 14:23:50.281 +03 [19748] ERROR:  relation "_prisma_migrations" does not exist at character 126
+2026-09-07 14:23:50.281 +03 [19748] STATEMENT:  SELECT "id", "checksum", "finished_at", "migration_name", "logs", "rolled_back_at", "started_at", "applied_steps_count" FROM "_prisma_migrations" ORDER BY "started_at" ASC
+2026-09-07 14:23:51.577 +03 [27240] LOG:  checkpoint starting: immediate force wait
+2026-09-07 14:24:06.932 +03 [27240] LOG:  checkpoint complete: wrote 994 buffers (6.1%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 1 recycled; write=0.089 s, sync=14.845 s, total=15.355 s; sync files=302, longest=0.316 s, average=0.050 s; distance=9448 kB, estimate=9448 kB; lsn=0/2179610, redo lsn=0/21795B8
+2026-09-07 14:24:07.915 +03 [27240] LOG:  checkpoint starting: immediate force wait
+2026-09-07 14:24:08.452 +03 [27240] LOG:  checkpoint complete: wrote 22 buffers (0.1%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.274 s, total=0.537 s; sync files=7, longest=0.052 s, average=0.040 s; distance=5298 kB, estimate=9033 kB; lsn=0/26A5E18, redo lsn=0/26A5DC0
+2026-09-07 14:24:09.739 +03 [27240] LOG:  checkpoint starting: immediate force wait
+2026-09-07 14:24:13.764 +03 [27240] LOG:  checkpoint complete: wrote 115 buffers (0.7%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.027 s, sync=3.631 s, total=4.026 s; sync files=112, longest=0.204 s, average=0.033 s; distance=5915 kB, estimate=8721 kB; lsn=0/2C6CA20, redo lsn=0/2C6C9C8
+2026-09-07 14:29:09.786 +03 [27240] LOG:  checkpoint starting: time
+2026-09-07 14:29:18.572 +03 [27240] LOG:  checkpoint complete: wrote 73 buffers (0.4%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=7.962 s, sync=0.648 s, total=8.786 s; sync files=25, longest=0.166 s, average=0.026 s; distance=439 kB, estimate=7893 kB; lsn=0/2CDA990, redo lsn=0/2CDA900
+2026-09-07 14:53:36.727 +03 [19660] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-09-07 14:53:36.727 +03 [3672] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-09-07 14:53:36.727 +03 [12848] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-09-07 14:53:36.727 +03 [13160] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-09-07 14:59:09.610 +03 [27240] LOG:  checkpoint starting: time
+2026-09-07 14:59:10.522 +03 [27240] LOG:  checkpoint complete: wrote 2 buffers (0.0%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.210 s, sync=0.235 s, total=0.913 s; sync files=3, longest=0.091 s, average=0.079 s; distance=16 kB, estimate=7105 kB; lsn=0/2CDEA08, redo lsn=0/2CDE9B0
+2026-09-07 15:02:22.844 +03 [28580] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-09-07 15:02:22.844 +03 [28568] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-09-07 15:02:22.844 +03 [28560] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-09-07 15:02:22.844 +03 [28532] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-09-07 15:02:22.844 +03 [28608] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-09-07 15:02:22.845 +03 [28652] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-09-07 15:02:22.845 +03 [28668] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-09-07 15:02:22.845 +03 [28628] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-09-07 15:04:09.533 +03 [27240] LOG:  checkpoint starting: time
+2026-09-07 15:04:10.617 +03 [27240] LOG:  checkpoint complete: wrote 5 buffers (0.0%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.539 s, sync=0.270 s, total=1.084 s; sync files=5, longest=0.079 s, average=0.054 s; distance=28 kB, estimate=6397 kB; lsn=0/2CE5A20, redo lsn=0/2CE59C8

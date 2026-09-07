@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Panel } from "@/components/ui/Panel";
@@ -109,6 +110,26 @@ export function Hero({
             <span aria-hidden="true">→</span>
           </Link>
         </Panel>
+      </Container>
+      <Container>
+        <figure className="hero-media">
+          <Image
+            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1800&auto=format&fit=crop"
+            alt={
+              locale === "ar"
+                ? "فريق أتوي يعمل مع عميل"
+                : "The ATOI team at work with a client"
+            }
+            width={1800}
+            height={900}
+            priority
+          />
+          <figcaption>
+            {locale === "ar"
+              ? "صورة مؤقتة — فريق يعمل مع عميل"
+              : "Temporary photo — a team working with a client"}
+          </figcaption>
+        </figure>
       </Container>
     </section>
   );

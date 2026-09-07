@@ -40,7 +40,7 @@ async function main() {
     await prisma.websiteContent.upsert({
       where: { key: field.key },
       create: { key: field.key, valueEn: field.valueEn, valueAr: field.valueAr },
-      update: {},
+      update: { valueEn: field.valueEn, valueAr: field.valueAr },
     });
   }
   console.log(`Seeded ${DEFAULT_WEBSITE_CONTENT.length} website content fields (existing values kept).`);

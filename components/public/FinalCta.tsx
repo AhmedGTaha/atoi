@@ -12,7 +12,7 @@ export function FinalCta({
   content: WebsiteContentMap;
 }) {
   return (
-    <section id="contact" className="public-section contact-section">
+    <section id="contact" className="public-section contact-section contact-dark">
       <Container className="flex flex-wrap items-end justify-between gap-8">
         <div>
           <p className="section-marker mb-5">

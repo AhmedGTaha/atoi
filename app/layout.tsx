@@ -64,7 +64,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       suppressHydrationWarning
-      data-theme="dark"
+      data-theme="light"
       lang={locale}
       dir={dirFor(locale)}
       className={`${latin.variable} ${mono.variable} ${arabic.variable} h-full antialiased`}
@@ -72,7 +72,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('atoi-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark'}catch(e){}})()`,
+            __html: `(function(){try{var t=localStorage.getItem('atoi-theme');document.documentElement.dataset.theme=t==='dark'?'dark':'light'}catch(e){}})()`,
           }}
         />
       </head>
