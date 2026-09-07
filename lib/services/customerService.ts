@@ -1,7 +1,7 @@
 import "server-only";
 import { prisma } from "@/lib/db/client";
 import { normalizeGccPhone, type GccCountryCode } from "@/lib/validation/phone";
-import { hashPassword, verifyPassword } from "@/lib/auth/password";
+import { verifyPassword } from "@/lib/auth/password";
 import { generateRawToken, hashToken, INVITE_TOKEN_TTL_MS, RESET_TOKEN_TTL_MS } from "@/lib/auth/tokens";
 import { sendEmail } from "@/lib/email/resend";
 import { customerInvitationEmail, passwordResetEmail } from "@/lib/email/templates";
@@ -129,41 +129,6 @@ export async function requestPasswordReset(email: string): Promise<void> {
     appUrl(`/set-password?token=${rawToken}&mode=reset`)
   );
   await sendEmail({ to: customer.email, subject: email_.subject, html: email_.html });
-}
-
-export interface TokenConsumeResult {
-  ok: boolean;
-  error?: string;
-}
-
-/** Used by both the invite flow and the forgot-password flow: both end in "set a password with a one-time token". */
-export async function consumeTokenAndSetPassword(
-  rawToken: string,
-  newPassword: string
-): Promise<TokenConsumeResult> {
-  const tokenHash = hashToken(rawToken);
-  const token = await prisma.secureToken.findUnique({ where: { tokenHash } });
-
-  if (!token) return { ok: false, error: "This link is invalid or has already been used." };
-  if (token.usedAt) return { ok: false, error: "This link has already been used." };
-  if (token.expiresAt < new Date()) {
-    return { ok: false, error: "This link has expired. Please request a new one." };
-  }
-
-  const passwordHash = await hashPassword(newPassword);
-
-  await prisma.$transaction([
-    prisma.customer.update({
-      where: { id: token.customerId },
-      data: { passwordHash, accountStatus: "ACTIVE" },
-    }),
-    prisma.secureToken.update({
-      where: { id: token.id },
-      data: { usedAt: new Date() },
-    }),
-  ]);
-
-  return { ok: true };
 }
 
 export async function authenticateCustomer(

@@ -8,9 +8,8 @@ vi.mock("@/lib/email/resend", () => ({
   sendEmail: (...args: unknown[]) => mockSendEmail(...args),
 }));
 
-const { sendCustomerInvitation, consumeTokenAndSetPassword, authenticateCustomer } = await import(
-  "@/lib/services/customerService"
-);
+const { sendCustomerInvitation, authenticateCustomer } = await import("@/lib/services/customerService");
+const { consumeSetPasswordToken } = await import("@/lib/services/secureTokenService");
 const { getOwnedCustomerProject } = await import("@/lib/services/projectService");
 
 beforeEach(async () => {
@@ -46,7 +45,7 @@ describe("customer invitation + set password", () => {
     expect(rawTokenFromEmail).toBeTruthy();
     expect(hashToken(decodeURIComponent(rawTokenFromEmail!))).toBe(token.tokenHash);
 
-    const result = await consumeTokenAndSetPassword(decodeURIComponent(rawTokenFromEmail!), "newpassword123");
+    const result = await consumeSetPasswordToken(decodeURIComponent(rawTokenFromEmail!), "newpassword123");
     expect(result.ok).toBe(true);
 
     const updated = await prisma.customer.findUniqueOrThrow({ where: { id: customer.id } });
@@ -57,7 +56,7 @@ describe("customer invitation + set password", () => {
     expect(authenticated?.id).toBe(customer.id);
 
     // The token is single-use.
-    const reuse = await consumeTokenAndSetPassword(decodeURIComponent(rawTokenFromEmail!), "anotherpassword1");
+    const reuse = await consumeSetPasswordToken(decodeURIComponent(rawTokenFromEmail!), "anotherpassword1");
     expect(reuse.ok).toBe(false);
   });
 });

@@ -7,6 +7,8 @@ import {
   createTeamMember,
   updateTeamMember,
   setTeamMemberActive,
+  deleteTeamMember,
+  sendTeamMemberInvitation,
 } from "@/lib/services/teamService";
 
 export interface TeamFormState {
@@ -60,4 +62,41 @@ export async function setTeamMemberActiveAction(memberId: string, isActive: bool
   await requireAdmin();
   await setTeamMemberActive(memberId, isActive);
   revalidatePath("/admin/team");
+}
+
+export interface ResendTeamInviteState {
+  sent?: boolean;
+  error?: string;
+}
+
+export async function resendTeamMemberInvitationAction(
+  memberId: string,
+  _prevState: ResendTeamInviteState
+): Promise<ResendTeamInviteState> {
+  await requireAdmin();
+  const result = await sendTeamMemberInvitation(memberId);
+  if (result === "FAILED") {
+    return { error: "Unable to send invitation. This member may already be active." };
+  }
+  revalidatePath("/admin/team");
+  return { sent: true };
+}
+
+export interface DeleteTeamMemberState {
+  success?: boolean;
+  error?: string;
+}
+
+export async function deleteTeamMemberAction(
+  memberId: string,
+  _prevState: DeleteTeamMemberState
+): Promise<DeleteTeamMemberState> {
+  await requireAdmin();
+  try {
+    await deleteTeamMember(memberId);
+  } catch {
+    return { error: "Unable to delete this team member. Please try again." };
+  }
+  revalidatePath("/admin/team");
+  return { success: true };
 }

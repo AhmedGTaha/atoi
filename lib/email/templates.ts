@@ -119,6 +119,22 @@ export function customerInvitationEmail(
   };
 }
 
+/** Team member invitations are internal, so always sent in English. */
+export function teamMemberInvitationEmail(companyName: string, setupUrl: string): EmailContent {
+  return {
+    subject: "Set up your Atrio team account",
+    html: emailShell({
+      locale: "en",
+      companyName,
+      heading: "You've been invited to the Atrio team.",
+      bodyHtml:
+        "<p>An admin has added you as a team member. Set a password to activate your account.</p>",
+      ctaUrl: setupUrl,
+      ctaLabel: "Set your password",
+    }),
+  };
+}
+
 export function passwordResetEmail(
   locale: Locale,
   companyName: string,

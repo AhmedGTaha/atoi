@@ -3,7 +3,8 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { loginSchema, setPasswordSchema, forgotPasswordSchema } from "@/lib/validation/auth";
-import { authenticateCustomer, requestPasswordReset, consumeTokenAndSetPassword } from "@/lib/services/customerService";
+import { authenticateCustomer, requestPasswordReset } from "@/lib/services/customerService";
+import { consumeSetPasswordToken } from "@/lib/services/secureTokenService";
 import { createCustomerSession, destroyCustomerSession } from "@/lib/auth/session";
 import { rateLimit, clientIpFrom } from "@/lib/utils/rateLimit";
 
@@ -88,10 +89,10 @@ export async function setPasswordAction(
     return { error: parsed.error.issues[0]?.message ?? "Invalid input." };
   }
 
-  const result = await consumeTokenAndSetPassword(parsed.data.token, parsed.data.password);
+  const result = await consumeSetPasswordToken(parsed.data.token, parsed.data.password);
   if (!result.ok) {
     return { error: result.error };
   }
 
-  redirect("/login?passwordSet=1");
+  redirect(result.redirectTo ?? "/login?passwordSet=1");
 }
