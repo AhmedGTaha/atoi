@@ -50,7 +50,7 @@ export function PortfolioImageManager({
       <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {images.map((image, index) => (
           <div key={image.id} className="overflow-hidden border border-rule">
-            <div className="relative aspect-square bg-cream-dim">
+            <div className="relative aspect-square bg-surface">
               <Image
                 src={image.publicUrl}
                 alt=""
@@ -59,7 +59,7 @@ export function PortfolioImageManager({
                 className="object-cover"
               />
               {image.isMain && (
-                <span className="absolute start-2 top-2 bg-ink px-2 py-0.5 text-xs font-semibold text-cream">
+                <span className="absolute start-2 top-2 bg-foreground px-2 py-0.5 text-xs font-semibold text-canvas">
                   Main
                 </span>
               )}
@@ -102,7 +102,7 @@ export function PortfolioImageManager({
                   >
                     <button
                       type="submit"
-                      className="text-xs font-semibold text-muted hover:text-ink"
+                      className="text-xs font-semibold text-muted hover:text-foreground"
                     >
                       Set main
                     </button>

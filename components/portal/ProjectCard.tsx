@@ -1,4 +1,3 @@
-import { BlueprintMarks } from "@/components/ui/BlueprintPanel";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
@@ -17,9 +16,8 @@ export function ProjectCard({
   return (
     <Link
       href={`/portal/projects/${project.id}`}
-      className="block blueprint p-6 transition-colors hover:border-blue-dark"
+      className="block panel p-6 transition-colors hover:border-accent"
     >
-      <BlueprintMarks />
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-lg font-semibold">{project.name}</h3>
         <span className="status">{statusLabel(locale, project.status)}</span>
@@ -36,10 +34,10 @@ export function ProjectCard({
           aria-valuenow={project.progress}
           aria-valuemin={0}
           aria-valuemax={100}
-          className="mt-1.5 h-1 w-full overflow-hidden bg-cream-dim"
+          className="mt-1.5 h-1 w-full overflow-hidden bg-surface"
         >
           <div
-            className="h-full bg-blue-dark"
+            className="h-full bg-accent"
             style={{ width: `${project.progress}%` }}
           />
         </div>

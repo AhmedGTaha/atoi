@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Barlow, Barlow_Condensed, Cairo } from "next/font/google";
+import { IBM_Plex_Sans, IBM_Plex_Mono, Cairo } from "next/font/google";
 import "./globals.css";
 import { getLocale } from "@/lib/i18n/getLocale";
 import { dirFor } from "@/lib/i18n/locale";
@@ -7,17 +7,17 @@ import { I18nProvider } from "@/lib/i18n/I18nProvider";
 import { getCompanySettings } from "@/lib/services/settingsService";
 import { appUrl } from "@/lib/utils/appUrl";
 
-const latin = Barlow({
+const latin = IBM_Plex_Sans({
   variable: "--font-latin",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
-const condensed = Barlow_Condensed({
-  variable: "--font-condensed",
+const mono = IBM_Plex_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
@@ -63,11 +63,20 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
 
   return (
     <html
+      suppressHydrationWarning
+      data-theme="dark"
       lang={locale}
       dir={dirFor(locale)}
-      className={`${latin.variable} ${condensed.variable} ${arabic.variable} h-full antialiased`}
+      className={`${latin.variable} ${mono.variable} ${arabic.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-cream text-ink">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('atoi-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark'}catch(e){}})()`,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col bg-canvas text-foreground">
         <a href="#main-content" className="skip-link">
           {locale === "ar" ? "انتقل إلى المحتوى" : "Skip to content"}
         </a>

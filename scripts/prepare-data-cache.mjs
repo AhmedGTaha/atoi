@@ -8,7 +8,10 @@ import path from "node:path";
 if (existsSync(".env")) process.loadEnvFile(".env");
 const databaseUrl = process.env.DATABASE_URL;
 if (databaseUrl) {
-  const cacheDirectory = path.resolve(".next/cache");
+  const cacheDirectory = path.resolve(
+    process.env.ATOI_BUILD_DIR || ".next",
+    "cache",
+  );
   const marker = path.join(cacheDirectory, "atoi-data-source");
   const namespace = createHash("sha256").update(databaseUrl).digest("hex");
   let previous;

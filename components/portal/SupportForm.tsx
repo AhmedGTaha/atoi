@@ -1,6 +1,5 @@
 "use client";
 
-import { BlueprintMarks } from "@/components/ui/BlueprintPanel";
 import { useActionState, useEffect, useRef } from "react";
 import {
   submitSupportRequestAction,
@@ -31,8 +30,7 @@ export function SupportForm({
   }, [state]);
 
   return (
-    <div className="blueprint p-6">
-      <BlueprintMarks />
+    <div className="panel p-6">
       <h2 className="font-semibold">{dict.portal.needHelp}</h2>
       <form ref={formRef} action={formAction} className="mt-4 space-y-3">
         <textarea
@@ -62,7 +60,7 @@ export function SupportForm({
               : dict.portal.supportSentEmailFailed}
           </p>
         )}
-        <Button type="submit" variant="primaryBlue" disabled={isPending}>
+        <Button type="submit" variant="primary" disabled={isPending}>
           {isPending
             ? dict.portal.sendingSupportRequest
             : dict.portal.sendSupportRequest}

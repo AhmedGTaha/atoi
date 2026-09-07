@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import { BlueprintPanel } from "@/components/ui/BlueprintPanel";
 import { Modal } from "@/components/ui/Modal";
 import { PhoneInput } from "./PhoneInput";
 import { useStartProjectModal } from "./StartProjectModalContext";
@@ -17,13 +16,7 @@ import { Button } from "@/components/ui/Button";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export function StartProjectModal({
-  locale,
-  inline = false,
-}: {
-  locale: Locale;
-  inline?: boolean;
-}) {
+export function StartProjectModal({ locale }: { locale: Locale }) {
   const { isOpen, close, triggerRef } = useStartProjectModal();
   const dict = getDictionary(locale);
   const titleId = useId();
@@ -54,11 +47,11 @@ export function StartProjectModal({
   }
 
   useEffect(() => {
-    if (!isOpen && !inline) {
+    if (!isOpen) {
       const timeout = setTimeout(resetForm, 200);
       return () => clearTimeout(timeout);
     }
-  }, [isOpen, inline]);
+  }, [isOpen]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -95,34 +88,29 @@ export function StartProjectModal({
   }
 
   const contents = (
-    <div className="relative p-6 sm:p-8">
-      {!inline && (
+    <div className="inquiry-panel relative">
+      {
         <button
           type="button"
           onClick={close}
           aria-label={dict.modal.close}
-          className="absolute z-20 end-5 top-5 flex h-11 w-11 items-center justify-center bg-ink text-cream hover:bg-blue-dark"
+          className="icon-button absolute z-20 end-4 top-3"
         >
           <CloseIcon />
         </button>
-      )}
+      }
 
       {status === "success" ? (
         <SuccessView
           dict={dict}
           confirmationEmailSent={confirmationEmailSent}
-          onDone={inline ? resetForm : close}
+          onDone={close}
           titleId={titleId}
         />
       ) : (
         <form onSubmit={handleSubmit} noValidate>
-          <p className="text-sm font-semibold text-blue-dark">
-            {dict.modal.eyebrow}
-          </p>
-          <h2
-            id={titleId}
-            className="mt-2 pe-10 text-3xl font-semibold tracking-normal sm:text-4xl"
-          >
+          <p className="panel-strip pe-16">atoi ~ new-project.inquiry</p>
+          <h2 id={titleId} className="mt-6 text-xl">
             {dict.modal.heading}
           </h2>
           <p className="mt-2 text-muted">{dict.modal.subheading}</p>
@@ -141,7 +129,7 @@ export function StartProjectModal({
             />
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="mt-6 grid grid-cols-1">
             <Field label={dict.modal.businessTypeLabel}>
               <select
                 value={businessType}
@@ -188,7 +176,7 @@ export function StartProjectModal({
             </Field>
           </div>
 
-          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="mt-4 grid grid-cols-1">
             <Field
               label={dict.modal.emailLabel}
               required
@@ -229,9 +217,9 @@ export function StartProjectModal({
 
           <Button
             type="submit"
-            variant="primaryBlue"
+            variant="primary"
             disabled={status === "submitting"}
-            className="mt-6 w-full"
+            className="mt-6 ms-auto flex"
           >
             {status === "submitting"
               ? dict.modal.submitting
@@ -241,15 +229,13 @@ export function StartProjectModal({
       )}
     </div>
   );
-  return inline ? (
-    <BlueprintPanel>{contents}</BlueprintPanel>
-  ) : (
+  return (
     <Modal
       isOpen={isOpen}
       onClose={close}
       titleId={titleId}
       restoreFocusTo={triggerRef}
-      className="max-w-[560px]"
+      className="max-w-[760px]"
     >
       {contents}
     </Modal>
@@ -268,9 +254,13 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <label className="block">
-      <span className="mb-1.5 block text-sm font-semibold">
-        {label} {required && <span className="text-blue-dark">*</span>}
+    <label className="terminal-row">
+      <span className="terminal-label">
+        {label} {required && <span className="text-accent">*</span>}
+        <span className="text-accent" aria-hidden="true">
+          {" "}
+          ?
+        </span>
       </span>
       {children}
       {error && (
@@ -295,18 +285,18 @@ function SuccessView({
 }) {
   return (
     <div className="flex flex-col items-center py-6 text-center">
-      <div className="flex h-16 w-16 items-center justify-center bg-blue-light">
+      <div className="flex h-16 w-16 items-center justify-center bg-accent-soft">
         <CheckIcon />
       </div>
       <h2 id={titleId} className="mt-6 text-3xl font-semibold tracking-normal">
         {dict.success.heading}
       </h2>
-      <p className="mt-3 max-w-sm text-black/70">
+      <p className="mt-3 max-w-sm text-muted">
         {confirmationEmailSent
           ? dict.success.bodyWithEmail
           : dict.success.bodyWithoutEmail}
       </p>
-      <Button variant="primaryBlue" onClick={onDone} className="mt-8">
+      <Button variant="primary" onClick={onDone} className="mt-8">
         {dict.success.done}
       </Button>
     </div>

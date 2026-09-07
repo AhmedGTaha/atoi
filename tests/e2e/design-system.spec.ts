@@ -78,50 +78,67 @@ async function reviewRoutes(
     await page.goto(route);
     await page.locator("h1").first().waitFor();
     await page.evaluate(() => document.fonts.ready);
-    for (const width of widths) {
-      await page.setViewportSize({ width, height: 960 });
-      const metrics = await page.evaluate(() => ({
-        overflow: document.documentElement.scrollWidth > innerWidth + 1,
-        bodyFont: getComputedStyle(document.body).fontFamily,
-        headingFont: getComputedStyle(document.querySelector("h1")!).fontFamily,
-        background: getComputedStyle(document.body).backgroundColor,
-        duplicateIds: [...document.querySelectorAll("[id]")]
-          .map((el) => el.id)
-          .filter((id, index, ids) => ids.indexOf(id) !== index),
-      }));
+    for (const theme of ["dark", "light"] as const) {
+      await page.evaluate((theme) => {
+        document.documentElement.dataset.theme = theme;
+        localStorage.setItem("atoi-theme", theme);
+      }, theme);
+      for (const width of widths) {
+        const heights: Record<number, number> = {
+          1440: 900,
+          1280: 800,
+          1024: 768,
+          768: 1024,
+          430: 932,
+          390: 844,
+        };
+        await page.setViewportSize({ width, height: heights[width] });
+        const metrics = await page.evaluate(() => ({
+          overflow: document.documentElement.scrollWidth > innerWidth + 1,
+          bodyFont: getComputedStyle(document.body).fontFamily,
+          headingFont: getComputedStyle(document.querySelector("h1")!)
+            .fontFamily,
+          background: getComputedStyle(document.body).backgroundColor,
+          duplicateIds: [...document.querySelectorAll("[id]")]
+            .map((el) => el.id)
+            .filter((id, index, ids) => ids.indexOf(id) !== index),
+        }));
+        expect
+          .soft(
+            metrics.overflow,
+            `${route} at ${width}: horizontal page overflow`,
+          )
+          .toBe(false);
+        expect.soft(metrics.bodyFont).toContain("IBM Plex Sans");
+        expect.soft(metrics.headingFont).toContain("IBM Plex Mono");
+        expect
+          .soft(metrics.background)
+          .toBe(theme === "dark" ? "rgb(11, 13, 16)" : "rgb(245, 247, 248)");
+        expect
+          .soft(metrics.duplicateIds, `${route}: duplicate element IDs`)
+          .toEqual([]);
+        if (width === 1440 || width === 390)
+          await page.screenshot({
+            animations: "disabled",
+            path: outputPath(
+              `${route.replace(/[^a-z0-9]/gi, "-") || "home"}-${theme}-${width}.png`,
+            ),
+            fullPage: true,
+          });
+      }
+      const audit = await new AxeBuilder({ page })
+        .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+        .analyze();
       expect
         .soft(
-          metrics.overflow,
-          `${route} at ${width}: horizontal page overflow`,
+          audit.violations.map((v) => ({
+            id: v.id,
+            nodes: v.nodes.map((n) => n.target),
+          })),
+          `Accessibility on ${route} in ${theme}`,
         )
-        .toBe(false);
-      expect.soft(metrics.bodyFont).toContain("Barlow");
-      expect.soft(metrics.headingFont).toContain("Barlow Condensed");
-      expect.soft(metrics.background).toBe("rgb(242, 242, 243)");
-      expect
-        .soft(metrics.duplicateIds, `${route}: duplicate element IDs`)
         .toEqual([]);
-      if (width === 1440 || width === 390)
-        await page.screenshot({
-          animations: "disabled",
-          path: outputPath(
-            `${route.replace(/[^a-z0-9]/gi, "-") || "home"}-${width}.png`,
-          ),
-          fullPage: true,
-        });
     }
-    const audit = await new AxeBuilder({ page })
-      .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
-      .analyze();
-    expect
-      .soft(
-        audit.violations.map((v) => ({
-          id: v.id,
-          nodes: v.nodes.map((n) => n.target),
-        })),
-        `Accessibility on ${route}`,
-      )
-      .toEqual([]);
   }
   expect(errors).toEqual([]);
 }
@@ -129,7 +146,7 @@ async function reviewRoutes(
 test("all public and account routes use the design system at six widths", async ({
   page,
 }, info) => {
-  test.setTimeout(180_000);
+  test.setTimeout(360_000);
   await reviewRoutes(
     page,
     [
@@ -150,7 +167,7 @@ test("all public and account routes use the design system at six widths", async 
 test("every admin route remains usable at six widths", async ({
   page,
 }, info) => {
-  test.setTimeout(180_000);
+  test.setTimeout(360_000);
   await signIn(page, true);
   await reviewRoutes(
     page,
@@ -180,7 +197,7 @@ test("every admin route remains usable at six widths", async ({
 test("portal routes and Arabic layout remain usable", async ({
   page,
 }, info) => {
-  test.setTimeout(90_000);
+  test.setTimeout(180_000);
   await signIn(page, false);
   await reviewRoutes(
     page,
@@ -245,4 +262,97 @@ test("mobile navigation and dialogs trap focus and restore it", async ({
     animations: "disabled",
     path: info.outputPath("portfolio-dialog.png"),
   });
+});
+
+test("theme preference persists across routes and reloads; inquiry is accessible in both modes", async ({
+  page,
+}, info) => {
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page
+    .getByRole("button", { name: "Switch colour mode" })
+    .filter({ visible: true })
+    .click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.goto("/login");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.goto("/");
+  for (const theme of ["light", "dark"]) {
+    if (theme === "dark")
+      await page
+        .getByRole("button", { name: "Switch colour mode" })
+        .filter({ visible: true })
+        .click();
+    await page
+      .getByRole("button", { name: "Start a project", exact: true })
+      .first()
+      .click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    const audit = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+      .analyze();
+    expect(
+      audit.violations.map((v) => ({
+        id: v.id,
+        nodes: v.nodes.map((n) => n.target),
+      })),
+    ).toEqual([]);
+    await page.screenshot({ path: info.outputPath(`inquiry-${theme}.png`) });
+    await page.keyboard.press("Escape");
+  }
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  expect(
+    await page
+      .locator(".cursor")
+      .evaluate((el) => getComputedStyle(el).animationDuration),
+  ).toBe("1e-05s");
+});
+
+test("admin mobile menu and deletion confirmation retain keyboard behavior", async ({
+  page,
+}, info) => {
+  await signIn(page, true);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "Menu / Dashboard" }).click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await page
+    .getByRole("dialog")
+    .getByRole("link", { name: "Settings", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/admin\/settings$/);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.goto(`/admin/portfolio/${portfolioId}`);
+  const trigger = page.getByRole("button", {
+    name: "Delete project",
+    exact: true,
+  });
+  for (const theme of ["dark", "light"]) {
+    await page.evaluate(
+      (theme) => (document.documentElement.dataset.theme = theme),
+      theme,
+    );
+    await trigger.click();
+    const dialog = page.getByRole("dialog");
+    await expect(
+      dialog.getByRole("heading", { name: "Delete project?" }),
+    ).toBeVisible();
+    await page.keyboard.press("Shift+Tab");
+    expect(
+      await dialog.evaluate((el) => el.contains(document.activeElement)),
+    ).toBe(true);
+    const audit = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+      .analyze();
+    expect(audit.violations.map((v) => v.id)).toEqual([]);
+    await page.screenshot({
+      path: info.outputPath(`confirmation-${theme}.png`),
+    });
+    await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+    await expect(trigger).toBeFocused();
+  }
+  expect(await db.portfolioProject.count({ where: { id: portfolioId } })).toBe(
+    1,
+  );
 });

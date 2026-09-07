@@ -57,7 +57,7 @@ export default async function AdminCustomerDetailPage({
               <Link
                 key={p.id}
                 href={`/admin/projects/${p.id}`}
-                className="flex items-center justify-between border border-rule-soft p-4 hover:border-blue-dark"
+                className="flex items-center justify-between border border-rule-soft p-4 hover:border-accent"
               >
                 <div>
                   <p className="font-semibold">{p.name}</p>

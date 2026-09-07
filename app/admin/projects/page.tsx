@@ -29,20 +29,20 @@ export default async function AdminProjectsPage({
         description="All active and completed customer projects."
       />
 
-      <form className="mb-5 flex flex-wrap gap-3">
+      <form className="filter-bar">
         <input
           type="search"
           aria-label="Search projects"
           name="q"
           defaultValue={q}
           placeholder="Search by project, customer, email…"
-          className="min-w-[240px] flex-1 border border-rule bg-cream px-3.5 py-2.5"
+          className="min-w-0 flex-1 border border-rule bg-canvas px-3.5 py-2.5"
         />
         <select
           aria-label="Project status"
           name="status"
           defaultValue={validStatus ?? ""}
-          className="border border-rule bg-cream px-3.5 py-2.5"
+          className="border border-rule bg-canvas px-3.5 py-2.5"
         >
           <option value="">All statuses</option>
           {PROJECT_STATUSES.map((s) => (
@@ -75,7 +75,7 @@ export default async function AdminProjectsPage({
               {projects.map((p) => (
                 <tr
                   key={p.id}
-                  className="border-b border-rule-soft last:border-0 hover:bg-cream-dim"
+                  className="border-b border-rule-soft last:border-0 hover:bg-surface"
                 >
                   <td className="px-5 py-3">
                     <Link
@@ -85,7 +85,7 @@ export default async function AdminProjectsPage({
                       {p.name}
                     </Link>
                   </td>
-                  <td className="px-5 py-3 text-ink/70">
+                  <td className="px-5 py-3 text-foreground/70">
                     {p.customer.businessName ||
                       p.customer.name ||
                       p.customer.email}
@@ -96,8 +96,10 @@ export default async function AdminProjectsPage({
                       tone={p.status}
                     />
                   </td>
-                  <td className="px-5 py-3 text-ink/70">{p.progress}%</td>
-                  <td className="px-5 py-3 text-ink/70">
+                  <td className="px-5 py-3 text-foreground/70">
+                    {p.progress}%
+                  </td>
+                  <td className="px-5 py-3 text-foreground/70">
                     {p.members.map((m) => m.teamMember.name).join(", ") || "—"}
                   </td>
                   <td className="px-5 py-3 text-muted">

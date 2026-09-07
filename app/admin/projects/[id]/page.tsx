@@ -68,7 +68,7 @@ export default async function AdminProjectDetailPage({
                 <p className="text-sm text-muted">No updates yet.</p>
               )}
               {project.updates.map((update) => (
-                <div key={update.id} className="border border-rule-soft p-4">
+                <div key={update.id} className="activity-item">
                   <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
                     <span>{update.createdAt.toLocaleString()}</span>
                     <span>
@@ -99,7 +99,7 @@ export default async function AdminProjectDetailPage({
                 </p>
               )}
               {project.supportRequests.map((s) => (
-                <div key={s.id} className="border border-rule-soft p-4">
+                <div key={s.id} className="activity-item">
                   <p className="text-xs text-muted">
                     {s.createdAt.toLocaleString()}
                   </p>

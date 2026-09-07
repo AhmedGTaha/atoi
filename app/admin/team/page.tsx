@@ -40,8 +40,10 @@ export default async function AdminTeamPage() {
                 className="border-b border-rule-soft last:border-0"
               >
                 <td className="px-5 py-3 font-semibold">{m.name}</td>
-                <td className="px-5 py-3 text-ink/70">{m.email}</td>
-                <td className="px-5 py-3 text-ink/70">{m._count.projects}</td>
+                <td className="px-5 py-3 text-foreground/70">{m.email}</td>
+                <td className="px-5 py-3 text-foreground/70">
+                  {m._count.projects}
+                </td>
                 <td className="px-5 py-3">
                   <Badge
                     label={m.isActive ? "Active" : "Inactive"}
@@ -58,7 +60,7 @@ export default async function AdminTeamPage() {
                   >
                     <button
                       type="submit"
-                      className="text-sm font-semibold text-ink/70 hover:text-ink"
+                      className="text-sm font-semibold text-foreground/70 hover:text-foreground"
                     >
                       {m.isActive ? "Deactivate" : "Activate"}
                     </button>

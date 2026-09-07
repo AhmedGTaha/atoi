@@ -12,13 +12,28 @@ export function About({
 }) {
   return (
     <section id="about" className="public-section about-section">
-      <Container className="grid gap-8 md:grid-cols-2">
-        <h2 className="text-[clamp(2rem,5.5vw,3.25rem)] font-semibold leading-[1.05] tracking-normal">
-          {t(content, "about.heading", locale)}
-        </h2>
-        <p className="mt-6 text-lg leading-relaxed text-cream/80">
+      <Container>
+        <p className="section-marker mb-6">[03] readme.md</p>
+        <h2>{t(content, "about.heading", locale)}</h2>
+        <p className="mt-6 max-w-3xl text-lg leading-relaxed text-muted">
           {t(content, "about.body", locale)}
         </p>
+        <div className="readme mt-8">
+          <h3 className="text-faint">
+            # {t(content, "process.heading", locale)}
+          </h3>
+          {[1, 2, 3].map((n) => (
+            <div className="readme-row" key={n}>
+              <h4>
+                <span className="text-accent" aria-hidden="true">
+                  →{" "}
+                </span>
+                {t(content, `process.step${n}.name`, locale)}
+              </h4>
+              <p>{t(content, `process.step${n}.description`, locale)}</p>
+            </div>
+          ))}
+        </div>
       </Container>
     </section>
   );

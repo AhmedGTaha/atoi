@@ -20,6 +20,9 @@ export function SelectedWork({
   return (
     <section id="work" className="public-section work-section">
       <Container>
+        <p className="section-marker mb-5">
+          [01] {locale === "ar" ? "أعمال مختارة" : "selected work"}
+        </p>
         <div className="flex items-center justify-between gap-4">
           <h2 className="text-[clamp(2rem,6vw,3.25rem)] font-semibold leading-[1.02] tracking-normal">
             {t(content, "work.heading", locale)}

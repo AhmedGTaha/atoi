@@ -43,7 +43,7 @@ export default async function AdminPortfolioPage() {
                 key={project.id}
                 className="flex flex-wrap items-center gap-4"
               >
-                <div className="relative h-16 w-24 shrink-0 overflow-hidden bg-cream-dim">
+                <div className="relative h-16 w-24 shrink-0 overflow-hidden bg-surface">
                   {mainImage && (
                     <Image
                       src={mainImage.publicUrl}
@@ -117,7 +117,7 @@ export default async function AdminPortfolioPage() {
                 >
                   <button
                     type="submit"
-                    className="text-sm font-semibold text-ink/70 hover:text-ink"
+                    className="text-sm font-semibold text-foreground/70 hover:text-foreground"
                   >
                     {project.featured ? "Unfeature" : "Feature"}
                   </button>
@@ -132,7 +132,7 @@ export default async function AdminPortfolioPage() {
                 >
                   <button
                     type="submit"
-                    className="text-sm font-semibold text-ink/70 hover:text-ink"
+                    className="text-sm font-semibold text-foreground/70 hover:text-foreground"
                   >
                     {project.published ? "Hide" : "Publish"}
                   </button>

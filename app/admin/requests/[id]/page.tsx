@@ -63,7 +63,7 @@ export default async function AdminRequestDetailPage({
           </dl>
           <div className="mt-4">
             <p className="text-sm font-semibold">Description</p>
-            <p className="mt-1 whitespace-pre-wrap text-ink/70">
+            <p className="mt-1 whitespace-pre-wrap text-foreground/70">
               {request.description}
             </p>
           </div>
@@ -75,7 +75,7 @@ export default async function AdminRequestDetailPage({
             >
               <button
                 type="submit"
-                className="text-sm font-semibold text-muted hover:text-ink"
+                className="text-sm font-semibold text-muted hover:text-foreground"
               >
                 Archive request
               </button>
@@ -87,13 +87,13 @@ export default async function AdminRequestDetailPage({
           {request.state === "CONVERTED" ? (
             <div>
               <h2 className="font-semibold">Already converted</h2>
-              <p className="mt-2 text-ink/70">
+              <p className="mt-2 text-foreground/70">
                 This request has already been converted.
               </p>
               {request.convertedProjectId && (
                 <Link
                   href={`/admin/projects/${request.convertedProjectId}`}
-                  className="mt-3 inline-block font-semibold text-blue-dark hover:underline"
+                  className="mt-3 inline-block font-semibold text-accent hover:underline"
                 >
                   View project →
                 </Link>

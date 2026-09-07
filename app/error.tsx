@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { BlueprintPanel } from "@/components/ui/BlueprintPanel";
+import { Panel } from "@/components/ui/Panel";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 
 export default function ErrorPage({
@@ -15,7 +15,7 @@ export default function ErrorPage({
   const ar = locale === "ar";
   return (
     <main id="main-content" className="site-container py-16">
-      <BlueprintPanel className="max-w-xl p-8">
+      <Panel className="max-w-xl p-8">
         <p className="section-marker mb-4">
           ATOI / {ar ? "تعذر التحميل" : "Unable to load"}
         </p>
@@ -31,7 +31,7 @@ export default function ErrorPage({
             {ar ? "الرئيسية" : "Back home"}
           </Link>
         </div>
-      </BlueprintPanel>
+      </Panel>
     </main>
   );
 }

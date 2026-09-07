@@ -1,5 +1,6 @@
+import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
-import { BlueprintPanel } from "@/components/ui/BlueprintPanel";
+import { Panel } from "@/components/ui/Panel";
 
 export function AuthCard({
   title,
@@ -28,18 +29,21 @@ export function AuthCard({
         </p>
         <Link
           href="/"
-          className="mt-8 inline-block text-sm text-blue-dark hover:underline"
+          className="mt-8 inline-block text-sm text-accent hover:underline"
         >
           ← Back to the website
         </Link>
       </div>
       <div>
-        <BlueprintPanel className="auth-panel">
-          <p className="section-marker mb-5">{brandName} / Account access</p>
+        <Panel className="auth-panel">
+          <div className="panel-strip auth-strip">
+            <span>{brandName.toLowerCase()} / account access</span>
+            <ThemeToggle />
+          </div>
           <h1>{title}</h1>
           {subtitle && <p className="mt-3 text-muted">{subtitle}</p>}
-          <div className="mt-8">{children}</div>
-        </BlueprintPanel>
+          <div className="mt-6">{children}</div>
+        </Panel>
         {footer && <div className="mt-6 text-sm text-muted">{footer}</div>}
       </div>
     </main>
@@ -61,7 +65,7 @@ export function AuthInput({
       <span className="mb-1.5 block text-sm font-semibold">
         {label}
         {props.required && (
-          <span aria-hidden="true" className="ms-1 text-blue-dark">
+          <span aria-hidden="true" className="ms-1 text-accent">
             *
           </span>
         )}

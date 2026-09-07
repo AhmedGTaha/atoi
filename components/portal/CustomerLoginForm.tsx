@@ -27,7 +27,7 @@ export function CustomerLoginForm({
   return (
     <form action={formAction} className="space-y-4">
       {justSetPassword && (
-        <p className="bg-cream-dim px-3.5 py-2.5 text-sm text-success">
+        <p className="bg-surface px-3.5 py-2.5 text-sm text-success">
           Your password has been set. You can sign in now.
         </p>
       )}
@@ -54,7 +54,7 @@ export function CustomerLoginForm({
       )}
       <Button
         type="submit"
-        variant="primaryBlue"
+        variant="primary"
         className="w-full"
         disabled={isPending}
       >
@@ -63,7 +63,7 @@ export function CustomerLoginForm({
       <p className="text-center text-sm">
         <Link
           href="/forgot-password"
-          className="font-semibold text-blue-dark hover:underline"
+          className="font-semibold text-accent hover:underline"
         >
           Forgot your password?
         </Link>

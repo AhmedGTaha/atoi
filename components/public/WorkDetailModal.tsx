@@ -40,7 +40,7 @@ export function WorkDetailModal({
           type="button"
           onClick={onClose}
           aria-label={dict.modal.close}
-          className="absolute z-20 end-5 top-5 flex h-11 w-11 items-center justify-center bg-ink text-cream hover:bg-blue-dark"
+          className="icon-button absolute z-20 end-4 top-3"
         >
           <CloseIcon />
         </button>
@@ -58,7 +58,7 @@ export function WorkDetailModal({
         )}
 
         {project.category && (
-          <p className="mt-6 text-xs font-bold uppercase tracking-wider text-blue-dark">
+          <p className="mt-6 text-xs font-bold tracking-wider text-accent">
             {project.category}
           </p>
         )}
@@ -68,7 +68,7 @@ export function WorkDetailModal({
         >
           {title}
         </h2>
-        <p className="mt-3 text-ink/70">{description}</p>
+        <p className="mt-3 text-foreground/70">{description}</p>
 
         {project.images.length > 1 && (
           <div className="mt-6 grid grid-cols-3 gap-3">
@@ -127,11 +127,9 @@ export function WorkDetailModal({
 
 function DetailBlock({ label, text }: { label: string; text: string }) {
   return (
-    <div className="bg-cream-dim/70 p-4">
-      <p className="text-xs font-bold uppercase tracking-wide text-muted">
-        {label}
-      </p>
-      <p className="mt-2 text-sm text-ink/80">{text}</p>
+    <div className="bg-surface/70 p-4">
+      <p className="text-xs font-bold tracking-wide text-muted">{label}</p>
+      <p className="mt-2 text-sm text-foreground/80">{text}</p>
     </div>
   );
 }

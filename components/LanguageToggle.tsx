@@ -23,10 +23,7 @@ export function LanguageToggle({
 
   return (
     <div
-      className={clsx(
-        "inline-flex items-center gap-1  border border-rule px-1 py-1 text-sm font-medium",
-        className,
-      )}
+      className={clsx("language-toggle", className)}
       role="group"
       aria-label="Language"
     >
@@ -36,27 +33,24 @@ export function LanguageToggle({
         onClick={() => switchTo("en")}
         aria-pressed={locale === "en"}
         className={clsx(
-          " px-2.5 py-1 transition-colors",
+          "px-2.5 transition-colors",
           locale === "en"
-            ? "bg-blue-dark text-cream"
-            : "text-muted hover:text-ink",
+            ? "language-active"
+            : "text-muted hover:text-foreground",
         )}
       >
         EN
       </button>
-      <span className="text-black/30" aria-hidden="true">
-        |
-      </span>
       <button
         type="button"
         disabled={isPending}
         onClick={() => switchTo("ar")}
         aria-pressed={locale === "ar"}
         className={clsx(
-          " px-2.5 py-1 transition-colors",
+          "px-2.5 transition-colors",
           locale === "ar"
-            ? "bg-blue-dark text-cream"
-            : "text-muted hover:text-ink",
+            ? "language-active"
+            : "text-muted hover:text-foreground",
         )}
       >
         عربي

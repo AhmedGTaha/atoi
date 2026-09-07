@@ -1,6 +1,7 @@
 export interface WebsiteContentField {
   key: string;
-  section: "hero" | "services" | "process" | "work" | "about" | "finalCta" | "footer";
+  section:
+    "hero" | "services" | "process" | "work" | "about" | "finalCta" | "footer";
   label: string;
   multiline: boolean;
   valueEn: string;
@@ -18,7 +19,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     section: "hero",
     label: "Eyebrow",
     multiline: false,
-    valueEn: "BAHRAIN-BASED DIGITAL STUDIO",
+    valueEn: "Bahrain-based software studio",
     valueAr: "استوديو رقمي من البحرين",
   },
   {
@@ -26,7 +27,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     section: "hero",
     label: "Heading",
     multiline: false,
-    valueEn: "Software built around your business.",
+    valueEn: "Give us the problem. We ship the software.",
     valueAr: "برمجيات مصممة حول أعمالك.",
   },
   {
@@ -35,7 +36,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Body",
     multiline: true,
     valueEn:
-      "We build websites, business systems, automation and custom software for businesses that want to work smarter.",
+      "We design and build websites, web applications and internal software for businesses in Bahrain and beyond.",
     valueAr:
       "نصمم مواقع إلكترونية وأنظمة أعمال وأتمتة وبرمجيات مخصصة للشركات التي تريد العمل بذكاء أكبر.",
   },
@@ -68,7 +69,8 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     section: "services",
     label: "Supporting copy",
     multiline: true,
-    valueEn: "No packages to decode. Just the right digital solution for the way you work.",
+    valueEn:
+      "No packages to decode. Just the right digital solution for the way you work.",
     valueAr: "لا حزم معقدة لفك رموزها. فقط الحل الرقمي المناسب لطريقة عملك.",
   },
   {
@@ -84,7 +86,8 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     section: "services",
     label: "Service 1 description",
     multiline: true,
-    valueEn: "A clear digital home that helps your customers take the next step.",
+    valueEn:
+      "A clear digital home that helps your customers take the next step.",
     valueAr: "منزل رقمي واضح يساعد عملاءك على اتخاذ الخطوة التالية.",
   },
   {
@@ -116,7 +119,8 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     section: "services",
     label: "Service 3 description",
     multiline: true,
-    valueEn: "Less repetitive work, fewer handovers and more time for what matters.",
+    valueEn:
+      "Less repetitive work, fewer handovers and more time for what matters.",
     valueAr: "عمل متكرر أقل، تسليمات أقل، ووقت أكبر لما يهم.",
   },
   {
@@ -132,7 +136,8 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     section: "services",
     label: "Service 4 description",
     multiline: true,
-    valueEn: "Useful intelligence applied thoughtfully to your real business tasks.",
+    valueEn:
+      "Useful intelligence applied thoughtfully to your real business tasks.",
     valueAr: "ذكاء مفيد يُطبق بعناية على مهام عملك الحقيقية.",
   },
   {
@@ -202,7 +207,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
   {
     key: "work.seeAllLabel",
     section: "work",
-    label: "\"See all projects\" label",
+    label: '"See all projects" label',
     multiline: false,
     valueEn: "See all projects",
     valueAr: "عرض كل المشاريع",
@@ -246,7 +251,8 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     section: "finalCta",
     label: "Body",
     multiline: true,
-    valueEn: "Tell us what your business needs. You do not need to know the technical solution.",
+    valueEn:
+      "Tell us what your business needs. You do not need to know the technical solution.",
     valueAr: "أخبرنا بما تحتاجه أعمالك. لست بحاجة لمعرفة الحل التقني.",
   },
   {
@@ -267,7 +273,12 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
   },
 ];
 
-export const DEFAULT_WEBSITE_CONTENT_MAP: Record<string, { valueEn: string; valueAr: string }> =
-  Object.fromEntries(
-    DEFAULT_WEBSITE_CONTENT.map((f) => [f.key, { valueEn: f.valueEn, valueAr: f.valueAr }])
-  );
+export const DEFAULT_WEBSITE_CONTENT_MAP: Record<
+  string,
+  { valueEn: string; valueAr: string }
+> = Object.fromEntries(
+  DEFAULT_WEBSITE_CONTENT.map((f) => [
+    f.key,
+    { valueEn: f.valueEn, valueAr: f.valueAr },
+  ]),
+);

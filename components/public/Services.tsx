@@ -11,8 +11,11 @@ export function Services({
   content: WebsiteContentMap;
 }) {
   return (
-    <section id="services" className="public-section">
+    <section id="services" className="public-section services-section">
       <Container>
+        <p className="section-marker mb-5">
+          [02] {locale === "ar" ? "ما نبنيه" : "what we build"}
+        </p>
         <div className="mb-8 flex flex-wrap justify-between gap-6 border-b pb-8">
           <h2>{t(content, "services.heading", locale)}</h2>
           <p className="max-w-sm text-muted">
@@ -22,7 +25,7 @@ export function Services({
         {[1, 2, 3, 4].map((n) => (
           <div key={n} className="service-row">
             <span className="section-marker">0{n}</span>
-            <h3 className="text-3xl">
+            <h3 className="service-name">
               {t(content, `services.item${n}.name`, locale)}
             </h3>
             <p className="text-muted">

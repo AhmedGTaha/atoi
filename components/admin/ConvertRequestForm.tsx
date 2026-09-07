@@ -71,7 +71,7 @@ export function ConvertRequestForm({
               name="phoneCountry"
               aria-label="Country code"
               defaultValue={request.phoneCountry}
-              className="border border-rule bg-cream px-2.5 py-2.5"
+              className="border border-rule bg-canvas px-2.5 py-2.5"
             >
               {GCC_COUNTRY_CODES.map((code) => (
                 <option key={code} value={code}>
@@ -123,7 +123,7 @@ export function ConvertRequestForm({
         </p>
       )}
 
-      <Button type="submit" variant="primaryBlue" disabled={isPending}>
+      <Button type="submit" variant="primary" disabled={isPending}>
         {isPending ? "Creating…" : "Create Customer & Project"}
       </Button>
     </form>

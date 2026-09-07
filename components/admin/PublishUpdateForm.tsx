@@ -52,7 +52,7 @@ export function PublishUpdateForm({ projectId }: { projectId: string }) {
         </p>
       )}
 
-      <Button type="submit" variant="primaryBlue" disabled={isPending}>
+      <Button type="submit" variant="primary" disabled={isPending}>
         {isPending ? "Publishing…" : "Publish update"}
       </Button>
     </form>

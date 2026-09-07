@@ -1,3 +1,4 @@
+import { ThemeToggle } from "@/components/ThemeToggle";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getCompanySettings } from "@/lib/services/settingsService";
@@ -12,16 +13,19 @@ export default async function TermsPage() {
 
   return (
     <main id="main-content" className="legal-page">
-      <Link
-        href="/"
-        className="text-sm font-semibold text-blue-dark hover:underline"
-      >
-        ← Back home
-      </Link>
+      <div className="flex items-center justify-between">
+        <Link
+          href="/"
+          className="text-sm font-semibold text-accent hover:underline"
+        >
+          ← Back home
+        </Link>
+        <ThemeToggle />
+      </div>
       <h1 className="mt-6 text-3xl font-semibold tracking-normal">
         Terms of Service
       </h1>
-      <div className="mt-6 space-y-4 text-ink/70">
+      <div className="mt-6 space-y-4 text-foreground/70">
         <p>
           By submitting a project request or using the {settings.companyName}{" "}
           customer portal, you agree to provide accurate contact information so

@@ -38,7 +38,7 @@ export default async function AdminRequestsPage() {
               {requests.map((r) => (
                 <tr
                   key={r.id}
-                  className="border-b border-rule-soft last:border-0 hover:bg-cream-dim"
+                  className="border-b border-rule-soft last:border-0 hover:bg-surface"
                 >
                   <td className="px-5 py-3">
                     <Link
@@ -49,12 +49,12 @@ export default async function AdminRequestsPage() {
                     </Link>
                     <p className="text-xs text-muted">{r.email}</p>
                   </td>
-                  <td className="px-5 py-3 text-ink/70">
+                  <td className="px-5 py-3 text-foreground/70">
                     {r.businessType
                       ? businessTypeLabel("en", r.businessType as BusinessType)
                       : "—"}
                   </td>
-                  <td className="max-w-xs px-5 py-3 text-ink/70">
+                  <td className="max-w-xs px-5 py-3 text-foreground/70">
                     <span className="line-clamp-1">{r.description}</span>
                   </td>
                   <td className="px-5 py-3 text-muted">

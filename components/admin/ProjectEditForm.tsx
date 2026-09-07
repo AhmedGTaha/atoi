@@ -105,7 +105,7 @@ export function ProjectEditForm({
         </p>
       )}
 
-      <Button type="submit" variant="primaryDark" disabled={isPending}>
+      <Button type="submit" variant="primary" disabled={isPending}>
         {isPending ? "Saving…" : "Save changes"}
       </Button>
     </form>

@@ -32,7 +32,7 @@ export default async function AdminCustomersPage() {
               {customers.map((c) => (
                 <tr
                   key={c.id}
-                  className="border-b border-rule-soft last:border-0 hover:bg-cream-dim"
+                  className="border-b border-rule-soft last:border-0 hover:bg-surface"
                 >
                   <td className="px-5 py-3">
                     <Link
@@ -42,9 +42,13 @@ export default async function AdminCustomersPage() {
                       {c.businessName || c.name || c.email}
                     </Link>
                   </td>
-                  <td className="px-5 py-3 text-ink/70">{c.email}</td>
-                  <td className="px-5 py-3 text-ink/70">{c.phoneE164}</td>
-                  <td className="px-5 py-3 text-ink/70">{c._count.projects}</td>
+                  <td className="px-5 py-3 text-foreground/70">{c.email}</td>
+                  <td className="px-5 py-3 text-foreground/70">
+                    {c.phoneE164}
+                  </td>
+                  <td className="px-5 py-3 text-foreground/70">
+                    {c._count.projects}
+                  </td>
                   <td className="px-5 py-3">
                     <Badge label={c.accountStatus} tone={c.accountStatus} />
                   </td>

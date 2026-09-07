@@ -1,5 +1,5 @@
 import { Container } from "@/components/ui/Container";
-import { StartProjectModal } from "./StartProjectModal";
+import { StartProjectTrigger } from "./StartProjectTrigger";
 import type { Locale } from "@/lib/i18n/locale";
 import type { WebsiteContentMap } from "@/lib/services/websiteContentService";
 import { t } from "@/lib/content/helpers";
@@ -12,21 +12,22 @@ export function FinalCta({
   content: WebsiteContentMap;
 }) {
   return (
-    <section id="contact" className="public-section">
-      <Container className="grid items-start gap-12 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
+    <section id="contact" className="public-section contact-section">
+      <Container className="flex flex-wrap items-end justify-between gap-8">
         <div>
           <p className="section-marker mb-5">
-            {t(content, "finalCta.eyebrow", locale)}
+            [04] {t(content, "finalCta.eyebrow", locale)}
           </p>
-          <h2>{t(content, "finalCta.heading", locale)}</h2>
-          <p className="mt-6 text-lg text-muted">
+          <h2 className="max-w-[22ch]">
+            {t(content, "finalCta.heading", locale)}
+          </h2>
+          <p className="mt-4 max-w-lg text-muted">
             {t(content, "finalCta.body", locale)}
           </p>
-          <p className="mt-8 border-t pt-5 section-marker">
-            {t(content, "finalCta.ctaLabel", locale)}
-          </p>
         </div>
-        <StartProjectModal locale={locale} inline />
+        <StartProjectTrigger className="btn btn-primary">
+          {t(content, "finalCta.ctaLabel", locale)}
+        </StartProjectTrigger>
       </Container>
     </section>
   );

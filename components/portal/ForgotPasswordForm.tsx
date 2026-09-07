@@ -18,7 +18,7 @@ export function ForgotPasswordForm() {
 
   if (state.submitted) {
     return (
-      <p className="text-ink/70">
+      <p className="text-foreground/70">
         If an account exists for that email, we&apos;ve sent a link to reset
         your password.
       </p>
@@ -41,7 +41,7 @@ export function ForgotPasswordForm() {
       )}
       <Button
         type="submit"
-        variant="primaryBlue"
+        variant="primary"
         className="w-full"
         disabled={isPending}
       >

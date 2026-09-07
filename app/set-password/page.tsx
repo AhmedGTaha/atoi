@@ -19,7 +19,7 @@ export default async function SetPasswordPage({
   if (!token) {
     return (
       <AuthCard title="Invalid link" companyName={settings.companyName}>
-        <p className="text-ink/70">
+        <p className="text-foreground/70">
           This link is missing its token. Please use the link from your email,
           or request a new one.
         </p>

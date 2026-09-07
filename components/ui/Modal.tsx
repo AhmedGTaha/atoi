@@ -105,7 +105,7 @@ export function Modal({
         aria-modal="true"
         aria-labelledby={titleId}
         className={clsx(
-          "relative z-10 w-full max-h-[90dvh] overflow-y-auto border border-blue-dark bg-cream shadow-lg",
+          "studio-dialog relative z-10 w-full max-h-[90dvh] overflow-y-auto",
           "animate-[modal-in_0.18s_ease-out]",
           className,
         )}

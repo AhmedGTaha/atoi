@@ -3,10 +3,9 @@ import Link from "next/link";
 import type { ComponentPropsWithoutRef } from "react";
 
 const variants = {
-  primaryDark: "btn-primary",
-  primaryBlue: "btn-primary",
+  primary: "btn-primary",
   outline: "btn-secondary",
-  cream: "btn-cream",
+
   ghost: "btn-ghost",
   destructive: "btn-destructive",
 };
@@ -14,7 +13,7 @@ type Variant = keyof typeof variants;
 
 export function Button({
   className,
-  variant = "primaryBlue",
+  variant = "primary",
   ...props
 }: ComponentPropsWithoutRef<"button"> & { variant?: Variant }) {
   return (
@@ -31,7 +30,7 @@ export function Button({
 
 export function LinkButton({
   className,
-  variant = "primaryBlue",
+  variant = "primary",
   href,
   ...props
 }: ComponentPropsWithoutRef<typeof Link> & { variant?: Variant }) {

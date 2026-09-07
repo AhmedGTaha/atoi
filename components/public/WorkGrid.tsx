@@ -56,7 +56,7 @@ export function WorkGrid({
                     ? project.descriptionAr
                     : project.descriptionEn}
                 </p>
-                <span className="mt-6 inline-flex items-center gap-4 text-blue-dark text-sm">
+                <span className="mt-6 inline-flex items-center gap-4 text-accent text-sm">
                   {locale === "ar" ? "تفاصيل المشروع" : "View project"}
                   <ArrowIcon />
                 </span>
@@ -77,7 +77,7 @@ export function WorkGrid({
                     className="object-cover object-top"
                   />
                 ) : (
-                  <span className="absolute inset-0 grid place-items-center section-marker text-ink">
+                  <span className="absolute inset-0 grid place-items-center section-marker text-foreground">
                     {locale === "ar"
                       ? "لا توجد صورة للمشروع"
                       : "Project image unavailable"}
@@ -94,7 +94,7 @@ export function WorkGrid({
           <button
             type="button"
             onClick={() => setExpanded((v) => !v)}
-            className="text-sm font-semibold underline decoration-ink/40 underline-offset-4 hover:decoration-ink"
+            className="text-sm font-semibold underline decoration-foreground/40 underline-offset-4 hover:decoration-foreground"
           >
             {expanded ? dict.work.showLess : seeAllLabel}
           </button>

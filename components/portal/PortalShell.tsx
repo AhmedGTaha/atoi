@@ -1,3 +1,4 @@
+import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
 import { Logo } from "@/components/public/Logo";
 import { LanguageToggle } from "@/components/LanguageToggle";
@@ -17,18 +18,19 @@ export function PortalShell({
   const dict = getDictionary(locale);
 
   return (
-    <div className="min-h-dvh">
-      <header className="border-b border-rule bg-cream">
+    <div className="portal-shell min-h-dvh">
+      <header className="border-b border-rule bg-canvas">
         <div className="site-container flex flex-wrap items-center justify-between gap-4 py-4">
           <Link href="/portal">
             <Logo name={companyName} />
           </Link>
           <div className="flex items-center gap-3">
+            <ThemeToggle locale={locale} />
             <LanguageToggle locale={locale} />
             <form action={logoutCustomerAction}>
               <button
                 type="submit"
-                className="text-sm font-semibold text-ink/70 hover:text-ink"
+                className="text-sm font-semibold text-foreground/70 hover:text-foreground"
               >
                 {dict.portal.signOut}
               </button>
@@ -37,7 +39,7 @@ export function PortalShell({
         </div>
       </header>
       <div className="site-container border-b py-3 flex justify-between text-sm">
-        <Link href="/portal" className="text-blue-dark">
+        <Link href="/portal" className="text-accent">
           {dict.portal.yourProjects}
         </Link>
         <Link href="/" className="text-muted">

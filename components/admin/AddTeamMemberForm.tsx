@@ -33,7 +33,7 @@ export function AddTeamMemberForm() {
       <div className="w-64">
         <AdminInput label="Email" name="email" type="email" required />
       </div>
-      <Button type="submit" variant="primaryDark" disabled={isPending}>
+      <Button type="submit" variant="primary" disabled={isPending}>
         {isPending ? "Adding…" : "Add member"}
       </Button>
       {state.error && (

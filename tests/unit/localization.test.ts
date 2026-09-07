@@ -38,11 +38,15 @@ describe("dirFor", () => {
 
 describe("t (website content lookup)", () => {
   it("falls back to the default map when a key is missing from the DB map", () => {
-    expect(t({}, "hero.heading", "en")).toBe("Software built around your business.");
+    expect(t({}, "hero.heading", "en")).toBe(
+      "Give us the problem. We ship the software.",
+    );
   });
 
   it("prefers the DB value over the default when present", () => {
-    const content = { "hero.heading": { valueEn: "Custom heading", valueAr: "عنوان مخصص" } };
+    const content = {
+      "hero.heading": { valueEn: "Custom heading", valueAr: "عنوان مخصص" },
+    };
     expect(t(content, "hero.heading", "en")).toBe("Custom heading");
     expect(t(content, "hero.heading", "ar")).toBe("عنوان مخصص");
   });

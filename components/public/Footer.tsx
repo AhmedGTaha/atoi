@@ -19,7 +19,7 @@ export function Footer({
   const location = locale === "ar" ? settings.locationAr : settings.locationEn;
 
   return (
-    <footer id="footer" className="border-t bg-cream-dim py-12">
+    <footer id="footer" className="studio-footer border-t bg-surface py-12">
       <Container className="flex flex-col gap-10 sm:flex-row sm:justify-between">
         <div className="max-w-xs">
           <Logo name={settings.companyName} logoUrl={settings.logoPublicUrl} />

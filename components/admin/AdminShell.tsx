@@ -1,3 +1,4 @@
+import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
 import { AdminBreadcrumbs } from "./AdminBreadcrumbs";
 import { AdminNav } from "./AdminNav";
@@ -16,7 +17,10 @@ export function AdminShell({
         <Link href="/admin" className="brand">
           ATOI <span className="section-marker">/ Admin</span>
         </Link>
-        <Link href="/" className="mt-3 block text-xs text-muted hover:text-ink">
+        <Link
+          href="/"
+          className="mt-3 block text-xs text-muted hover:text-foreground"
+        >
           ← Public website
         </Link>
         <div className="mt-6">
@@ -28,16 +32,19 @@ export function AdminShell({
         <header className="app-topbar">
           <p className="text-sm text-muted">
             Signed in as{" "}
-            <span className="font-semibold text-ink">{adminName}</span>
+            <span className="font-semibold text-foreground">{adminName}</span>
           </p>
-          <form action={logoutAdminAction}>
-            <button
-              type="submit"
-              className="text-sm font-semibold text-ink/70 hover:text-ink"
-            >
-              Sign out
-            </button>
-          </form>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <form action={logoutAdminAction}>
+              <button
+                type="submit"
+                className="text-sm font-semibold text-foreground/70 hover:text-foreground"
+              >
+                Sign out
+              </button>
+            </form>
+          </div>
         </header>
         <main id="main-content" className="app-main">
           <AdminBreadcrumbs />

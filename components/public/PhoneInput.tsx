@@ -27,7 +27,7 @@ export function PhoneInput({
   const countryId = useId();
   return (
     <div
-      className={`flex overflow-hidden  border bg-cream ${
+      className={`flex overflow-hidden  border bg-canvas ${
         error ? "border-danger" : "border-rule"
       }`}
     >
@@ -35,7 +35,7 @@ export function PhoneInput({
         id={countryId}
         value={country}
         onChange={(e) => onCountryChange(e.target.value as GccCountryCode)}
-        className="shrink-0 border-r border-rule bg-blue-light/40 px-2.5 text-sm font-medium text-ink"
+        className="shrink-0 border-r border-rule bg-accent-soft/40 px-2.5 text-sm font-medium text-foreground"
         aria-label="Country code"
       >
         {GCC_COUNTRY_CODES.map((code) => (

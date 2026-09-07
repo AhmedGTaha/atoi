@@ -44,7 +44,7 @@ export function AdminLoginForm() {
       )}
       <Button
         type="submit"
-        variant="primaryDark"
+        variant="primary"
         className="w-full"
         disabled={isPending}
       >

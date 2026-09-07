@@ -4,6 +4,7 @@ import { getPortfolioProjectById } from "@/lib/services/portfolioService";
 import { PageHeader, Card } from "@/components/admin/ui";
 import { PortfolioForm } from "@/components/admin/PortfolioForm";
 import { PortfolioImageManager } from "@/components/admin/PortfolioImageManager";
+import { ConfirmAction } from "@/components/ui/ConfirmAction";
 import {
   updatePortfolioProjectAction,
   deletePortfolioProjectAction,
@@ -47,14 +48,11 @@ export default async function EditPortfolioProjectPage({
             <p className="mb-3 text-sm text-muted">
               Deleting a project removes it and all its images permanently.
             </p>
-            <form action={deletePortfolioProjectAction.bind(null, project.id)}>
-              <button
-                type="submit"
-                className="text-sm font-semibold text-danger hover:text-danger"
-              >
-                Delete project
-              </button>
-            </form>
+            <ConfirmAction
+              action={deletePortfolioProjectAction.bind(null, project.id)}
+              label="Delete project"
+              description={`This permanently deletes ${project.titleEn} and its images. This cannot be undone.`}
+            />
           </Card>
         </div>
       </div>

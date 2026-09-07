@@ -1,3 +1,4 @@
+import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "./Logo";
@@ -25,21 +26,21 @@ export function Navbar({
   const dict = getDictionary(locale);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-rule bg-cream/90 backdrop-blur">
-      <Container className="flex h-[66px] items-center justify-between gap-4">
+    <header className="public-header">
+      <Container className="flex h-[58px] items-center justify-between gap-4">
         <Link href="/#home" className="shrink-0">
           <Logo name={companyName} />
         </Link>
 
         <nav
-          className="hidden items-center gap-5 xl:gap-8 lg:flex"
+          className="hidden items-center gap-5 xl:gap-6 lg:flex"
           aria-label="Primary"
         >
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.key}
               href={item.href}
-              className="text-xs uppercase tracking-wider font-medium text-ink/80 transition-colors hover:text-ink"
+              className="text-xs font-display font-medium text-foreground/80 transition-colors hover:text-foreground"
             >
               {dict.nav[item.key]}
             </Link>
@@ -47,12 +48,10 @@ export function Navbar({
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Link
-            href="/login"
-            className="text-xs uppercase tracking-wider text-blue-dark"
-          >
+          <Link href="/login" className="text-xs font-display text-accent">
             {locale === "ar" ? "تسجيل الدخول" : "Sign in"}
           </Link>
+          <ThemeToggle locale={locale} />
           <LanguageToggle locale={locale} />
           <StartProjectTrigger className="btn btn-primary">
             {dict.nav.startProject}
@@ -60,6 +59,7 @@ export function Navbar({
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle locale={locale} />
           <LanguageToggle locale={locale} />
           <MobileMenu locale={locale} navItems={NAV_ITEMS} />
         </div>

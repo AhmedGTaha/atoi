@@ -42,7 +42,7 @@ export function SetPasswordForm({ token }: { token: string }) {
       )}
       <Button
         type="submit"
-        variant="primaryBlue"
+        variant="primary"
         className="w-full"
         disabled={isPending}
       >

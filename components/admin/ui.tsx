@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import Link from "next/link";
-import { BlueprintPanel } from "@/components/ui/BlueprintPanel";
+import { Panel } from "@/components/ui/Panel";
 
 export function PageHeader({
   title,
@@ -31,7 +31,7 @@ export function Card({
 }) {
   const isTable = className?.includes("overflow-x-auto");
   return (
-    <BlueprintPanel
+    <Panel
       className={clsx(
         !isTable && "p-5",
         className?.replace("overflow-x-auto", ""),
@@ -54,7 +54,7 @@ export function Card({
       ) : (
         children
       )}
-    </BlueprintPanel>
+    </Panel>
   );
 }
 
@@ -93,7 +93,7 @@ export function AdminInput({
       <span className="mb-1.5 block text-sm font-semibold">
         {label}
         {props.required && (
-          <span aria-hidden="true" className="ms-1 text-blue-dark">
+          <span aria-hidden="true" className="ms-1 text-accent">
             *
           </span>
         )}
@@ -139,7 +139,7 @@ export function AdminTextarea({
       <span className="mb-1.5 block text-sm font-semibold">
         {label}
         {props.required && (
-          <span aria-hidden="true" className="ms-1 text-blue-dark">
+          <span aria-hidden="true" className="ms-1 text-accent">
             *
           </span>
         )}
@@ -179,7 +179,7 @@ export function AdminSelect({
       <span className="mb-1.5 block text-sm font-semibold">
         {label}
         {props.required && (
-          <span aria-hidden="true" className="ms-1 text-blue-dark">
+          <span aria-hidden="true" className="ms-1 text-accent">
             *
           </span>
         )}

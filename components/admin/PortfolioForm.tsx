@@ -148,7 +148,7 @@ export function PortfolioForm({
         </p>
       )}
 
-      <Button type="submit" variant="primaryDark" disabled={isPending}>
+      <Button type="submit" variant="primary" disabled={isPending}>
         {isPending ? "Saving…" : submitLabel}
       </Button>
     </form>
