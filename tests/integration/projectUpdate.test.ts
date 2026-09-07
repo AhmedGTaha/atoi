@@ -22,6 +22,14 @@ async function seedProjectWithAdmin() {
   const admin = await prisma.adminUser.create({
     data: { name: "Admin One", email: "admin@atrio.bh", passwordHash: "hash" },
   });
+  const teamMember = await prisma.teamMember.create({
+    data: {
+      name: "Team One",
+      email: "team@atrio.bh",
+      passwordHash: "hash",
+      accountStatus: "ACTIVE",
+    },
+  });
   const customer = await prisma.customer.create({
     data: {
       email: "customer@example.com",
@@ -40,7 +48,7 @@ async function seedProjectWithAdmin() {
       progress: 40,
     },
   });
-  return { admin, customer, project };
+  return { admin, teamMember, customer, project };
 }
 
 describe("publishProjectUpdate", () => {
@@ -48,7 +56,11 @@ describe("publishProjectUpdate", () => {
     mockSendEmail.mockResolvedValue("SENT");
     const { admin, project } = await seedProjectWithAdmin();
 
-    const result = await publishProjectUpdate(project.id, admin.id, "We finished the booking calendar.");
+    const result = await publishProjectUpdate(
+      project.id,
+      { kind: "admin", id: admin.id },
+      "We finished the booking calendar.",
+    );
     expect(result.emailSent).toBe(true);
     expect(mockSendEmail).toHaveBeenCalledTimes(1);
     const [emailArgs] = mockSendEmail.mock.calls[0]!;
@@ -59,6 +71,7 @@ describe("publishProjectUpdate", () => {
     expect(update.statusSnapshot).toBe("DEVELOPMENT");
     expect(update.progressSnapshot).toBe(40);
     expect(update.authorAdminId).toBe(admin.id);
+    expect(update.authorTeamMemberId).toBeNull();
     expect(update.emailDeliveryState).toBe("SENT");
   });
 
@@ -66,11 +79,31 @@ describe("publishProjectUpdate", () => {
     mockSendEmail.mockResolvedValue("FAILED");
     const { admin, project } = await seedProjectWithAdmin();
 
-    const result = await publishProjectUpdate(project.id, admin.id, "Still working on it.");
+    const result = await publishProjectUpdate(
+      project.id,
+      { kind: "admin", id: admin.id },
+      "Still working on it.",
+    );
     expect(result.emailSent).toBe(false);
 
     const update = await prisma.projectUpdate.findFirstOrThrow({ where: { projectId: project.id } });
     expect(update.body).toBe("Still working on it.");
     expect(update.emailDeliveryState).toBe("FAILED");
+  });
+
+  it("team member = admin: a team member can author an update too", async () => {
+    mockSendEmail.mockResolvedValue("SENT");
+    const { teamMember, project } = await seedProjectWithAdmin();
+
+    const result = await publishProjectUpdate(
+      project.id,
+      { kind: "team", id: teamMember.id },
+      "Deployed the staging build.",
+    );
+    expect(result.emailSent).toBe(true);
+
+    const update = await prisma.projectUpdate.findFirstOrThrow({ where: { projectId: project.id } });
+    expect(update.authorTeamMemberId).toBe(teamMember.id);
+    expect(update.authorAdminId).toBeNull();
   });
 });

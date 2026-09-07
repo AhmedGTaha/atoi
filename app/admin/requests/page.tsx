@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/guards";
 import { listProjectRequests } from "@/lib/services/requestService";
-import { PageHeader, Card, Badge, EmptyState } from "@/components/admin/ui";
+import { PageHeader } from "@/components/admin/ui";
+import { RequestsTable } from "@/components/admin/RequestsTable";
 import { businessTypeLabel } from "@/lib/i18n/labels";
 import type { BusinessType } from "@/lib/validation/shared";
 
@@ -16,59 +16,19 @@ export default async function AdminRequestsPage() {
         description="Project requests submitted from the public website."
       />
 
-      {requests.length === 0 ? (
-        <EmptyState>No project requests yet.</EmptyState>
-      ) : (
-        <Card className="overflow-x-auto p-0">
-          <table className="w-full min-w-[720px] text-sm">
-            <thead>
-              <tr className="border-b border-rule text-start text-muted">
-                <th className="px-5 py-3 text-start font-medium">Contact</th>
-                <th className="px-5 py-3 text-start font-medium">
-                  Business type
-                </th>
-                <th className="px-5 py-3 text-start font-medium">
-                  Description
-                </th>
-                <th className="px-5 py-3 text-start font-medium">Submitted</th>
-                <th className="px-5 py-3 text-start font-medium">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {requests.map((r) => (
-                <tr
-                  key={r.id}
-                  className="border-b border-rule-soft last:border-0 hover:bg-surface"
-                >
-                  <td className="px-5 py-3">
-                    <Link
-                      href={`/admin/requests/${r.id}`}
-                      className="font-semibold hover:underline"
-                    >
-                      {r.businessName || r.name || r.email}
-                    </Link>
-                    <p className="text-xs text-muted">{r.email}</p>
-                  </td>
-                  <td className="px-5 py-3 text-foreground/70">
-                    {r.businessType
-                      ? businessTypeLabel("en", r.businessType as BusinessType)
-                      : "—"}
-                  </td>
-                  <td className="max-w-xs px-5 py-3 text-foreground/70">
-                    <span className="line-clamp-1">{r.description}</span>
-                  </td>
-                  <td className="px-5 py-3 text-muted">
-                    {r.createdAt.toLocaleDateString()}
-                  </td>
-                  <td className="px-5 py-3">
-                    <Badge label={r.state} tone={r.state} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Card>
-      )}
+      <RequestsTable
+        requests={requests.map((request) => ({
+          id: request.id,
+          contact: request.businessName || request.name || request.email,
+          email: request.email,
+          businessType: request.businessType
+            ? businessTypeLabel("en", request.businessType as BusinessType)
+            : "—",
+          description: request.description,
+          submitted: request.createdAt.toLocaleDateString(),
+          state: request.state,
+        }))}
+      />
     </div>
   );
 }

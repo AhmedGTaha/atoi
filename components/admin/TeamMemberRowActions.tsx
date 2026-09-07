@@ -1,14 +1,15 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
-import { createPortal, useFormStatus } from "react-dom";
+import { useActionState, useEffect } from "react";
+import { useFormStatus } from "react-dom";
 import type { AccountStatus } from "@prisma/client";
 import {
   setTeamMemberActiveAction,
   resendTeamMemberInvitationAction,
   type ResendTeamInviteState,
 } from "@/app/actions/teamActions";
-import { PowerIcon, RefreshIcon, EllipsisIcon, TrashIcon } from "./icons";
+import { PowerIcon, RefreshIcon } from "./icons";
+import { RowActionMenu } from "./RowActionMenu";
 
 export function TeamMemberRowActions({
   id,
@@ -36,16 +37,31 @@ export function TeamMemberRowActions({
         applicable={accountStatus !== "ACTIVE"}
         onNotify={onNotify}
       />
-      <OverflowMenu name={name} onDelete={() => onRequestDelete(id, name)} />
+      <RowActionMenu
+        ariaLabel={`Actions for ${name}`}
+        deleteLabel="Delete"
+        onDelete={() => onRequestDelete(id, name)}
+      />
     </div>
   );
 }
 
-function ToggleActiveButton({ id, isActive }: { id: string; isActive: boolean }) {
+function ToggleActiveButton({
+  id,
+  isActive,
+}: {
+  id: string;
+  isActive: boolean;
+}) {
   const label = isActive ? "Deactivate" : "Activate";
   return (
     <form action={setTeamMemberActiveAction.bind(null, id, !isActive)}>
-      <button type="submit" className="icon-action-btn" aria-label={label} title={label}>
+      <button
+        type="submit"
+        className="icon-action-btn"
+        aria-label={label}
+        title={label}
+      >
         <PowerIcon />
       </button>
     </form>
@@ -78,7 +94,11 @@ function ResendInviteButton({
 
   return (
     <form action={formAction}>
-      <SubmitIconButton label="Resend invitation" disabled={!applicable} icon={<RefreshIcon />} />
+      <SubmitIconButton
+        label="Resend invitation"
+        disabled={!applicable}
+        icon={<RefreshIcon />}
+      />
     </form>
   );
 }
@@ -103,86 +123,5 @@ function SubmitIconButton({
     >
       {icon}
     </button>
-  );
-}
-
-function OverflowMenu({ name, onDelete }: { name: string; onDelete: () => void }) {
-  const [coords, setCoords] = useState<{ top: number; right: number } | null>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const open = coords !== null;
-
-  useEffect(() => {
-    if (!open) return;
-    function handlePointerDown(e: MouseEvent) {
-      const target = e.target as Node;
-      if (menuRef.current?.contains(target) || triggerRef.current?.contains(target)) return;
-      setCoords(null);
-    }
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") setCoords(null);
-    }
-    function handleViewportChange() {
-      setCoords(null);
-    }
-    document.addEventListener("mousedown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("scroll", handleViewportChange, true);
-    window.addEventListener("resize", handleViewportChange);
-    return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("scroll", handleViewportChange, true);
-      window.removeEventListener("resize", handleViewportChange);
-    };
-  }, [open]);
-
-  return (
-    <div className="relative">
-      <button
-        ref={triggerRef}
-        type="button"
-        className="icon-action-btn"
-        aria-label="More actions"
-        title="More actions"
-        aria-haspopup="menu"
-        aria-expanded={open}
-        onClick={() => {
-          if (open) {
-            setCoords(null);
-            return;
-          }
-          const rect = triggerRef.current?.getBoundingClientRect();
-          if (!rect) return;
-          setCoords({ top: rect.bottom + 4, right: window.innerWidth - rect.right });
-        }}
-      >
-        <EllipsisIcon />
-      </button>
-      {coords &&
-        createPortal(
-          <div
-            ref={menuRef}
-            role="menu"
-            aria-label={`Actions for ${name}`}
-            className="row-menu"
-            style={{ position: "fixed", top: coords.top, right: coords.right }}
-          >
-            <button
-              type="button"
-              role="menuitem"
-              className="row-menu-item"
-              onClick={() => {
-                setCoords(null);
-                onDelete();
-              }}
-            >
-              <TrashIcon />
-              Delete
-            </button>
-          </div>,
-          document.body,
-        )}
-    </div>
   );
 }

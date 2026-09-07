@@ -75,18 +75,10 @@ export function SettingsForm({ settings }: { settings: CompanySettings }) {
         />
       </div>
 
-      <AdminTextarea
-        label="New-request notification recipients"
-        name="requestNotificationRecipients"
-        rows={2}
-        defaultValue={settings.requestNotificationRecipients.join(", ")}
-      />
-      <AdminTextarea
-        label="Support fallback recipients"
-        name="supportFallbackRecipients"
-        rows={2}
-        defaultValue={settings.supportFallbackRecipients.join(", ")}
-      />
+      <p className="text-sm text-muted">
+        New requests and support messages notify every active admin and team
+        member automatically — there&apos;s nothing to configure here.
+      </p>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <AdminInput

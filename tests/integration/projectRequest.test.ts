@@ -8,6 +8,7 @@ vi.mock("@/lib/email/resend", () => ({
 }));
 
 const { submitProjectRequest } = await import("@/lib/services/projectRequestService");
+const { deleteProjectRequest } = await import("@/lib/services/requestService");
 
 beforeEach(async () => {
   await resetDatabase();
@@ -84,5 +85,19 @@ describe("submitProjectRequest", () => {
     const stored = await prisma.projectRequest.findFirst({ where: { email: "sara@example.com" } });
     expect(stored?.phoneE164).toBe("+971501234567");
     expect(stored?.phoneCountry).toBe("AE");
+  });
+
+  it("permanently deletes a project request", async () => {
+    mockSendEmail.mockResolvedValue("SENT");
+    await submitProjectRequest(validInput);
+    const stored = await prisma.projectRequest.findFirstOrThrow({
+      where: { email: validInput.email },
+    });
+
+    await deleteProjectRequest(stored.id);
+
+    await expect(
+      prisma.projectRequest.findUnique({ where: { id: stored.id } }),
+    ).resolves.toBeNull();
   });
 });

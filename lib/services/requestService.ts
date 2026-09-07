@@ -16,6 +16,10 @@ export async function archiveProjectRequest(id: string) {
   await prisma.projectRequest.update({ where: { id }, data: { state: "ARCHIVED" } });
 }
 
+export async function deleteProjectRequest(id: string) {
+  await prisma.projectRequest.delete({ where: { id } });
+}
+
 export async function dashboardCounts() {
   const [newRequests, activeProjects, supportRequests, completedProjects] = await Promise.all([
     prisma.projectRequest.count({ where: { state: "NEW" } }),

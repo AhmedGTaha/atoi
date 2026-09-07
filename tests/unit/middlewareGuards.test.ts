@@ -57,7 +57,7 @@ describe("middleware — route guards", () => {
     expect(res.headers.get("location")).toBeNull();
   });
 
-  it("lets a team session through to /team but not to /admin", async () => {
+  it("team member = admin: a team session passes through to both /team and /admin", async () => {
     __resetCookieStore();
     await createTeamSession({ role: "team", teamMemberId: "t1", email: "t@example.com", name: "T" });
     const cookieHeader = await currentCookieHeader();
@@ -66,7 +66,7 @@ describe("middleware — route guards", () => {
     expect(teamRes.headers.get("location")).toBeNull();
 
     const adminRes = await middleware(requestFor("/admin", cookieHeader));
-    expect(new URL(adminRes.headers.get("location")!).pathname).toBe("/login");
+    expect(adminRes.headers.get("location")).toBeNull();
   });
 
   it("lets a customer session through to /portal but not to /team", async () => {

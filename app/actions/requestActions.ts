@@ -1,14 +1,40 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth/guards";
-import { archiveProjectRequest } from "@/lib/services/requestService";
+import {
+  archiveProjectRequest,
+  deleteProjectRequest,
+} from "@/lib/services/requestService";
 import { convertRequestToProject } from "@/lib/services/projectService";
 import { isGccCountryCode, type GccCountryCode } from "@/lib/validation/phone";
 
 export async function archiveRequestAction(requestId: string) {
   await requireAdmin();
   await archiveProjectRequest(requestId);
+}
+
+export interface DeleteRequestState {
+  success?: boolean;
+  error?: string;
+}
+
+export async function deleteRequestAction(
+  requestId: string,
+  _prevState: DeleteRequestState,
+): Promise<DeleteRequestState> {
+  void _prevState;
+  await requireAdmin();
+  try {
+    await deleteProjectRequest(requestId);
+  } catch {
+    return { error: "Unable to delete this request. Please try again." };
+  }
+
+  revalidatePath("/admin/requests");
+  revalidatePath("/admin");
+  return { success: true };
 }
 
 export interface ConvertRequestState {

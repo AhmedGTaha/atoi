@@ -74,7 +74,9 @@ export async function submitProjectRequest(
   });
 
   let internalState: "SENT" | "FAILED" = "FAILED";
-  const recipients = settings.requestNotificationRecipients;
+  // Team member = Admin: notify every active admin and team member, not a
+  // hand-configured recipient list.
+  const recipients = await listStaffNotificationEmails();
   if (recipients.length > 0) {
     const internal = internalNewRequestEmail(settings.companyName, {
       name: input.name,
@@ -94,7 +96,7 @@ export async function submitProjectRequest(
       html: internal.html,
     });
   } else {
-    console.warn("[projectRequest] No request notification recipients configured.");
+    console.warn("[projectRequest] No active staff to notify (no admins or team members).");
   }
 
   await prisma.projectRequest.update({

@@ -25,8 +25,6 @@ export async function updateSettingsAction(
     locationAr: formData.get("locationAr"),
     instagramUrl: formData.get("instagramUrl") || null,
     linkedinUrl: formData.get("linkedinUrl") || null,
-    requestNotificationRecipients: formData.get("requestNotificationRecipients"),
-    supportFallbackRecipients: formData.get("supportFallbackRecipients"),
     seoTitleEn: formData.get("seoTitleEn"),
     seoTitleAr: formData.get("seoTitleAr"),
     seoDescriptionEn: formData.get("seoDescriptionEn"),

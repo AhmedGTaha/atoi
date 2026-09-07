@@ -42,67 +42,42 @@ async function seedProject() {
 }
 
 describe("submitSupportRequest", () => {
-  it("persists the request and emails every active assigned project member", async () => {
+  it("team member = admin: emails every active admin and team member, regardless of project assignment", async () => {
     const { customer, project } = await seedProject();
 
-    const memberA = await prisma.teamMember.create({ data: { name: "A", email: "a@atrio.bh", isActive: true } });
-    const memberB = await prisma.teamMember.create({ data: { name: "B", email: "b@atrio.bh", isActive: true } });
-    const inactiveMember = await prisma.teamMember.create({
-      data: { name: "C", email: "c@atrio.bh", isActive: false },
+    await prisma.adminUser.create({
+      data: { name: "Admin", email: "admin@atrio.bh", passwordHash: "hash" },
     });
-    await prisma.projectMember.createMany({
-      data: [
-        { projectId: project.id, teamMemberId: memberA.id },
-        { projectId: project.id, teamMemberId: memberB.id },
-        { projectId: project.id, teamMemberId: inactiveMember.id },
-      ],
+    // Assigned to the project.
+    const memberA = await prisma.teamMember.create({
+      data: { name: "A", email: "a@atrio.bh", passwordHash: "hash", accountStatus: "ACTIVE", isActive: true },
     });
+    // Not assigned to any project — still notified, since every team member
+    // has full admin access now.
+    await prisma.teamMember.create({
+      data: { name: "B", email: "b@atrio.bh", passwordHash: "hash", accountStatus: "ACTIVE", isActive: true },
+    });
+    await prisma.teamMember.create({
+      data: { name: "C", email: "c@atrio.bh", passwordHash: "hash", accountStatus: "ACTIVE", isActive: false },
+    });
+    await prisma.projectMember.create({ data: { projectId: project.id, teamMemberId: memberA.id } });
 
     const result = await submitSupportRequest(project.id, customer.id, "The booking page is showing an error.");
     expect(result.emailSent).toBe(true);
-    expect(result.usedFallback).toBe(false);
 
     expect(mockSendEmail).toHaveBeenCalledTimes(1);
     const [emailArgs] = mockSendEmail.mock.calls[0]!;
-    // Every active member is included; the inactive member is excluded.
-    expect(emailArgs.to).toEqual(expect.arrayContaining(["a@atrio.bh", "b@atrio.bh"]));
+    expect(emailArgs.to).toEqual(expect.arrayContaining(["admin@atrio.bh", "a@atrio.bh", "b@atrio.bh"]));
     expect(emailArgs.to).not.toContain("c@atrio.bh");
+    // No duplicates.
+    expect(new Set(emailArgs.to).size).toBe(emailArgs.to.length);
 
     const stored = await prisma.supportRequest.findFirstOrThrow({ where: { projectId: project.id } });
     expect(stored.message).toBe("The booking page is showing an error.");
     expect(stored.emailDeliveryState).toBe("SENT");
   });
 
-  it("falls back to configured support recipients when no active members are assigned", async () => {
-    const { customer, project } = await seedProject();
-    await prisma.companySettings.create({
-      data: {
-        companyName: "Atrio",
-        companyEmail: "hello@atrio.bh",
-        companyPhone: "+973 1 000 0000",
-        locationEn: "Manama",
-        locationAr: "المنامة",
-        requestNotificationRecipients: [],
-        supportFallbackRecipients: ["fallback@atrio.bh"],
-        seoTitleEn: "t",
-        seoTitleAr: "t",
-        seoDescriptionEn: "d",
-        seoDescriptionAr: "d",
-      },
-    });
-
-    const result = await submitSupportRequest(project.id, customer.id, "Need help urgently.");
-    expect(result.usedFallback).toBe(true);
-    expect(result.emailSent).toBe(true);
-
-    const [emailArgs] = mockSendEmail.mock.calls[0]!;
-    expect(emailArgs.to).toEqual(["fallback@atrio.bh"]);
-
-    const stored = await prisma.supportRequest.findFirstOrThrow({ where: { projectId: project.id } });
-    expect(stored.notifiedFallback).toBe(true);
-  });
-
-  it("persists the request even when no recipients (not even fallback) are configured", async () => {
+  it("persists the request even when there is no active staff to notify", async () => {
     const { customer, project } = await seedProject();
 
     const result = await submitSupportRequest(project.id, customer.id, "Anyone there?");
