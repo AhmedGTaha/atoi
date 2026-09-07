@@ -23,10 +23,10 @@ export interface FileValidationError {
  */
 export function validateImageFile(file: File): { ok: true } | FileValidationError {
   if (!ALLOWED_IMAGE_MIME_TYPES.includes(file.type as (typeof ALLOWED_IMAGE_MIME_TYPES)[number])) {
-    return { ok: false, error: "Only JPEG, PNG, WebP or AVIF images are allowed." };
+    return { ok: false, error: "Only JPEG, PNG or WebP images are allowed." };
   }
   if (file.size > MAX_IMAGE_BYTES) {
-    return { ok: false, error: "Image must be smaller than 8MB." };
+    return { ok: false, error: "Image must be smaller than 5MB." };
   }
   if (file.size === 0) {
     return { ok: false, error: "The uploaded file is empty." };

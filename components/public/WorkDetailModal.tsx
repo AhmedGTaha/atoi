@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
-import Image from "next/image";
+import { useId } from "react";
 import { Modal } from "@/components/ui/Modal";
 import type { Locale } from "@/lib/i18n/locale";
 import type { PortfolioProjectWithImages } from "@/lib/services/portfolioService.types";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { ProjectGallery } from "./ProjectGallery";
+import { ArrowIcon } from "./WorkGrid";
 
 export function WorkDetailModal({
   project,
@@ -18,130 +19,128 @@ export function WorkDetailModal({
 }) {
   const titleId = useId();
   const dict = getDictionary(locale);
-  const [imageIndex, setImageIndex] = useState(0);
-  const projectId = project?.id;
-  const coverIndex = Math.max(0, project?.images.findIndex((image) => image.isMain) ?? 0);
-  useEffect(() => {
-    setImageIndex(coverIndex);
-  }, [projectId, coverIndex]);
-
   if (!project) return null;
 
-  const title = locale === "ar" ? project.titleAr : project.titleEn;
+  const title =
+    locale === "ar" ? project.titleAr || project.titleEn : project.titleEn;
   const description =
-    locale === "ar" ? project.descriptionAr : project.descriptionEn;
-  const problem = locale === "ar" ? project.problemAr : project.problemEn;
-  const built = locale === "ar" ? project.builtAr : project.builtEn;
-  const result = locale === "ar" ? project.resultAr : project.resultEn;
-  const image = project.images[Math.min(imageIndex, Math.max(0, project.images.length - 1))];
+    locale === "ar"
+      ? project.descriptionAr || project.descriptionEn
+      : project.descriptionEn;
+  const problem =
+    locale === "ar"
+      ? project.problemAr || project.problemEn
+      : project.problemEn;
+  const built =
+    locale === "ar" ? project.builtAr || project.builtEn : project.builtEn;
+  const result =
+    locale === "ar" ? project.resultAr || project.resultEn : project.resultEn;
 
   return (
     <Modal
-      isOpen={!!project}
+      isOpen
       onClose={onClose}
       titleId={titleId}
-      className="max-w-6xl"
+      className="project-detail-dialog max-w-7xl"
     >
-      <div className="relative p-6 sm:p-8">
+      <div className="project-detail-modal">
         <button
           type="button"
           onClick={onClose}
           aria-label={dict.modal.close}
-          className="icon-button absolute z-20 end-4 top-3"
+          className="icon-button project-detail-close"
         >
           <CloseIcon />
         </button>
-
-        {image && (
-          <div className="relative aspect-[16/10] w-full overflow-hidden bg-surface">
-            <Image
-              src={image.publicUrl}
-              alt={title}
-              fill
-              sizes="(min-width: 768px) 680px, 90vw"
-              className="object-cover"
-            />
-            {project.images.length > 1 && <><button type="button" aria-label="Previous image" onClick={() => setImageIndex((i) => (i - 1 + project.images.length) % project.images.length)} className="work-image-control start-3">‹</button><button type="button" aria-label="Next image" onClick={() => setImageIndex((i) => (i + 1) % project.images.length)} className="work-image-control end-3">›</button></>}
-          </div>
-        )}
-
-        {project.category && (
-          <p className="mt-6 text-xs font-bold tracking-wider text-accent">
-            {project.category}
-          </p>
-        )}
-        <h2
-          id={titleId}
-          className="mt-2 pe-10 text-3xl font-semibold tracking-normal"
-        >
-          {title}
-        </h2>
-        <p className="mt-3 text-foreground/70">{description}</p>
-        {project.clientName && <p className="mt-4 font-display text-xs text-muted">{project.clientName}</p>}
-
-        {project.images.length > 1 && (
-          <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
-            {project.images.map((img, index) => (
-              <button
-                key={img.id}
-                type="button"
-                onClick={() => setImageIndex(index)}
-                aria-current={imageIndex === index}
-                className={`relative aspect-[4/3] w-24 shrink-0 overflow-hidden border ${imageIndex === index ? "border-accent" : "border-rule"}`}
+        <div className="project-detail-lead">
+          <div className="project-detail-title-row">
+            <h2 id={titleId}>{title}</h2>
+            {project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${locale === "ar" ? "فتح الموقع" : "Open live site"}: ${title}`}
+                className="project-external-link"
               >
-                <Image
-                  src={img.publicUrl}
-                  alt={locale === "ar" ? (img.altAr ?? "") : (img.altEn ?? "")}
-                  fill
-                  sizes="200px"
-                  className="object-cover"
-                />
-              </button>
-            ))}
+                <ExternalIcon />
+              </a>
+            )}
           </div>
-        )}
-
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {problem && (
-            <DetailBlock
-              label={locale === "ar" ? "المشكلة" : "Problem"}
-              text={problem}
-            />
-          )}
-          {built && (
-            <DetailBlock
-              label={locale === "ar" ? "ما قمنا ببنائه" : "What we built"}
-              text={built}
-            />
-          )}
-          {result && (
-            <DetailBlock
-              label={locale === "ar" ? "النتيجة" : "Result"}
-              text={result}
-            />
-          )}
+          <p>{description}</p>
+          <ProjectGallery
+            images={project.images}
+            locale={locale}
+            title={title}
+            mode="detail"
+          />
         </div>
-
-        {project.liveUrl && (
-          <a
-            href={project.liveUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 btn btn-primary"
-          >
-            {dict.work.liveSite}
-          </a>
-        )}
+        <aside className="project-detail-overview">
+          <h3>
+            {locale === "ar" ? "نظرة عامة على المشروع" : "Project overview"}
+          </h3>
+          <p>
+            {[problem, built, result].filter(Boolean).join(" ") || description}
+          </p>
+          <dl>
+            {project.category && (
+              <Metadata label={locale === "ar" ? "الفئة" : "Category"}>
+                {project.category}
+              </Metadata>
+            )}
+            {project.clientName && (
+              <Metadata label={locale === "ar" ? "العميل" : "Client"}>
+                {project.clientName}
+              </Metadata>
+            )}
+            {project.technologies.length > 0 && (
+              <Metadata label={locale === "ar" ? "التقنيات" : "Technologies"}>
+                <ul className="project-tags">
+                  {project.technologies.map((technology) => (
+                    <li key={technology}>{technology}</li>
+                  ))}
+                </ul>
+              </Metadata>
+            )}
+            {project.liveUrl && (
+              <Metadata label={locale === "ar" ? "الموقع" : "Live site"}>
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {project.liveUrl.replace(/^https?:\/\//, "")} <ExternalIcon />
+                </a>
+              </Metadata>
+            )}
+          </dl>
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary project-live-cta"
+            >
+              {dict.work.liveSite} <ArrowIcon />
+            </a>
+          )}
+        </aside>
       </div>
     </Modal>
   );
 }
 
-function DetailBlock({ label, text }: { label: string; text: string }) {
+function Metadata({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="bg-surface/70 p-4">
-      <p className="text-xs font-bold tracking-wide text-muted">{label}</p>
-      <p className="mt-2 text-sm text-foreground/80">{text}</p>
+    <div>
+      <dt>{label}</dt>
+      <dd>{children}</dd>
     </div>
   );
 }
@@ -156,10 +155,29 @@ function CloseIcon() {
       aria-hidden="true"
     >
       <path
-        d="M1 1L15 15M15 1L1 15"
+        d="M1.5 1.5 14.5 14.5M14.5 1.5 1.5 14.5"
         stroke="currentColor"
         strokeWidth="1.5"
+      />
+    </svg>
+  );
+}
+
+function ExternalIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M8.5 2.5h5v5M13.25 2.75 7 9M6.5 3H3.75a1 1 0 0 0-1 1v8.25a1 1 0 0 0 1 1H12a1 1 0 0 0 1-1V9.5"
+        stroke="currentColor"
+        strokeWidth="1.25"
         strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

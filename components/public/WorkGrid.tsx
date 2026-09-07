@@ -1,16 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import { Modal } from "@/components/ui/Modal";
 import type { Locale } from "@/lib/i18n/locale";
-import { localize } from "@/lib/i18n/locale";
 import type { PortfolioProjectWithImages } from "@/lib/services/portfolioService.types";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { ProjectGallery } from "./ProjectGallery";
 import { WorkDetailModal } from "./WorkDetailModal";
 
-// ATOI Studio.dc.html shows exactly three case studies before "see all".
-const INITIAL_COUNT = 3;
+const FEATURED_COUNT = 3;
 
 export function WorkGrid({
   projects,
@@ -26,37 +25,45 @@ export function WorkGrid({
   const [selected, setSelected] = useState<PortfolioProjectWithImages | null>(
     null,
   );
-
-  const visible = projects.slice(0, INITIAL_COUNT);
+  const featured = projects.slice(0, FEATURED_COUNT);
 
   return (
     <>
+      <div className="selected-work-actions">
+        <button
+          type="button"
+          onClick={() => setShowAll(true)}
+          className="work-cta"
+        >
+          {seeAllLabel} <ArrowIcon />
+        </button>
+      </div>
       <div className="work-grid">
-        {visible.map((project, index) => (
+        {featured.map((project, index) => (
           <WorkCard
             key={project.id}
             project={project}
             locale={locale}
-            dict={dict}
-            index={index}
+            number={index + 1}
+            actionLabel={dict.work.caseStudy}
             onOpen={() => setSelected(project)}
           />
         ))}
       </div>
-
-      {projects.length > 0 && (
-        <div className="mt-8 text-end">
-          <button
-            type="button"
-            onClick={() => setShowAll(true)}
-            className="work-cta"
-          >
-            {seeAllLabel}
-            <ArrowIcon />
-          </button>
-        </div>
-      )}
-
+      <div className="selected-work-footer">
+        <span>
+          {locale === "ar"
+            ? "// المزيد قريباً. لنبدأ مشروعك التالي."
+            : "// More to come. Let’s build yours next."}
+        </span>
+        <button
+          type="button"
+          onClick={() => setShowAll(true)}
+          className="work-cta"
+        >
+          {seeAllLabel} <ArrowIcon />
+        </button>
+      </div>
       <AllProjectsModal
         isOpen={showAll}
         projects={projects}
@@ -67,7 +74,6 @@ export function WorkGrid({
           setSelected(project);
         }}
       />
-
       <WorkDetailModal
         project={selected}
         locale={locale}
@@ -77,158 +83,183 @@ export function WorkGrid({
   );
 }
 
-/** hostname + path shown in the browser-bar figure header, e.g. "app.ledgerline.io". */
-function displayUrl(liveUrl: string | null): string | null {
-  if (!liveUrl) return null;
-  try {
-    const url = new URL(liveUrl);
-    const path = url.pathname === "/" ? "" : url.pathname;
-    return `${url.hostname.replace(/^www\./, "")}${path}`;
-  } catch {
-    return liveUrl;
-  }
-}
-
-function WorkFigure({
-  project,
-  locale,
-  aspect,
-}: {
-  project: PortfolioProjectWithImages;
-  locale: Locale;
-  aspect: "16/10" | "2/1";
-}) {
-  const title = locale === "ar" ? project.titleAr : project.titleEn;
-  const coverIndex = Math.max(0, project.images.findIndex((img) => img.isMain));
-  const [imageIndex, setImageIndex] = useState(coverIndex);
-  const image = project.images[imageIndex];
-  const url = displayUrl(project.liveUrl);
-
-  return (
-    <figure className="work-figure">
-      {url && (
-        <div className="work-browserbar">
-          <span>{url}</span>
-        </div>
-      )}
-      <div className="work-image" style={{ aspectRatio: aspect }}>
-        {image ? (
-          <Image
-            src={image.publicUrl}
-            alt={
-              localize(locale, {
-                valueEn: image.altEn ?? "",
-                valueAr: image.altAr ?? "",
-              }) || title
-            }
-            fill
-            sizes="(min-width: 768px) 60vw, 90vw"
-            className="object-cover object-top"
-          />
-        ) : (
-          <span className="absolute inset-0 grid place-items-center section-marker text-foreground">
-            {locale === "ar"
-              ? "لا توجد صورة للمشروع"
-              : "Project image unavailable"}
-          </span>
-        )}
-        {project.images.length > 1 && (
-          <>
-            <button type="button" aria-label="Previous image" onClick={() => setImageIndex((i) => (i - 1 + project.images.length) % project.images.length)} className="work-image-control start-2">‹</button>
-            <button type="button" aria-label="Next image" onClick={() => setImageIndex((i) => (i + 1) % project.images.length)} className="work-image-control end-2">›</button>
-            <div className="work-image-pagination" aria-label={`Image ${imageIndex + 1} of ${project.images.length}`}>
-              <span>{imageIndex + 1} / {project.images.length}</span>
-              {project.images.map((item, index) => <button key={item.id} type="button" aria-label={`Show image ${index + 1}`} aria-current={index === imageIndex} onClick={() => setImageIndex(index)} className="work-image-dot" />)}
-            </div>
-          </>
-        )}
-      </div>
-    </figure>
-  );
-}
-
-function WorkMeta({
-  project,
-  locale,
-}: {
-  project: PortfolioProjectWithImages;
-  locale: Locale;
-}) {
-  const result = locale === "ar" ? project.resultAr : project.resultEn;
-  if (!project.category && !result) return null;
-  return (
-    <div className="work-meta">
-      {project.category && <div>{project.category}</div>}
-      {result && <div className="work-result">{result}</div>}
-    </div>
-  );
-}
-
-function WorkCta({
-  label,
-  onOpen,
-}: {
-  label: string;
-  onOpen: () => void;
-}) {
-  return (
-    <button type="button" onClick={onOpen} className="work-cta">
-      {label}
-      <ArrowIcon />
-    </button>
-  );
+function localizedProject(project: PortfolioProjectWithImages, locale: Locale) {
+  return {
+    title:
+      locale === "ar" ? project.titleAr || project.titleEn : project.titleEn,
+    description:
+      locale === "ar"
+        ? project.descriptionAr || project.descriptionEn
+        : project.descriptionEn,
+  };
 }
 
 function WorkCard({
   project,
   locale,
-  dict,
+  number,
+  actionLabel,
   onOpen,
-  index,
 }: {
   project: PortfolioProjectWithImages;
   locale: Locale;
-  dict: ReturnType<typeof getDictionary>;
+  number: number;
+  actionLabel: string;
   onOpen: () => void;
-  index: number;
 }) {
-  const title = locale === "ar" ? project.titleAr : project.titleEn;
-  const description =
-    locale === "ar" ? project.descriptionAr : project.descriptionEn;
-
+  const { title, description } = localizedProject(project, locale);
   return (
     <article className="work-card">
-      <WorkFigure project={project} locale={locale} aspect="16/10" />
-      <div className="mt-4">
+      <ProjectGallery images={project.images} locale={locale} title={title} />
+      <div className="work-card-body">
         <h3 className="work-title">{title}</h3>
-        <p className="work-desc mt-2">{description}</p>
-        <WorkMeta project={project} locale={locale} />
-        <div className="flex items-center justify-between border-t border-rule pt-4">
-          <WorkCta label={dict.work.caseStudy} onOpen={onOpen} />
-          <span className="section-marker">[ {String(index + 1).padStart(2, "0")} ]</span>
+        <p className="work-desc">{description}</p>
+        {project.technologies.length > 0 && (
+          <ul
+            className="project-tags"
+            aria-label={locale === "ar" ? "التقنيات" : "Technologies"}
+          >
+            {project.technologies.map((technology) => (
+              <li key={technology}>{technology}</li>
+            ))}
+          </ul>
+        )}
+        <div className="work-card-footer">
+          <button
+            type="button"
+            aria-label={`${actionLabel}: ${title}`}
+            onClick={onOpen}
+            className="work-cta"
+          >
+            {actionLabel} <ArrowIcon />
+          </button>
+          <span className="section-marker">
+            [ {String(number).padStart(2, "0")} ]
+          </span>
         </div>
       </div>
     </article>
   );
 }
 
-function AllProjectsModal({ isOpen, projects, locale, onClose, onOpenProject }: { isOpen: boolean; projects: PortfolioProjectWithImages[]; locale: Locale; onClose: () => void; onOpenProject: (project: PortfolioProjectWithImages) => void }) {
-  return <Modal isOpen={isOpen} onClose={onClose} titleId="all-projects-title" className="max-w-6xl">
-    <div className="p-6 sm:p-8"><button type="button" onClick={onClose} aria-label="Close" className="icon-button absolute end-4 top-3">×</button><p className="section-marker">[ all ]</p><h2 id="all-projects-title" className="mt-2 text-3xl">{locale === "ar" ? "كل المشاريع" : "All projects"}</h2><div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{projects.map((project) => <button key={project.id} type="button" onClick={() => onOpenProject(project)} className="work-card text-start"><WorkFigure project={project} locale={locale} aspect="16/10" /><span className="mt-3 block font-display text-lg">{locale === "ar" ? project.titleAr : project.titleEn}</span></button>)}</div></div>
-  </Modal>;
+function AllProjectsModal({
+  isOpen,
+  projects,
+  locale,
+  onClose,
+  onOpenProject,
+}: {
+  isOpen: boolean;
+  projects: PortfolioProjectWithImages[];
+  locale: Locale;
+  onClose: () => void;
+  onOpenProject: (project: PortfolioProjectWithImages) => void;
+}) {
+  const [category, setCategory] = useState("all");
+  const categories = useMemo(
+    () =>
+      Array.from(
+        new Set(projects.map((project) => project.category).filter(Boolean)),
+      ) as string[],
+    [projects],
+  );
+  const filtered =
+    category === "all"
+      ? projects
+      : projects.filter((project) => project.category === category);
+  const heading = locale === "ar" ? "كل المشاريع" : "All Projects";
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      titleId="all-projects-title"
+      className="all-projects-dialog max-w-6xl"
+    >
+      <div className="all-projects-modal">
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={locale === "ar" ? "إغلاق" : "Close"}
+          className="icon-button all-projects-close"
+        >
+          ×
+        </button>
+        <h2 id="all-projects-title">{heading}</h2>
+        <p>
+          {locale === "ar" ? "مجموعة من أعمالنا." : "A collection of our work."}
+        </p>
+        <div
+          className="project-filters"
+          role="group"
+          aria-label={locale === "ar" ? "تصفية المشاريع" : "Filter projects"}
+        >
+          <button
+            type="button"
+            aria-pressed={category === "all"}
+            onClick={() => setCategory("all")}
+          >
+            {locale === "ar" ? "الكل" : "All"}
+          </button>
+          {categories.map((item) => (
+            <button
+              key={item}
+              type="button"
+              aria-pressed={category === item}
+              onClick={() => setCategory(item)}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+        <div className="all-projects-grid">
+          {filtered.map((project) => {
+            const { title, description } = localizedProject(project, locale);
+            const cover =
+              project.images.find((image) => image.isMain) ?? project.images[0];
+            return (
+              <button
+                key={project.id}
+                type="button"
+                className="all-project-card"
+                onClick={() => onOpenProject(project)}
+              >
+                <span className="all-project-image">
+                  {cover && (
+                    <Image
+                      src={cover.publicUrl}
+                      alt=""
+                      fill
+                      sizes="(min-width: 1024px) 18vw, 44vw"
+                      className="object-cover object-top"
+                    />
+                  )}
+                </span>
+                <span className="all-project-copy">
+                  <strong>{title}</strong>
+                  <small>{description}</small>
+                </span>
+                <ArrowIcon />
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </Modal>
+  );
 }
 
-function ArrowIcon() {
+export function ArrowIcon() {
   return (
     <svg
-      width="14"
-      height="14"
+      width="15"
+      height="15"
       viewBox="0 0 16 16"
       fill="none"
+      aria-hidden="true"
       className="rtl:-scale-x-100"
     >
       <path
-        d="M4 12L12 4M12 4H5M12 4V11"
+        d="M3 8h9M8.5 3.5 13 8l-4.5 4.5"
         stroke="currentColor"
         strokeWidth="1.4"
         strokeLinecap="round"

@@ -22,11 +22,14 @@ export default async function EditPortfolioProjectPage({
 
   return (
     <div>
-      <PageHeader title={project.titleEn} />
+      <PageHeader
+        title={project.titleEn}
+        description="Edit public portfolio content and its ordered gallery."
+      />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card>
-          <h2 className="mb-4 font-semibold">Details</h2>
+          <h2 className="mb-5 font-display text-base">Project details</h2>
           <PortfolioForm
             project={project}
             action={updatePortfolioProjectAction.bind(null, project.id)}
@@ -36,7 +39,7 @@ export default async function EditPortfolioProjectPage({
 
         <div className="space-y-6">
           <Card>
-            <h2 className="mb-4 font-semibold">Images</h2>
+            <h2 className="mb-5 font-display text-base">Project images</h2>
             <PortfolioImageManager
               projectId={project.id}
               images={project.images}

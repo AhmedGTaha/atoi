@@ -28,6 +28,7 @@ const baseInput = {
   builtAr: null,
   resultEn: null,
   resultAr: null,
+  technologies: [],
   liveUrl: null,
   featured: false,
   published: false,

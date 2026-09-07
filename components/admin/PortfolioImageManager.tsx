@@ -1,18 +1,20 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import Image from "next/image";
-import {
-  uploadPortfolioImageAction,
-  removePortfolioImageAction,
-  movePortfolioImageAction,
-  setMainPortfolioImageAction,
-  type ImageUploadState,
-} from "@/app/actions/portfolioActions";
-import { Button } from "@/components/ui/Button";
+import { useRouter } from "next/navigation";
 import type { PortfolioImage } from "@prisma/client";
+import {
+  removePortfolioImageAction,
+  reorderPortfolioImagesAction,
+  setMainPortfolioImageAction,
+  uploadPortfolioImageAction,
+} from "@/app/actions/portfolioActions";
+import { ProjectGallery } from "@/components/public/ProjectGallery";
 
-const initialState: ImageUploadState = {};
+const MAX_FILES = 10;
+const MAX_BYTES = 5 * 1024 * 1024;
+const ACCEPTED_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 export function PortfolioImageManager({
   projectId,
@@ -21,123 +23,229 @@ export function PortfolioImageManager({
   projectId: string;
   images: PortfolioImage[];
 }) {
-  const [state, formAction, isPending] = useActionState(
-    uploadPortfolioImageAction.bind(null, projectId),
-    initialState,
-  );
-  const [previewIndex, setPreviewIndex] = useState(0);
-  const preview = images[Math.min(previewIndex, Math.max(0, images.length - 1))];
+  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string>();
+  const [draggedId, setDraggedId] = useState<string>();
+
+  const submitFiles = (files: FileList | File[]) => {
+    const selected = Array.from(files);
+    if (!selected.length) return;
+    if (images.length + selected.length > MAX_FILES)
+      return setError(
+        `This project can contain a maximum of ${MAX_FILES} images.`,
+      );
+    if (selected.some((file) => !ACCEPTED_TYPES.has(file.type)))
+      return setError("Only PNG, JPG and WebP images are allowed.");
+    if (selected.some((file) => file.size > MAX_BYTES))
+      return setError("Each image must be 5MB or smaller.");
+    setError(undefined);
+    const formData = new FormData();
+    selected.forEach((file) => formData.append("image", file));
+    startTransition(async () => {
+      const state = await uploadPortfolioImageAction(projectId, {}, formData);
+      setError(state.error);
+      if (!state.error) router.refresh();
+    });
+  };
+
+  const updateOrder = (sourceId: string, targetId: string) => {
+    if (sourceId === targetId) return;
+    const ordered = [...images];
+    const from = ordered.findIndex((image) => image.id === sourceId);
+    const to = ordered.findIndex((image) => image.id === targetId);
+    if (from < 0 || to < 0) return;
+    const [moved] = ordered.splice(from, 1);
+    if (!moved) return;
+    ordered.splice(to, 0, moved);
+    startTransition(async () => {
+      await reorderPortfolioImagesAction(
+        projectId,
+        ordered.map((image) => image.id),
+      );
+      router.refresh();
+    });
+  };
+
+  const removeImage = (imageId: string) =>
+    startTransition(async () => {
+      await removePortfolioImageAction(imageId);
+      router.refresh();
+    });
+  const setCover = (imageId: string) =>
+    startTransition(async () => {
+      await setMainPortfolioImageAction(projectId, imageId);
+      router.refresh();
+    });
 
   return (
-    <div>
-      <div className="mb-3 flex items-center justify-between font-display text-sm"><span>Project images</span><span className="text-muted">{images.length}/10</span></div>
-      <form action={formAction} className="border border-dashed border-rule p-6 text-center">
+    <div className="portfolio-image-manager">
+      <div className="portfolio-images-heading">
+        <span>Project images</span>
+        <span>
+          {images.length}/{MAX_FILES}
+        </span>
+      </div>
+      <div
+        className="portfolio-dropzone"
+        role="button"
+        tabIndex={0}
+        onClick={() => inputRef.current?.click()}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            inputRef.current?.click();
+          }
+        }}
+        onDragOver={(event) => event.preventDefault()}
+        onDrop={(event) => {
+          event.preventDefault();
+          submitFiles(event.dataTransfer.files);
+        }}
+      >
         <input
+          ref={inputRef}
           type="file"
-          aria-label="Portfolio image"
           name="image"
-          accept="image/png,image/jpeg,image/webp,image/avif"
+          accept="image/png,image/jpeg,image/webp"
           multiple
-          required
-          className="mx-auto block max-w-full text-sm"
+          className="sr-only"
+          onChange={(event) =>
+            event.target.files && submitFiles(event.target.files)
+          }
         />
-        <p className="mt-2 text-xs text-muted">Drop images here or click to browse · PNG, JPG, WebP, AVIF · 8MB each</p>
-        <Button type="submit" variant="outline" disabled={isPending || images.length >= 10} className="mt-4">
-          {isPending ? "Uploading…" : "Upload images"}
-        </Button>
-      </form>
-      {state.error && (
-        <p role="alert" className="mt-2 text-sm text-danger">
-          {state.error}
+        <UploadIcon />
+        <strong>
+          {isPending ? "Uploading images…" : "Drag and drop images here"}
+        </strong>
+        <span>or click to browse</span>
+        <small>PNG, JPG, WebP · Max 5MB each</small>
+      </div>
+      {error && (
+        <p role="alert" className="portfolio-upload-error">
+          {error}
         </p>
       )}
-
-      {preview && (
-        <div className="relative mt-5 border border-rule p-3">
-          <p className="mb-3 font-display text-xs text-muted">Image preview</p>
-          <div className="relative aspect-[16/10] overflow-hidden bg-surface">
-            <Image src={preview.publicUrl} alt="" fill sizes="(min-width: 1024px) 45vw, 90vw" className="object-cover" />
-            {images.length > 1 && <><button type="button" aria-label="Previous preview image" onClick={() => setPreviewIndex((index) => (index - 1 + images.length) % images.length)} className="work-image-control start-2">‹</button><button type="button" aria-label="Next preview image" onClick={() => setPreviewIndex((index) => (index + 1) % images.length)} className="work-image-control end-2">›</button></>}
-          </div>
-          <p className="mt-2 text-xs text-muted">{Math.min(previewIndex + 1, images.length)} / {images.length}</p>
+      {images.length > 0 && (
+        <div className="portfolio-image-list">
+          {images.map((image, index) => (
+            <div
+              key={image.id}
+              className="portfolio-image-row"
+              draggable={!isPending}
+              onDragStart={() => setDraggedId(image.id)}
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={() => {
+                if (draggedId) updateOrder(draggedId, image.id);
+                setDraggedId(undefined);
+              }}
+            >
+              <div className="portfolio-image-thumbnail">
+                <Image
+                  src={image.publicUrl}
+                  alt=""
+                  fill
+                  sizes="76px"
+                  className="object-cover"
+                />
+              </div>
+              <div className="portfolio-image-file">
+                <strong>{image.fileName || `Image ${index + 1}`}</strong>
+                <span>
+                  {image.fileSize
+                    ? formatBytes(image.fileSize)
+                    : `Image ${index + 1}`}
+                </span>
+              </div>
+              {image.isMain ? (
+                <span className="portfolio-cover-badge">Cover</span>
+              ) : (
+                <button
+                  type="button"
+                  disabled={isPending}
+                  className="portfolio-text-action"
+                  onClick={() => setCover(image.id)}
+                >
+                  Set cover
+                </button>
+              )}
+              <span className="portfolio-drag-handle" aria-hidden="true">
+                ⠿
+              </span>
+              <button
+                type="button"
+                disabled={isPending}
+                aria-label={`Delete ${image.fileName || `image ${index + 1}`}`}
+                className="portfolio-delete-image"
+                onClick={() => removeImage(image.id)}
+              >
+                <TrashIcon />
+              </button>
+            </div>
+          ))}
         </div>
       )}
-
-      <div className="mt-5 space-y-3">
-        {images.map((image, index) => (
-          <div key={image.id} className="flex overflow-hidden border border-rule">
-            <div className="relative aspect-[4/3] w-28 shrink-0 bg-surface">
-              <Image
-                src={image.publicUrl}
-                alt=""
-                fill
-                sizes="200px"
-                className="object-cover"
-              />
-              {image.isMain && (
-                <span className="absolute start-2 top-2 bg-foreground px-2 py-0.5 text-xs font-semibold text-canvas">
-                  Main
-                </span>
-              )}
-            </div>
-            <div className="flex flex-1 flex-wrap items-center justify-between gap-2 p-3">
-              <span className="font-display text-xs text-muted">Image {index + 1}{image.isMain ? " · Cover" : ""}</span>
-              <div className="flex gap-1">
-                <form
-                  action={movePortfolioImageAction.bind(null, image.id, "up")}
-                >
-                  <button
-                    type="submit"
-                    aria-label="Move image up"
-                    disabled={index === 0}
-                    className="border border-rule px-1.5 py-0.5 text-xs disabled:opacity-30"
-                  >
-                    ↑
-                  </button>
-                </form>
-                <form
-                  action={movePortfolioImageAction.bind(null, image.id, "down")}
-                >
-                  <button
-                    type="submit"
-                    aria-label="Move image down"
-                    disabled={index === images.length - 1}
-                    className="border border-rule px-1.5 py-0.5 text-xs disabled:opacity-30"
-                  >
-                    ↓
-                  </button>
-                </form>
-              </div>
-              <div className="flex gap-2">
-                {!image.isMain && (
-                  <form
-                    action={setMainPortfolioImageAction.bind(
-                      null,
-                      projectId,
-                      image.id,
-                    )}
-                  >
-                    <button
-                      type="submit"
-                      className="text-xs font-semibold text-muted hover:text-foreground"
-                    >
-                      Set main
-                    </button>
-                  </form>
-                )}
-                <form action={removePortfolioImageAction.bind(null, image.id)}>
-                  <button
-                    type="submit"
-                    className="text-xs font-semibold text-danger hover:text-danger"
-                  >
-                    Remove
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        ))}
+      <div className="portfolio-image-preview">
+        <p>Image preview (how it appears)</p>
+        <ProjectGallery
+          images={images}
+          locale="en"
+          title="Project image"
+          mode="preview"
+        />
       </div>
     </div>
+  );
+}
+
+function formatBytes(bytes: number) {
+  return `${(bytes / 1024 / 1024).toFixed(bytes > 1024 * 1024 ? 1 : 2)} MB`;
+}
+function UploadIcon() {
+  return (
+    <svg
+      width="27"
+      height="27"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <rect
+        x="3"
+        y="4"
+        width="18"
+        height="16"
+        rx="1"
+        stroke="currentColor"
+        strokeWidth="1.4"
+      />
+      <circle cx="8" cy="9" r="1.4" stroke="currentColor" strokeWidth="1.4" />
+      <path
+        d="m4 18 5.4-5 3.5 3 2.1-2 5 4"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+function TrashIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M3 4h10m-6.5 3v4m3-4v4M5 4l.7-2h4.6l.7 2m-6.3 0 .55 9h5.5l.55-9"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }

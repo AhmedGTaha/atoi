@@ -14,6 +14,7 @@ import {
   addPortfolioImage,
   removePortfolioImage,
   movePortfolioImage,
+  reorderPortfolioImages,
   setMainPortfolioImage,
   getPortfolioProjectById,
 } from "@/lib/services/portfolioService";
@@ -36,6 +37,10 @@ function readPortfolioForm(formData: FormData) {
     builtAr: formData.get("builtAr") || null,
     resultEn: formData.get("resultEn") || null,
     resultAr: formData.get("resultAr") || null,
+    technologies: String(formData.get("technologies") || "")
+      .split(/[\n,]/)
+      .map((technology) => technology.trim())
+      .filter(Boolean),
     liveUrl: formData.get("liveUrl") || null,
     featured: formData.get("featured") === "on",
     published: formData.get("published") === "on",
@@ -44,7 +49,7 @@ function readPortfolioForm(formData: FormData) {
 
 export async function createPortfolioProjectAction(
   _prevState: PortfolioFormState,
-  formData: FormData
+  formData: FormData,
 ): Promise<PortfolioFormState> {
   await requireAdmin();
   const parsed = readPortfolioForm(formData);
@@ -59,7 +64,7 @@ export async function createPortfolioProjectAction(
 export async function updatePortfolioProjectAction(
   projectId: string,
   _prevState: PortfolioFormState,
-  formData: FormData
+  formData: FormData,
 ): Promise<PortfolioFormState> {
   await requireAdmin();
   const parsed = readPortfolioForm(formData);
@@ -71,12 +76,18 @@ export async function updatePortfolioProjectAction(
   return {};
 }
 
-export async function setPortfolioPublishedAction(id: string, published: boolean) {
+export async function setPortfolioPublishedAction(
+  id: string,
+  published: boolean,
+) {
   await requireAdmin();
   await setPortfolioPublished(id, published);
 }
 
-export async function setPortfolioFeaturedAction(id: string, featured: boolean) {
+export async function setPortfolioFeaturedAction(
+  id: string,
+  featured: boolean,
+) {
   await requireAdmin();
   await setPortfolioFeatured(id, featured);
 }
@@ -87,7 +98,10 @@ export async function deletePortfolioProjectAction(id: string) {
   redirect("/admin/portfolio");
 }
 
-export async function movePortfolioProjectAction(id: string, direction: "up" | "down") {
+export async function movePortfolioProjectAction(
+  id: string,
+  direction: "up" | "down",
+) {
   await requireAdmin();
   await movePortfolioProject(id, direction);
 }
@@ -99,20 +113,25 @@ export interface ImageUploadState {
 export async function uploadPortfolioImageAction(
   projectId: string,
   _prevState: ImageUploadState,
-  formData: FormData
+  formData: FormData,
 ): Promise<ImageUploadState> {
   await requireAdmin();
 
-  const files = formData.getAll("image").filter((file): file is File => file instanceof File && file.size > 0);
+  const files = formData
+    .getAll("image")
+    .filter((file): file is File => file instanceof File && file.size > 0);
   if (files.length === 0) {
     return { error: "Choose an image file." };
   }
 
-  if (files.length > 10) return { error: "Upload no more than 10 images at once." };
+  if (files.length > 10)
+    return { error: "Upload no more than 10 images at once." };
   const project = await getPortfolioProjectById(projectId);
   if (!project) return { error: "Portfolio project not found." };
   if (project.images.length + files.length > 10) {
-    return { error: `This project can contain 10 images. It currently has ${project.images.length}.` };
+    return {
+      error: `This project can contain 10 images. It currently has ${project.images.length}.`,
+    };
   }
   for (const file of files) {
     const validation = validateImageFile(file);
@@ -122,7 +141,11 @@ export async function uploadPortfolioImageAction(
   try {
     for (const file of files) {
       const asset = await uploadPortfolioImage(file, "portfolio");
-      await addPortfolioImage(projectId, asset);
+      await addPortfolioImage(projectId, {
+        ...asset,
+        fileName: file.name,
+        fileSize: file.size,
+      });
     }
   } catch (err) {
     console.error("[portfolio] Image upload failed:", err);
@@ -137,12 +160,34 @@ export async function removePortfolioImageAction(imageId: string) {
   await removePortfolioImage(imageId);
 }
 
-export async function movePortfolioImageAction(imageId: string, direction: "up" | "down") {
+export async function movePortfolioImageAction(
+  imageId: string,
+  direction: "up" | "down",
+) {
   await requireAdmin();
   await movePortfolioImage(imageId, direction);
 }
 
-export async function setMainPortfolioImageAction(projectId: string, imageId: string) {
+export async function reorderPortfolioImagesAction(
+  projectId: string,
+  orderedIds: string[],
+) {
+  await requireAdmin();
+  const project = await getPortfolioProjectById(projectId);
+  if (!project || orderedIds.length !== project.images.length) return;
+  const knownIds = new Set(project.images.map((image) => image.id));
+  if (
+    orderedIds.some((id) => !knownIds.has(id)) ||
+    new Set(orderedIds).size !== orderedIds.length
+  )
+    return;
+  await reorderPortfolioImages(projectId, orderedIds);
+}
+
+export async function setMainPortfolioImageAction(
+  projectId: string,
+  imageId: string,
+) {
   await requireAdmin();
   await setMainPortfolioImage(projectId, imageId);
 }

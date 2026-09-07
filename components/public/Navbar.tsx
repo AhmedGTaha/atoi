@@ -46,6 +46,7 @@ export function Navbar({
           </Link>
           <span className="nav-divider" aria-hidden="true" />
           <LanguageToggle locale={locale} />
+          <span className="nav-divider" aria-hidden="true" />
           <StartProjectTrigger className="btn btn-primary">
             {dict.nav.startProject}
           </StartProjectTrigger>

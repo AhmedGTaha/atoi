@@ -269,8 +269,18 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     section: "work",
     label: "Heading",
     multiline: false,
-    valueEn: "Three problems, solved.",
-    valueAr: "ثلاث مشاكل، تم حلها.",
+    valueEn: "Selected Work",
+    valueAr: "أعمال مختارة",
+  },
+  {
+    key: "work.intro",
+    section: "work",
+    label: "Supporting copy",
+    multiline: true,
+    valueEn:
+      "Real projects. Real impact. Built with modern technology for forward-thinking businesses.",
+    valueAr:
+      "مشاريع حقيقية وتأثير حقيقي. نبني بتقنيات حديثة للشركات ذات النظرة المستقبلية.",
   },
   {
     key: "work.seeAllLabel",

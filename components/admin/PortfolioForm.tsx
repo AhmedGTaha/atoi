@@ -77,6 +77,14 @@ export function PortfolioForm({
         placeholder="https://"
       />
 
+      <AdminInput
+        label="Technologies"
+        name="technologies"
+        hint="Separate technologies with commas. These appear as compact labels on the public project card."
+        defaultValue={project?.technologies.join(", ") ?? ""}
+        placeholder="e.g. Next.js, TypeScript, PostgreSQL"
+      />
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <AdminTextarea
           label="Problem (English, optional)"
@@ -123,22 +131,28 @@ export function PortfolioForm({
         />
       </div>
 
-      <div className="flex gap-6">
-        <label className="flex items-center gap-2 text-sm font-semibold">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="portfolio-state-control">
           <input
             type="checkbox"
             name="published"
             defaultChecked={project?.published}
           />
-          Published
+          <span>
+            <strong>Published</strong>
+            <small>Show on the public website</small>
+          </span>
         </label>
-        <label className="flex items-center gap-2 text-sm font-semibold">
+        <label className="portfolio-state-control">
           <input
             type="checkbox"
             name="featured"
             defaultChecked={project?.featured}
           />
-          Featured
+          <span>
+            <strong>Featured</strong>
+            <small>Highlight this project</small>
+          </span>
         </label>
       </div>
 

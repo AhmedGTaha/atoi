@@ -94,7 +94,7 @@ export function Modal({
       role="presentation"
     >
       <div
-        className="absolute inset-0 bg-overlay"
+        className="absolute inset-0 bg-overlay backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />

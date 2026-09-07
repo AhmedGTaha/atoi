@@ -56,7 +56,7 @@ export const dictionaries = {
       seeAll: "See all projects",
       showLess: "Show less",
       liveSite: "Visit live site",
-      caseStudy: "read the case study",
+      caseStudy: "View project",
       empty: "Selected work is coming soon.",
     },
     common: {
@@ -83,7 +83,8 @@ export const dictionaries = {
       sendSupportRequest: "Send Support Request",
       sendingSupportRequest: "Sending…",
       supportSent: "Your message has been sent to the team.",
-      supportSentEmailFailed: "Your message was saved. We had trouble sending the email notification, but the team will still see it.",
+      supportSentEmailFailed:
+        "Your message was saved. We had trouble sending the email notification, but the team will still see it.",
       noProjects: "You don't have any projects yet.",
       description: "Description",
       signOut: "Sign out",
@@ -112,7 +113,8 @@ export const dictionaries = {
       businessNameLabel: "الشركة",
       businessNamePlaceholder: "الشركة أو المشروع",
       descriptionLabel: "صف مشروعك",
-      descriptionPlaceholder: "ما تريد بناءه، وما هو موجود حالياً، ومن سيستخدمه",
+      descriptionPlaceholder:
+        "ما تريد بناءه، وما هو موجود حالياً، ومن سيستخدمه",
       emailLabel: "البريد الإلكتروني",
       emailPlaceholder: "you@company.com",
       phoneLabel: "الهاتف",
@@ -142,7 +144,7 @@ export const dictionaries = {
       seeAll: "عرض كل المشاريع",
       showLess: "عرض أقل",
       liveSite: "زيارة الموقع",
-      caseStudy: "اقرأ دراسة الحالة",
+      caseStudy: "عرض المشروع",
       empty: "الأعمال المختارة قريباً.",
     },
     common: {
@@ -169,7 +171,8 @@ export const dictionaries = {
       sendSupportRequest: "إرسال طلب الدعم",
       sendingSupportRequest: "جارِ الإرسال…",
       supportSent: "تم إرسال رسالتك إلى الفريق.",
-      supportSentEmailFailed: "تم حفظ رسالتك. واجهنا مشكلة في إرسال إشعار البريد الإلكتروني، لكن الفريق سيراها.",
+      supportSentEmailFailed:
+        "تم حفظ رسالتك. واجهنا مشكلة في إرسال إشعار البريد الإلكتروني، لكن الفريق سيراها.",
       noProjects: "ليس لديك أي مشاريع بعد.",
       description: "الوصف",
       signOut: "تسجيل الخروج",

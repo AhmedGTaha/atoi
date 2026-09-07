@@ -205,6 +205,7 @@ model PortfolioProject {
   builtAr        String?
   resultEn       String?
   resultAr       String?
+  technologies   String[] @default([])
   liveUrl        String?
   featured       Boolean  @default(false)
   published      Boolean  @default(false)
@@ -225,6 +226,8 @@ model PortfolioImage {
   publicUrl          String
   altEn              String?
   altAr              String?
+  fileName           String?
+  fileSize           Int?
   isMain             Boolean          @default(false)
   displayOrder       Int              @default(0)
   createdAt          DateTime         @default(now())

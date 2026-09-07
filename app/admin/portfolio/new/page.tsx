@@ -8,12 +8,20 @@ export default async function NewPortfolioProjectPage() {
 
   return (
     <div>
-      <PageHeader title="Add portfolio project" />
-      <Card>
+      <PageHeader
+        title="Add portfolio project"
+        description="Showcase your work on the public website."
+      />
+      <Card className="portfolio-details-card">
+        <h2 className="mb-5 font-display text-base">Project details</h2>
         <PortfolioForm
           action={createPortfolioProjectAction}
           submitLabel="Create project"
         />
+        <p className="mt-5 border-t border-rule pt-4 text-xs text-muted">
+          Save the project first to add, order, and preview up to 10 project
+          images.
+        </p>
       </Card>
     </div>
   );
