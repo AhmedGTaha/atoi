@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
+import { Modal } from "@/components/ui/Modal";
 import type { Locale } from "@/lib/i18n/locale";
 import { localize } from "@/lib/i18n/locale";
 import type { PortfolioProjectWithImages } from "@/lib/services/portfolioService.types";
@@ -21,51 +22,51 @@ export function WorkGrid({
   seeAllLabel: string;
 }) {
   const dict = getDictionary(locale);
-  const [expanded, setExpanded] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const [selected, setSelected] = useState<PortfolioProjectWithImages | null>(
     null,
   );
 
-  const visible = useMemo(
-    () => (expanded ? projects : projects.slice(0, INITIAL_COUNT)),
-    [expanded, projects],
-  );
+  const visible = projects.slice(0, INITIAL_COUNT);
 
   return (
     <>
       <div className="work-grid">
-        {visible.map((project, index) =>
-          index < 2 ? (
-            <WorkSplitArticle
-              key={project.id}
-              project={project}
-              locale={locale}
-              dict={dict}
-              onOpen={() => setSelected(project)}
-            />
-          ) : (
-            <WorkFullArticle
-              key={project.id}
-              project={project}
-              locale={locale}
-              dict={dict}
-              onOpen={() => setSelected(project)}
-            />
-          ),
-        )}
+        {visible.map((project, index) => (
+          <WorkCard
+            key={project.id}
+            project={project}
+            locale={locale}
+            dict={dict}
+            index={index}
+            onOpen={() => setSelected(project)}
+          />
+        ))}
       </div>
 
-      {projects.length > INITIAL_COUNT && (
+      {projects.length > 0 && (
         <div className="mt-8 text-end">
           <button
             type="button"
-            onClick={() => setExpanded((v) => !v)}
-            className="text-sm font-semibold underline decoration-foreground/40 underline-offset-4 hover:decoration-foreground"
+            onClick={() => setShowAll(true)}
+            className="work-cta"
           >
-            {expanded ? dict.work.showLess : seeAllLabel}
+            {seeAllLabel}
+            <ArrowIcon />
           </button>
         </div>
       )}
+
+      <AllProjectsModal
+        isOpen={showAll}
+        projects={projects}
+        locale={locale}
+        onClose={() => setShowAll(false)}
+        onOpenProject={(project) => {
+          setShowAll(false);
+          setSelected(project);
+        }}
+      />
 
       <WorkDetailModal
         project={selected}
@@ -74,15 +75,6 @@ export function WorkGrid({
       />
     </>
   );
-}
-
-/** work/<slug>, always derived from the English title for a stable eyebrow. */
-function slugFor(project: PortfolioProjectWithImages): string {
-  return project.titleEn
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
 }
 
 /** hostname + path shown in the browser-bar figure header, e.g. "app.ledgerline.io". */
@@ -107,8 +99,9 @@ function WorkFigure({
   aspect: "16/10" | "2/1";
 }) {
   const title = locale === "ar" ? project.titleAr : project.titleEn;
-  const mainImage =
-    project.images.find((img) => img.isMain) ?? project.images[0];
+  const coverIndex = Math.max(0, project.images.findIndex((img) => img.isMain));
+  const [imageIndex, setImageIndex] = useState(coverIndex);
+  const image = project.images[imageIndex];
   const url = displayUrl(project.liveUrl);
 
   return (
@@ -119,13 +112,13 @@ function WorkFigure({
         </div>
       )}
       <div className="work-image" style={{ aspectRatio: aspect }}>
-        {mainImage ? (
+        {image ? (
           <Image
-            src={mainImage.publicUrl}
+            src={image.publicUrl}
             alt={
               localize(locale, {
-                valueEn: mainImage.altEn ?? "",
-                valueAr: mainImage.altAr ?? "",
+                valueEn: image.altEn ?? "",
+                valueAr: image.altAr ?? "",
               }) || title
             }
             fill
@@ -138,6 +131,16 @@ function WorkFigure({
               ? "لا توجد صورة للمشروع"
               : "Project image unavailable"}
           </span>
+        )}
+        {project.images.length > 1 && (
+          <>
+            <button type="button" aria-label="Previous image" onClick={() => setImageIndex((i) => (i - 1 + project.images.length) % project.images.length)} className="work-image-control start-2">‹</button>
+            <button type="button" aria-label="Next image" onClick={() => setImageIndex((i) => (i + 1) % project.images.length)} className="work-image-control end-2">›</button>
+            <div className="work-image-pagination" aria-label={`Image ${imageIndex + 1} of ${project.images.length}`}>
+              <span>{imageIndex + 1} / {project.images.length}</span>
+              {project.images.map((item, index) => <button key={item.id} type="button" aria-label={`Show image ${index + 1}`} aria-current={index === imageIndex} onClick={() => setImageIndex(index)} className="work-image-dot" />)}
+            </div>
+          </>
         )}
       </div>
     </figure>
@@ -176,70 +179,43 @@ function WorkCta({
   );
 }
 
-function WorkSplitArticle({
+function WorkCard({
   project,
   locale,
   dict,
   onOpen,
+  index,
 }: {
   project: PortfolioProjectWithImages;
   locale: Locale;
   dict: ReturnType<typeof getDictionary>;
   onOpen: () => void;
+  index: number;
 }) {
   const title = locale === "ar" ? project.titleAr : project.titleEn;
   const description =
     locale === "ar" ? project.descriptionAr : project.descriptionEn;
 
   return (
-    <article className="work-item">
-      <div>
-        <p className="work-eyebrow">work/{slugFor(project)}</p>
-        <h3 className="work-title">{title}</h3>
-        <p className="work-desc">{description}</p>
-        <WorkMeta project={project} locale={locale} />
-        <WorkCta label={dict.work.caseStudy} onOpen={onOpen} />
-      </div>
+    <article className="work-card">
       <WorkFigure project={project} locale={locale} aspect="16/10" />
+      <div className="mt-4">
+        <h3 className="work-title">{title}</h3>
+        <p className="work-desc mt-2">{description}</p>
+        <WorkMeta project={project} locale={locale} />
+        <div className="flex items-center justify-between border-t border-rule pt-4">
+          <WorkCta label={dict.work.caseStudy} onOpen={onOpen} />
+          <span className="section-marker">[ {String(index + 1).padStart(2, "0")} ]</span>
+        </div>
+      </div>
     </article>
   );
 }
 
-function WorkFullArticle({
-  project,
-  locale,
-  dict,
-  onOpen,
-}: {
-  project: PortfolioProjectWithImages;
-  locale: Locale;
-  dict: ReturnType<typeof getDictionary>;
-  onOpen: () => void;
-}) {
-  const title = locale === "ar" ? project.titleAr : project.titleEn;
-  const description =
-    locale === "ar" ? project.descriptionAr : project.descriptionEn;
-
-  return (
-    <article className="work-full">
-      <div className="work-full-head">
-        <div>
-          <p className="work-eyebrow">work/{slugFor(project)}</p>
-          <h3 className="work-full-title">{title}</h3>
-        </div>
-        <WorkCta label={dict.work.caseStudy} onOpen={onOpen} />
-      </div>
-      <div className="work-full-figure">
-        <WorkFigure project={project} locale={locale} aspect="2/1" />
-      </div>
-      <div className="work-full-footer">
-        <p className="work-desc" style={{ margin: 0 }}>
-          {description}
-        </p>
-        <WorkMeta project={project} locale={locale} />
-      </div>
-    </article>
-  );
+function AllProjectsModal({ isOpen, projects, locale, onClose, onOpenProject }: { isOpen: boolean; projects: PortfolioProjectWithImages[]; locale: Locale; onClose: () => void; onOpenProject: (project: PortfolioProjectWithImages) => void }) {
+  return <Modal isOpen={isOpen} onClose={onClose} titleId="all-projects-title" className="max-w-6xl">
+    <div className="p-6 sm:p-8"><button type="button" onClick={onClose} aria-label="Close" className="icon-button absolute end-4 top-3">×</button><p className="section-marker">[ all ]</p><h2 id="all-projects-title" className="mt-2 text-3xl">{locale === "ar" ? "كل المشاريع" : "All projects"}</h2><div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{projects.map((project) => <button key={project.id} type="button" onClick={() => onOpenProject(project)} className="work-card text-start"><WorkFigure project={project} locale={locale} aspect="16/10" /><span className="mt-3 block font-display text-lg">{locale === "ar" ? project.titleAr : project.titleEn}</span></button>)}</div></div>
+  </Modal>;
 }
 
 function ArrowIcon() {

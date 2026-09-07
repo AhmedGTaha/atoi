@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Image from "next/image";
 import {
   uploadPortfolioImageAction,
@@ -25,20 +25,25 @@ export function PortfolioImageManager({
     uploadPortfolioImageAction.bind(null, projectId),
     initialState,
   );
+  const [previewIndex, setPreviewIndex] = useState(0);
+  const preview = images[Math.min(previewIndex, Math.max(0, images.length - 1))];
 
   return (
     <div>
-      <form action={formAction} className="flex flex-wrap items-center gap-3">
+      <div className="mb-3 flex items-center justify-between font-display text-sm"><span>Project images</span><span className="text-muted">{images.length}/10</span></div>
+      <form action={formAction} className="border border-dashed border-rule p-6 text-center">
         <input
           type="file"
           aria-label="Portfolio image"
           name="image"
           accept="image/png,image/jpeg,image/webp,image/avif"
+          multiple
           required
-          className="text-sm"
+          className="mx-auto block max-w-full text-sm"
         />
-        <Button type="submit" variant="outline" disabled={isPending}>
-          {isPending ? "Uploading…" : "Add image"}
+        <p className="mt-2 text-xs text-muted">Drop images here or click to browse · PNG, JPG, WebP, AVIF · 8MB each</p>
+        <Button type="submit" variant="outline" disabled={isPending || images.length >= 10} className="mt-4">
+          {isPending ? "Uploading…" : "Upload images"}
         </Button>
       </form>
       {state.error && (
@@ -47,10 +52,21 @@ export function PortfolioImageManager({
         </p>
       )}
 
-      <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      {preview && (
+        <div className="relative mt-5 border border-rule p-3">
+          <p className="mb-3 font-display text-xs text-muted">Image preview</p>
+          <div className="relative aspect-[16/10] overflow-hidden bg-surface">
+            <Image src={preview.publicUrl} alt="" fill sizes="(min-width: 1024px) 45vw, 90vw" className="object-cover" />
+            {images.length > 1 && <><button type="button" aria-label="Previous preview image" onClick={() => setPreviewIndex((index) => (index - 1 + images.length) % images.length)} className="work-image-control start-2">‹</button><button type="button" aria-label="Next preview image" onClick={() => setPreviewIndex((index) => (index + 1) % images.length)} className="work-image-control end-2">›</button></>}
+          </div>
+          <p className="mt-2 text-xs text-muted">{Math.min(previewIndex + 1, images.length)} / {images.length}</p>
+        </div>
+      )}
+
+      <div className="mt-5 space-y-3">
         {images.map((image, index) => (
-          <div key={image.id} className="overflow-hidden border border-rule">
-            <div className="relative aspect-square bg-surface">
+          <div key={image.id} className="flex overflow-hidden border border-rule">
+            <div className="relative aspect-[4/3] w-28 shrink-0 bg-surface">
               <Image
                 src={image.publicUrl}
                 alt=""
@@ -64,7 +80,8 @@ export function PortfolioImageManager({
                 </span>
               )}
             </div>
-            <div className="flex flex-wrap items-center justify-between gap-2 p-2">
+            <div className="flex flex-1 flex-wrap items-center justify-between gap-2 p-3">
+              <span className="font-display text-xs text-muted">Image {index + 1}{image.isMain ? " · Cover" : ""}</span>
               <div className="flex gap-1">
                 <form
                   action={movePortfolioImageAction.bind(null, image.id, "up")}

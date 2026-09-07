@@ -15,6 +15,7 @@ import {
   removePortfolioImage,
   movePortfolioImage,
   setMainPortfolioImage,
+  getPortfolioProjectById,
 } from "@/lib/services/portfolioService";
 
 export interface PortfolioFormState {
@@ -102,19 +103,27 @@ export async function uploadPortfolioImageAction(
 ): Promise<ImageUploadState> {
   await requireAdmin();
 
-  const file = formData.get("image");
-  if (!(file instanceof File) || file.size === 0) {
+  const files = formData.getAll("image").filter((file): file is File => file instanceof File && file.size > 0);
+  if (files.length === 0) {
     return { error: "Choose an image file." };
   }
 
-  const validation = validateImageFile(file);
-  if (!validation.ok) {
-    return { error: validation.error };
+  if (files.length > 10) return { error: "Upload no more than 10 images at once." };
+  const project = await getPortfolioProjectById(projectId);
+  if (!project) return { error: "Portfolio project not found." };
+  if (project.images.length + files.length > 10) {
+    return { error: `This project can contain 10 images. It currently has ${project.images.length}.` };
+  }
+  for (const file of files) {
+    const validation = validateImageFile(file);
+    if (!validation.ok) return { error: validation.error };
   }
 
   try {
-    const asset = await uploadPortfolioImage(file, "portfolio");
-    await addPortfolioImage(projectId, asset);
+    for (const file of files) {
+      const asset = await uploadPortfolioImage(file, "portfolio");
+      await addPortfolioImage(projectId, asset);
+    }
   } catch (err) {
     console.error("[portfolio] Image upload failed:", err);
     return { error: "Upload failed. Check that image storage is configured." };

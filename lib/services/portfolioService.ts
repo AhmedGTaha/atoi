@@ -111,6 +111,9 @@ export async function addPortfolioImage(
   asset: { storageKey: string; publicUrl: string }
 ) {
   const count = await prisma.portfolioImage.count({ where: { portfolioProjectId } });
+  if (count >= 10) {
+    throw new Error("A portfolio project can contain at most 10 images.");
+  }
   const image = await prisma.portfolioImage.create({
     data: {
       portfolioProjectId,

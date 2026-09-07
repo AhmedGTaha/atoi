@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useEffect, useId, useState } from "react";
 import Image from "next/image";
 import { Modal } from "@/components/ui/Modal";
 import type { Locale } from "@/lib/i18n/locale";
@@ -18,6 +18,12 @@ export function WorkDetailModal({
 }) {
   const titleId = useId();
   const dict = getDictionary(locale);
+  const [imageIndex, setImageIndex] = useState(0);
+  const projectId = project?.id;
+  const coverIndex = Math.max(0, project?.images.findIndex((image) => image.isMain) ?? 0);
+  useEffect(() => {
+    setImageIndex(coverIndex);
+  }, [projectId, coverIndex]);
 
   if (!project) return null;
 
@@ -27,13 +33,14 @@ export function WorkDetailModal({
   const problem = locale === "ar" ? project.problemAr : project.problemEn;
   const built = locale === "ar" ? project.builtAr : project.builtEn;
   const result = locale === "ar" ? project.resultAr : project.resultEn;
+  const image = project.images[Math.min(imageIndex, Math.max(0, project.images.length - 1))];
 
   return (
     <Modal
       isOpen={!!project}
       onClose={onClose}
       titleId={titleId}
-      className="max-w-[720px]"
+      className="max-w-6xl"
     >
       <div className="relative p-6 sm:p-8">
         <button
@@ -45,15 +52,16 @@ export function WorkDetailModal({
           <CloseIcon />
         </button>
 
-        {project.images[0] && (
-          <div className="relative aspect-[16/10] w-full overflow-hidden">
+        {image && (
+          <div className="relative aspect-[16/10] w-full overflow-hidden bg-surface">
             <Image
-              src={project.images[0].publicUrl}
+              src={image.publicUrl}
               alt={title}
               fill
               sizes="(min-width: 768px) 680px, 90vw"
               className="object-cover"
             />
+            {project.images.length > 1 && <><button type="button" aria-label="Previous image" onClick={() => setImageIndex((i) => (i - 1 + project.images.length) % project.images.length)} className="work-image-control start-3">‹</button><button type="button" aria-label="Next image" onClick={() => setImageIndex((i) => (i + 1) % project.images.length)} className="work-image-control end-3">›</button></>}
           </div>
         )}
 
@@ -69,13 +77,17 @@ export function WorkDetailModal({
           {title}
         </h2>
         <p className="mt-3 text-foreground/70">{description}</p>
+        {project.clientName && <p className="mt-4 font-display text-xs text-muted">{project.clientName}</p>}
 
         {project.images.length > 1 && (
-          <div className="mt-6 grid grid-cols-3 gap-3">
-            {project.images.slice(1).map((img) => (
-              <div
+          <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
+            {project.images.map((img, index) => (
+              <button
                 key={img.id}
-                className="relative aspect-square overflow-hidden"
+                type="button"
+                onClick={() => setImageIndex(index)}
+                aria-current={imageIndex === index}
+                className={`relative aspect-[4/3] w-24 shrink-0 overflow-hidden border ${imageIndex === index ? "border-accent" : "border-rule"}`}
               >
                 <Image
                   src={img.publicUrl}
@@ -84,7 +96,7 @@ export function WorkDetailModal({
                   sizes="200px"
                   className="object-cover"
                 />
-              </div>
+              </button>
             ))}
           </div>
         )}
