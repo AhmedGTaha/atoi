@@ -11,25 +11,20 @@ export function About({
   content: WebsiteContentMap;
 }) {
   return (
-    <section id="about" className="public-section about-section">
-      <Container>
-        <p className="section-marker mb-6">[03] readme.md</p>
-        <h2>{t(content, "about.heading", locale)}</h2>
-        <p className="mt-6 max-w-3xl text-lg leading-relaxed text-muted">
-          {t(content, "about.body", locale)}
+    <section id="about" className="lp-section lp-tight">
+      <Container className="lp-narrow">
+        <p className="lp-kicker">
+          {locale === "ar" ? "من نحن" : "Who we are"}
         </p>
-        <div className="readme mt-8">
-          <h3 className="text-faint">
-            # {t(content, "process.heading", locale)}
-          </h3>
+        <h2 className="lp-h2">{t(content, "about.heading", locale)}</h2>
+        <p className="lp-lead">{t(content, "about.body", locale)}</p>
+        <div className="lp-steps">
           {[1, 2, 3].map((n) => (
-            <div className="readme-row" key={n}>
-              <h4>
-                <span className="text-accent" aria-hidden="true">
-                  →{" "}
-                </span>
-                {t(content, `process.step${n}.name`, locale)}
-              </h4>
+            <div className="lp-step" key={n}>
+              <span className="lp-step-no" aria-hidden="true">
+                0{n}
+              </span>
+              <h3>{t(content, `process.step${n}.name`, locale)}</h3>
               <p>{t(content, `process.step${n}.description`, locale)}</p>
             </div>
           ))}

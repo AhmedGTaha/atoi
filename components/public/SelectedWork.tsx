@@ -18,19 +18,17 @@ export function SelectedWork({
   const dict = getDictionary(locale);
 
   return (
-    <section id="work" className="public-section work-section">
+    <section id="work" className="lp-section lp-alt">
       <Container>
-        <p className="section-marker mb-5">
-          [01] {locale === "ar" ? "أعمال مختارة" : "selected work"}
+        <p className="lp-kicker">
+          {locale === "ar" ? "أعمال مختارة" : "Selected work"}
         </p>
-        <div className="flex items-center justify-between gap-4">
-          <h2 className="text-[clamp(2rem,6vw,3.25rem)] font-semibold leading-[1.02] tracking-normal">
-            {t(content, "work.heading", locale)}
-          </h2>
+        <div className="lp-split">
+          <h2 className="lp-h2">{t(content, "work.heading", locale)}</h2>
         </div>
 
         {projects.length === 0 ? (
-          <p className="mt-10 empty-state">{dict.work.empty}</p>
+          <p className="lp-empty">{dict.work.empty}</p>
         ) : (
           <WorkGrid
             projects={projects}

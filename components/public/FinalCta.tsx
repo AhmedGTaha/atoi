@@ -12,20 +12,16 @@ export function FinalCta({
   content: WebsiteContentMap;
 }) {
   return (
-    <section id="contact" className="public-section contact-section contact-dark">
-      <Container className="flex flex-wrap items-end justify-between gap-8">
-        <div>
-          <p className="section-marker mb-5">
-            [04] {t(content, "finalCta.eyebrow", locale)}
-          </p>
-          <h2 className="max-w-[22ch]">
-            {t(content, "finalCta.heading", locale)}
-          </h2>
-          <p className="mt-4 max-w-lg text-muted">
-            {t(content, "finalCta.body", locale)}
-          </p>
-        </div>
-        <StartProjectTrigger className="btn btn-primary">
+    <section id="contact" className="lp-cta">
+      <Container className="lp-cta-inner">
+        <p className="lp-kicker light">
+          {t(content, "finalCta.eyebrow", locale)}
+        </p>
+        <h2 className="lp-cta-title">
+          {t(content, "finalCta.heading", locale)}
+        </h2>
+        <p className="lp-cta-sub">{t(content, "finalCta.body", locale)}</p>
+        <StartProjectTrigger className="btn btn-primary lp-cta-btn">
           {t(content, "finalCta.ctaLabel", locale)}
         </StartProjectTrigger>
       </Container>

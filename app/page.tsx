@@ -22,16 +22,18 @@ export default async function HomePage() {
 
   return (
     <StartProjectModalProvider locale={locale}>
-      <Navbar locale={locale} companyName={settings.companyName} />
-      <main id="main-content">
-        <Hero locale={locale} content={content} />
-        <SelectedWork locale={locale} content={content} projects={portfolio} />
-        <Services locale={locale} content={content} />
-        <About locale={locale} content={content} />
-        <FinalCta locale={locale} content={content} />
-      </main>
-      <Footer locale={locale} content={content} settings={settings} />
-      <StatusBar email={settings.companyEmail} />
+    <div className="lp">
+    <Navbar locale={locale} companyName={settings.companyName} />
+    <main id="main-content">
+      <Hero locale={locale} content={content} />
+      <SelectedWork locale={locale} content={content} projects={portfolio} />
+      <Services locale={locale} content={content} />
+      <About locale={locale} content={content} />
+      <FinalCta locale={locale} content={content} />
+    </main>
+    <Footer locale={locale} content={content} settings={settings} />
+    <StatusBar email={settings.companyEmail} />
+    </div>
     </StartProjectModalProvider>
   );
 }

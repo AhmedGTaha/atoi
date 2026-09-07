@@ -17,46 +17,40 @@ export function Hero({
   const softwareMatch = heading.match(/software\.?/i);
 
   return (
-    <section id="home" className="hero">
-      <Container className="hero-grid">
-        <div>
-          <p className="terminal-prompt">
-            {t(content, "hero.eyebrow", locale)}
-          </p>
-          <h1 className="hero-title">
-            {softwareMatch ? (
-              <>
-                {heading.slice(0, softwareMatch.index)}
-                <span className="text-accent">{softwareMatch[0]}</span>
-                {heading.slice(
-                  (softwareMatch.index ?? 0) + softwareMatch[0].length,
-                )}
-              </>
-            ) : (
-              heading
-            )}
-          </h1>
-          <p className="mt-8 max-w-lg text-lg leading-relaxed text-muted">
-            {t(content, "hero.body", locale)}
-          </p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <StartProjectTrigger className="btn btn-primary">
-              {t(content, "hero.ctaPrimary", locale)}
-            </StartProjectTrigger>
-            <Link href="/#work" className="btn btn-secondary">
-              {t(content, "hero.ctaSecondary", locale)}
-            </Link>
-          </div>
+    <section id="home" className="lp-hero">
+      <Container className="lp-hero-inner">
+        <p className="lp-eyebrow">{t(content, "hero.eyebrow", locale)}</p>
+        <h1 className="lp-title">
+          {softwareMatch ? (
+            <>
+              {heading.slice(0, softwareMatch.index)}
+              <span className="lp-accent">{softwareMatch[0]}</span>
+              {heading.slice(
+                (softwareMatch.index ?? 0) + softwareMatch[0].length,
+              )}
+            </>
+          ) : (
+            heading
+          )}
+        </h1>
+        <p className="lp-sub">{t(content, "hero.body", locale)}</p>
+        <div className="lp-cta-row">
+          <StartProjectTrigger className="btn btn-primary lp-cta">
+            {t(content, "hero.ctaPrimary", locale)}
+          </StartProjectTrigger>
+          <Link href="/#work" className="btn btn-secondary lp-cta">
+            {t(content, "hero.ctaSecondary", locale)}
+          </Link>
         </div>
-        <div className="hero-code" dir="ltr">
-          <div className="code-window">
-            <div className="code-bar" aria-hidden="true">
+        <div className="lp-hero-visual">
+          <div className="lp-code" dir="ltr">
+            <div className="lp-code-bar" aria-hidden="true">
               <span />
               <span />
               <span />
-              <span className="code-filename">inquiry.json</span>
+              <span className="lp-code-file">inquiry.json</span>
             </div>
-            <pre className="code-body">
+            <pre className="lp-code-body">
               <code>
                 <span className="tok-p">{"{"}</span>
                 {"\n  "}
@@ -78,7 +72,7 @@ export function Hero({
               </code>
             </pre>
           </div>
-          <figure className="hero-photo">
+          <figure className="lp-hero-photo">
             <Image
               src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1200&auto=format&fit=crop"
               alt={
@@ -93,7 +87,7 @@ export function Hero({
         </div>
       </Container>
       <Container>
-        <figure className="hero-media">
+        <figure className="lp-banner">
           <Image
             src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1800&auto=format&fit=crop"
             alt={

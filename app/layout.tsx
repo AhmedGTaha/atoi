@@ -1,23 +1,24 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans, IBM_Plex_Mono, Cairo } from "next/font/google";
+import { Source_Sans_3, Source_Code_Pro, Cairo } from "next/font/google";
 import "./globals.css";
+import "../styles/lp-landing.css";
 import { getLocale } from "@/lib/i18n/getLocale";
 import { dirFor } from "@/lib/i18n/locale";
 import { I18nProvider } from "@/lib/i18n/I18nProvider";
 import { getCompanySettings } from "@/lib/services/settingsService";
 import { appUrl } from "@/lib/utils/appUrl";
 
-const latin = IBM_Plex_Sans({
+const latin = Source_Sans_3({
   variable: "--font-latin",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 
-const mono = IBM_Plex_Mono({
+const mono = Source_Code_Pro({
   variable: "--font-mono",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "700"],
   display: "swap",
 });
 
