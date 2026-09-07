@@ -854,7 +854,6 @@ html[dir="rtl"] {
     cursor: pointer;
   }
   .work-image-dot[aria-current="true"] { background: var(--color-accent); }
-  }
   .work-item p {
     font-family: var(--font-body);
   }
