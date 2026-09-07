@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { projectRequestInputSchema } from "@/lib/validation/projectRequest";
 
 const validBase = {
+  businessType: "business_website",
   description: "I need a new website for my cafe with online ordering.",
   email: "owner@example.com",
   phoneCountry: "BH",
@@ -14,16 +15,32 @@ describe("projectRequestInputSchema", () => {
     expect(result.success).toBe(true);
   });
 
-  it("treats businessType and name as optional", () => {
+  it("treats name as optional but requires a business type", () => {
     const result = projectRequestInputSchema.safeParse(validBase);
     expect(result.success).toBe(true);
     if (result.success) {
-      expect(result.data.businessType ?? null).toBeNull();
+      expect(result.data.businessType).toBe("business_website");
       expect(result.data.name).toBeNull();
     }
+
+    const missingType = projectRequestInputSchema.safeParse({
+      ...validBase,
+      businessType: undefined,
+    });
+    expect(missingType.success).toBe(false);
   });
 
-  it("rejects a description shorter than 10 characters", () => {
+  it("rejects an unrecognized business type", () => {
+    const result = projectRequestInputSchema.safeParse({ ...validBase, businessType: "retail" });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects unexpected extra fields", () => {
+    const result = projectRequestInputSchema.safeParse({ ...validBase, admin: true });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects a description shorter than 20 characters", () => {
     const result = projectRequestInputSchema.safeParse({ ...validBase, description: "too short" });
     expect(result.success).toBe(false);
   });

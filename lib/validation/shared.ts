@@ -1,18 +1,22 @@
 import { z } from "zod";
 
+/**
+ * Project types offered in the "Start a project" inquiry form, matching
+ * ATOI Studio.dc.html's "select 1 — project type" options exactly.
+ * "business_website" is the default-checked option.
+ */
 export const BUSINESS_TYPES = [
+  "business_website",
   "restaurant_cafe",
-  "retail",
-  "salon_beauty",
-  "healthcare",
-  "professional_services",
-  "construction",
-  "ecommerce",
-  "startup",
-  "other",
+  "school_system",
+  "clinic_medical",
+  "retail_online_store",
+  "something_else",
 ] as const;
 
 export type BusinessType = (typeof BUSINESS_TYPES)[number];
+
+export const DEFAULT_BUSINESS_TYPE: BusinessType = "business_website";
 
 export const PROJECT_STATUSES = [
   "PENDING_TEAM_APPROVAL",

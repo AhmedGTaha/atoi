@@ -35,6 +35,7 @@
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
     "jose": "^6.2.12",
+    "libphonenumber-js": "^1.13.12",
     "next": "15.5.25",
     "prisma": "6.19.3",
     "react": "19.2.8",

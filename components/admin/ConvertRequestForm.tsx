@@ -7,7 +7,7 @@ import {
 } from "@/app/actions/requestActions";
 import { AdminInput, AdminTextarea } from "@/components/admin/ui";
 import { Button } from "@/components/ui/Button";
-import { GCC_COUNTRY_CODES, GCC_COUNTRIES } from "@/lib/validation/phone";
+import { GCC_COUNTRY_CODES, GCC_COUNTRIES, dialCodeFor } from "@/lib/validation/phone";
 import type { ProjectRequest, TeamMember } from "@prisma/client";
 
 const initialState: ConvertRequestState = {};
@@ -75,7 +75,7 @@ export function ConvertRequestForm({
             >
               {GCC_COUNTRY_CODES.map((code) => (
                 <option key={code} value={code}>
-                  {GCC_COUNTRIES[code].flag} {GCC_COUNTRIES[code].dialCode}
+                  {GCC_COUNTRIES[code].flag} {dialCodeFor(code)}
                 </option>
               ))}
             </select>
@@ -85,7 +85,7 @@ export function ConvertRequestForm({
               type="tel"
               autoComplete="tel-national"
               defaultValue={request.phoneE164.replace(
-                GCC_COUNTRIES[request.phoneCountry].dialCode,
+                dialCodeFor(request.phoneCountry),
                 "",
               )}
               className="input"

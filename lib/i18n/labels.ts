@@ -23,26 +23,20 @@ export function statusLabel(locale: Locale, status: ProjectStatusValue): string 
 
 export const BUSINESS_TYPE_LABELS: Record<Locale, Record<BusinessType, string>> = {
   en: {
-    restaurant_cafe: "Restaurant / Cafe",
-    retail: "Retail",
-    salon_beauty: "Salon / Beauty",
-    healthcare: "Healthcare",
-    professional_services: "Professional Services",
-    construction: "Construction",
-    ecommerce: "E-commerce",
-    startup: "Startup",
-    other: "Other",
+    business_website: "business website",
+    restaurant_cafe: "restaurant / café",
+    school_system: "school system",
+    clinic_medical: "clinic / medical",
+    retail_online_store: "retail / online store",
+    something_else: "something else",
   },
   ar: {
+    business_website: "موقع تجاري",
     restaurant_cafe: "مطعم / مقهى",
-    retail: "تجارة تجزئة",
-    salon_beauty: "صالون / تجميل",
-    healthcare: "رعاية صحية",
-    professional_services: "خدمات مهنية",
-    construction: "مقاولات وبناء",
-    ecommerce: "متجر إلكتروني",
-    startup: "شركة ناشئة",
-    other: "أخرى",
+    school_system: "نظام مدرسي",
+    clinic_medical: "عيادة / طبي",
+    retail_online_store: "تجارة تجزئة / متجر إلكتروني",
+    something_else: "شيء آخر",
   },
 };
 

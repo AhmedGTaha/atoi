@@ -15,7 +15,7 @@ const COPY = {
     requestConfirmationHeading: "Thanks for reaching out.",
     requestConfirmationBody: (description: string) =>
       `<p>We've received your project request and our team will review it shortly.</p>
-       <p style="margin-top:16px;padding:16px;background:#F5F5F7;border-radius:12px;color:#333;">
+       <p class="email-quote" style="margin-top:18px;padding:16px;border-left:2px solid #0A6577;background:#F5F7F8;color:#0F1418;">
          ${escapeHtml(description)}
        </p>
        <p style="margin-top:16px;">We'll be in touch soon.</p>`,
@@ -40,7 +40,7 @@ const COPY = {
     ) =>
       `<p><strong>${escapeHtml(projectName)}</strong></p>
        <p style="margin-top:12px;">${escapeHtml(body)}</p>
-       <p style="margin-top:16px;color:#555;">Status: ${escapeHtml(status)} · Progress: ${progress}%</p>`,
+       <p class="email-status" style="margin-top:18px;padding-top:14px;border-top:1px solid #D8DEE3;color:#414B55;font-family:'Courier New',Courier,monospace;font-size:12px;">Status: <span class="email-accent" style="color:#0A6577;">${escapeHtml(status)}</span> · Progress: <span class="email-value" style="color:#0F1418;">${progress}%</span></p>`,
     updateCta: "View project",
     internalRequestSubject: "New project request",
     internalRequestHeading: "New project request received.",
@@ -57,7 +57,7 @@ const COPY = {
     requestConfirmationHeading: "شكراً لتواصلك معنا.",
     requestConfirmationBody: (description: string) =>
       `<p>لقد استلمنا طلب مشروعك وسيقوم فريقنا بمراجعته قريباً.</p>
-       <p style="margin-top:16px;padding:16px;background:#F5F5F7;border-radius:12px;color:#333;">
+       <p class="email-quote" style="margin-top:18px;padding:16px;border-right:2px solid #0A6577;background:#F5F7F8;color:#0F1418;">
          ${escapeHtml(description)}
        </p>
        <p style="margin-top:16px;">سنتواصل معك قريباً.</p>`,
@@ -82,7 +82,7 @@ const COPY = {
     ) =>
       `<p><strong>${escapeHtml(projectName)}</strong></p>
        <p style="margin-top:12px;">${escapeHtml(body)}</p>
-       <p style="margin-top:16px;color:#555;">الحالة: ${escapeHtml(status)} · نسبة الإنجاز: ${progress}%</p>`,
+       <p class="email-status" style="margin-top:18px;padding-top:14px;border-top:1px solid #D8DEE3;color:#414B55;font-family:'Courier New',Courier,monospace;font-size:12px;">الحالة: <span class="email-accent" style="color:#0A6577;">${escapeHtml(status)}</span> · نسبة الإنجاز: <span class="email-value" style="color:#0F1418;">${progress}%</span></p>`,
     updateCta: "عرض المشروع",
     internalRequestSubject: "طلب مشروع جديد",
     internalRequestHeading: "تم استلام طلب مشروع جديد.",
@@ -212,7 +212,7 @@ export function internalNewRequestEmail(
   ]
     .map(
       ([label, value]) =>
-        `<tr><td style="padding:4px 12px 4px 0;color:#777;">${escapeHtml(label)}</td><td style="padding:4px 0;">${escapeHtml(value)}</td></tr>`
+        `<tr><td class="email-label" style="padding:7px 16px 7px 0;color:#414B55;font-family:'Courier New',Courier,monospace;font-size:12px;">${escapeHtml(label)}</td><td class="email-value" style="padding:7px 0;color:#0F1418;">${escapeHtml(value)}</td></tr>`
     )
     .join("");
 
@@ -222,9 +222,9 @@ export function internalNewRequestEmail(
       locale: "en",
       companyName,
       heading: c.internalRequestHeading,
-      bodyHtml: `<table style="border-collapse:collapse;font-size:14px;">${rows}</table>
-                 <p style="margin-top:16px;"><strong>Description</strong></p>
-                 <p style="padding:16px;background:#F5F5F7;border-radius:12px;color:#333;">${escapeHtml(fields.description)}</p>`,
+      bodyHtml: `<table style="width:100%;border-collapse:collapse;font-size:14px;">${rows}</table>
+                 <p class="email-accent" style="margin:20px 0 10px;font-family:'Courier New',Courier,monospace;font-size:12px;color:#0A6577;">DESCRIPTION</p>
+                 <p class="email-quote" style="margin:0;padding:16px;border-left:2px solid #0A6577;background:#F5F7F8;color:#0F1418;">${escapeHtml(fields.description)}</p>`,
       ctaUrl: fields.adminUrl,
       ctaLabel: "Open request",
     }),
@@ -248,8 +248,8 @@ export function supportNotificationEmail(
       locale: "en",
       companyName,
       heading: c.supportHeading,
-      bodyHtml: `<p><strong>${escapeHtml(fields.projectName)}</strong> — ${escapeHtml(fields.customerLabel)}</p>
-                 <p style="margin-top:16px;padding:16px;background:#F5F5F7;border-radius:12px;color:#333;">${escapeHtml(fields.message)}</p>`,
+      bodyHtml: `<p class="email-value" style="color:#0F1418;"><strong>${escapeHtml(fields.projectName)}</strong> — ${escapeHtml(fields.customerLabel)}</p>
+                 <p class="email-quote" style="margin-top:18px;padding:16px;border-left:2px solid #0A6577;background:#F5F7F8;color:#0F1418;">${escapeHtml(fields.message)}</p>`,
       ctaUrl: fields.adminUrl,
       ctaLabel: "Open project",
     }),

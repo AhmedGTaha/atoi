@@ -5,13 +5,15 @@ import { Modal } from "@/components/ui/Modal";
 import { PhoneInput } from "./PhoneInput";
 import { useStartProjectModal } from "./StartProjectModalContext";
 import { submitProjectRequestAction } from "@/app/actions/projectRequestActions";
-import { BUSINESS_TYPES } from "@/lib/validation/shared";
+import { BUSINESS_TYPES, DEFAULT_BUSINESS_TYPE } from "@/lib/validation/shared";
 import {
   DEFAULT_GCC_COUNTRY,
+  nationalNumberLength,
   type GccCountryCode,
 } from "@/lib/validation/phone";
 import type { Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { businessTypeLabel } from "@/lib/i18n/labels";
 import { Button } from "@/components/ui/Button";
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -21,7 +23,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
   const titleId = useId();
 
-  const [businessType, setBusinessType] = useState("");
+  const [businessType, setBusinessType] = useState(DEFAULT_BUSINESS_TYPE);
   const [name, setName] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [description, setDescription] = useState("");
@@ -37,7 +39,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
   const [reference, setReference] = useState("");
 
   function resetForm() {
-    setBusinessType("");
+    setBusinessType(DEFAULT_BUSINESS_TYPE);
     setName("");
     setBusinessName("");
     setDescription("");
@@ -114,7 +116,6 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
           dict={dict}
           confirmationEmailSent={confirmationEmailSent}
           reference={reference}
-          email={email}
           onDone={close}
           titleId={titleId}
         />
@@ -140,35 +141,36 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
 
           <div className="mt-4">
             <label className="terminal-row">
-              <span className="terminal-label">{dict.modal.nameLabel}</span>
+              <FieldPrompt>{dict.modal.nameLabel}</FieldPrompt>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder={dict.modal.namePlaceholder}
+                maxLength={200}
                 className="input"
               />
             </label>
             <label className="terminal-row">
-              <span className="terminal-label">{dict.modal.businessNameLabel}</span>
+              <FieldPrompt>{dict.modal.businessNameLabel}</FieldPrompt>
               <input
                 type="text"
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
                 placeholder={dict.modal.businessNamePlaceholder}
+                maxLength={200}
                 className="input"
               />
             </label>
             <label className="terminal-row">
-              <span className="terminal-label">
-                {dict.modal.emailLabel} <span className="text-accent">*</span>
-              </span>
+              <FieldPrompt required>{dict.modal.emailLabel}</FieldPrompt>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={dict.modal.emailPlaceholder}
                 required
+                maxLength={254}
                 aria-invalid={!!fieldErrors.email}
                 className="input"
               />
@@ -179,12 +181,14 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
               )}
             </label>
             <div className="terminal-row">
-              <span className="terminal-label">
-                {dict.modal.phoneLabel} <span className="text-accent">*</span>
-              </span>
+              <FieldPrompt required>{dict.modal.phoneLabel}</FieldPrompt>
               <PhoneInput
                 country={phoneCountry}
-                onCountryChange={setPhoneCountry}
+                onCountryChange={(next) => {
+                  setPhoneCountry(next);
+                  const { max } = nationalNumberLength(next);
+                  setPhoneNumber((current) => current.slice(0, max));
+                }}
                 number={phoneNumber}
                 onNumberChange={setPhoneNumber}
                 placeholder={dict.modal.phonePlaceholder}
@@ -197,15 +201,15 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
               )}
             </div>
             <label className="terminal-row items-start">
-              <span className="terminal-label pt-0.5">
-                {dict.modal.descriptionLabel} <span className="text-accent">*</span>
-              </span>
+              <FieldPrompt required className="pt-0.5">
+                {dict.modal.descriptionLabel}
+              </FieldPrompt>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder={dict.modal.descriptionPlaceholder}
                 required
-                minLength={10}
+                minLength={20}
                 maxLength={5000}
                 rows={3}
                 aria-invalid={!!fieldErrors.description}
@@ -232,7 +236,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
                     checked={businessType === type}
                     onChange={() => setBusinessType(type)}
                   />
-                  {dict.businessTypes[type]}
+                  {businessTypeLabel(locale, type)}
                 </label>
               ))}
             </div>
@@ -271,22 +275,23 @@ function ReceiptView({
   dict,
   confirmationEmailSent,
   reference,
-  email,
   onDone,
   titleId,
 }: {
   dict: ReturnType<typeof getDictionary>;
   confirmationEmailSent: boolean;
   reference: string;
-  email: string;
   onDone: () => void;
   titleId: string;
 }) {
   const lines = [
     "$ atoi send --inquiry",
     "> validating fields … ok",
-    `> transmitting to ${email || "our team"} … ok`,
+    "> transmitting to info@atoi.online … ok",
     `✓ received · ref ${reference}`,
+    "",
+    dict.success.replyLine1,
+    dict.success.replyLine2,
   ];
 
   return (
@@ -296,14 +301,14 @@ function ReceiptView({
       </h2>
       <div className="font-display text-sm leading-loose text-muted">
         {lines.map((line, i) => (
-          <div key={i}>{line}</div>
+          <div key={i}>{line || " "}</div>
         ))}
       </div>
-      <p className="mt-5 max-w-md text-muted">
-        {confirmationEmailSent
-          ? dict.success.bodyWithEmail
-          : dict.success.bodyWithoutEmail}
-      </p>
+      {!confirmationEmailSent && (
+        <p className="mt-5 max-w-md text-muted">
+          {dict.success.bodyWithoutEmail}
+        </p>
+      )}
       <div className="mt-6 flex flex-wrap gap-3 border-t pt-5">
         <Button variant="primary" onClick={onDone}>
           {dict.success.done}
@@ -313,6 +318,24 @@ function ReceiptView({
         </a>
       </div>
     </div>
+  );
+}
+
+/** Terminal-style field prompt: "label ›", or "label* ›" when required. */
+function FieldPrompt({
+  required,
+  className,
+  children,
+}: {
+  required?: boolean;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <span className={className ? `terminal-label ${className}` : "terminal-label"}>
+      {children}
+      {required && <span className="text-accent">*</span>} ›
+    </span>
   );
 }
 

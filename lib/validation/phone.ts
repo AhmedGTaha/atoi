@@ -3,15 +3,26 @@
  *
  * V1 intentionally supports only the six GCC countries (SRS section 23).
  * Numbers are normalized to E.164 (e.g. "+97312345678") for storage.
+ *
+ * Per-country dial codes and national number lengths come from
+ * libphonenumber-js's bundled metadata (the same dataset behind Google's
+ * libphonenumber) instead of a hand-maintained table, so they stay correct
+ * without us tracking numbering-plan changes ourselves.
  */
+import {
+  getCountryCallingCode,
+  parsePhoneNumberFromString,
+  validatePhoneNumberLength,
+  Metadata,
+} from "libphonenumber-js/max";
 
 export const GCC_COUNTRIES = {
-  BH: { dialCode: "+973", digits: 8, label: "Bahrain", flag: "🇧🇭" },
-  SA: { dialCode: "+966", digits: 9, label: "Saudi Arabia", flag: "🇸🇦" },
-  AE: { dialCode: "+971", digits: 9, label: "United Arab Emirates", flag: "🇦🇪" },
-  QA: { dialCode: "+974", digits: 8, label: "Qatar", flag: "🇶🇦" },
-  KW: { dialCode: "+965", digits: 8, label: "Kuwait", flag: "🇰🇼" },
-  OM: { dialCode: "+968", digits: 8, label: "Oman", flag: "🇴🇲" },
+  BH: { label: "Bahrain", flag: "🇧🇭" },
+  SA: { label: "Saudi Arabia", flag: "🇸🇦" },
+  AE: { label: "United Arab Emirates", flag: "🇦🇪" },
+  QA: { label: "Qatar", flag: "🇶🇦" },
+  KW: { label: "Kuwait", flag: "🇰🇼" },
+  OM: { label: "Oman", flag: "🇴🇲" },
 } as const;
 
 export type GccCountryCode = keyof typeof GCC_COUNTRIES;
@@ -24,6 +35,26 @@ export function isGccCountryCode(value: string): value is GccCountryCode {
   return Object.prototype.hasOwnProperty.call(GCC_COUNTRIES, value);
 }
 
+/** "+973" style dial code, read from libphonenumber-js metadata. */
+export function dialCodeFor(country: GccCountryCode): string {
+  return `+${getCountryCallingCode(country)}`;
+}
+
+/**
+ * National significant-number length range for a country (e.g. Bahrain is a
+ * fixed 8 digits), read from libphonenumber-js metadata — never hardcoded.
+ */
+export function nationalNumberLength(country: GccCountryCode): {
+  min: number;
+  max: number;
+} {
+  const metadata = new Metadata();
+  metadata.selectNumberingPlan(country);
+  const lengths = metadata.numberingPlan?.possibleLengths() ?? [];
+  if (lengths.length === 0) return { min: 4, max: 15 };
+  return { min: Math.min(...lengths), max: Math.max(...lengths) };
+}
+
 export interface PhoneValidationResult {
   ok: boolean;
   /** E.164 formatted number, only present when ok is true. */
@@ -34,67 +65,55 @@ export interface PhoneValidationResult {
 /**
  * Normalizes and validates a phone number against one GCC country's rules.
  *
- * - Strips spaces, hyphens, parentheses and dots.
- * - Rejects letters and any sign other than a single leading "+".
- * - Accepts the number with or without a redundant country code/leading 0.
- * - Enforces the exact national significant number length for the country.
+ * - Rejects anything but digits (no spaces, dashes, letters, parentheses).
+ * - Enforces the country's real national-number length via libphonenumber-js.
+ * - Confirms the number is a plausible number for that country, not just the
+ *   right length.
  */
 export function normalizeGccPhone(
   country: string,
   rawInput: string
 ): PhoneValidationResult {
   if (!isGccCountryCode(country)) {
-    return { ok: false, error: "Unsupported country. Only GCC countries are supported." };
+    return { ok: false, error: "Select a supported country." };
   }
 
   if (typeof rawInput !== "string" || rawInput.trim().length === 0) {
     return { ok: false, error: "Phone number is required." };
   }
 
-  const { dialCode, digits: expectedDigits } = GCC_COUNTRIES[country];
-  const dialDigits = dialCode.replace("+", "");
   const trimmed = rawInput.trim();
-
-  // A leading "-" is a negative sign, not formatting, and must be rejected
-  // even though internal hyphens (area-code style separators) are harmless.
-  if (trimmed.startsWith("-")) {
-    return { ok: false, error: "Phone number cannot contain a negative sign." };
-  }
-
-  // Remove harmless formatting characters.
-  let cleaned = trimmed.replace(/[\s\-().]/g, "");
-
-  if (/[a-zA-Z]/.test(cleaned)) {
-    return { ok: false, error: "Phone number cannot contain letters." };
-  }
-
-  const hasLeadingPlus = cleaned.startsWith("+");
-  if (hasLeadingPlus) {
-    cleaned = cleaned.slice(1);
-  }
-
-  if (!/^\d+$/.test(cleaned)) {
+  if (!/^\d+$/.test(trimmed)) {
     return { ok: false, error: "Phone number must contain digits only." };
   }
 
-  // Strip a redundant country code the user may have typed.
-  if (cleaned.startsWith(dialDigits)) {
-    cleaned = cleaned.slice(dialDigits.length);
-  } else if (!hasLeadingPlus && cleaned.startsWith("00" + dialDigits)) {
-    cleaned = cleaned.slice(2 + dialDigits.length);
-  }
+  const { label } = GCC_COUNTRIES[country];
+  const lengthResult = validatePhoneNumberLength(trimmed, {
+    defaultCountry: country,
+  });
 
-  // Strip a single leading trunk "0" some users type locally.
-  if (cleaned.length === expectedDigits + 1 && cleaned.startsWith("0")) {
-    cleaned = cleaned.slice(1);
-  }
-
-  if (cleaned.length !== expectedDigits) {
+  if (lengthResult === "TOO_SHORT") {
+    const { min } = nationalNumberLength(country);
     return {
       ok: false,
-      error: `Enter a valid ${expectedDigits}-digit number for ${GCC_COUNTRIES[country].label}.`,
+      error: `Enter at least ${min} digits for ${label}.`,
     };
   }
+  if (lengthResult === "TOO_LONG") {
+    const { max } = nationalNumberLength(country);
+    return {
+      ok: false,
+      error: `Enter no more than ${max} digits for ${label}.`,
+    };
+  }
+  if (lengthResult) {
+    return { ok: false, error: `Enter a valid phone number for ${label}.` };
+  }
 
-  return { ok: true, e164: `${dialCode}${cleaned}` };
+  const parsed = parsePhoneNumberFromString(trimmed, country);
+  if (!parsed || !parsed.isValid()) {
+    return { ok: false, error: `Enter a valid phone number for ${label}.` };
+  }
+
+  return { ok: true, e164: parsed.number };
 }

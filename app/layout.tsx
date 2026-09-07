@@ -64,7 +64,6 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       suppressHydrationWarning
-      data-theme="dark"
       lang={locale}
       dir={dirFor(locale)}
       className={`${latin.variable} ${mono.variable} ${arabic.variable} h-full antialiased`}
@@ -72,7 +71,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('atoi-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark'}catch(e){}})()`,
+            __html: `(function(){var root=document.documentElement;var media=window.matchMedia('(prefers-color-scheme: light)');var apply=function(theme){root.dataset.theme=theme};try{var saved=localStorage.getItem('atoi-theme');if(saved==='light'||saved==='dark'){apply(saved);return}}catch(e){}apply(media.matches?'light':'dark');if(!window.__atoiSystemThemeListener){var sync=function(event){try{if(localStorage.getItem('atoi-theme'))return}catch(e){}apply(event.matches?'light':'dark')};if(media.addEventListener)media.addEventListener('change',sync);else media.addListener(sync);window.__atoiSystemThemeListener=true}})()`,
           }}
         />
       </head>

@@ -19,7 +19,7 @@ afterAll(async () => {
 });
 
 const validInput = {
-  businessType: "retail",
+  businessType: "retail_online_store",
   name: "Sara",
   businessName: "Sara's Shop",
   description: "I need an online store for my retail business in Manama.",

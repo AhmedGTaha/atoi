@@ -4,6 +4,8 @@ import { useId } from "react";
 import {
   GCC_COUNTRIES,
   GCC_COUNTRY_CODES,
+  dialCodeFor,
+  nationalNumberLength,
   type GccCountryCode,
 } from "@/lib/validation/phone";
 
@@ -25,6 +27,7 @@ export function PhoneInput({
   describedById?: string;
 }) {
   const countryId = useId();
+  const { max } = nationalNumberLength(country);
   return (
     <div className="flex items-baseline gap-2.5">
       <select
@@ -36,7 +39,7 @@ export function PhoneInput({
       >
         {GCC_COUNTRY_CODES.map((code) => (
           <option key={code} value={code}>
-            {GCC_COUNTRIES[code].dialCode} {GCC_COUNTRIES[code].label.toLowerCase()}
+            {dialCodeFor(code)} {GCC_COUNTRIES[code].label.toLowerCase()}
           </option>
         ))}
       </select>
@@ -44,10 +47,14 @@ export function PhoneInput({
         type="tel"
         aria-label={placeholder}
         inputMode="numeric"
+        pattern="[0-9]*"
         autoComplete="tel-national"
         value={number}
-        onChange={(e) => onNumberChange(e.target.value.replace(/[^0-9]/g, ""))}
+        onChange={(e) =>
+          onNumberChange(e.target.value.replace(/[^0-9]/g, "").slice(0, max))
+        }
         placeholder={placeholder}
+        maxLength={max}
         aria-describedby={describedById}
         aria-invalid={!!error}
         className="input min-w-0 flex-1"

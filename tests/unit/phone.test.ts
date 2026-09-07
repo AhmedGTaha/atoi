@@ -1,10 +1,20 @@
 import { describe, it, expect } from "vitest";
-import { normalizeGccPhone, isGccCountryCode, DEFAULT_GCC_COUNTRY, GCC_COUNTRIES } from "@/lib/validation/phone";
+import {
+  normalizeGccPhone,
+  isGccCountryCode,
+  DEFAULT_GCC_COUNTRY,
+  dialCodeFor,
+  nationalNumberLength,
+} from "@/lib/validation/phone";
 
 describe("normalizeGccPhone", () => {
   it("defaults to Bahrain +973", () => {
     expect(DEFAULT_GCC_COUNTRY).toBe("BH");
-    expect(GCC_COUNTRIES.BH.dialCode).toBe("+973");
+    expect(dialCodeFor("BH")).toBe("+973");
+  });
+
+  it("reads Bahrain's national number length (8 digits) from real metadata", () => {
+    expect(nationalNumberLength("BH")).toEqual({ min: 8, max: 8 });
   });
 
   it("normalizes a plain 8-digit Bahrain number", () => {
@@ -13,28 +23,24 @@ describe("normalizeGccPhone", () => {
     expect(result.e164).toBe("+97336001234");
   });
 
-  it("strips spaces and hyphens", () => {
-    const result = normalizeGccPhone("BH", "3600-1234");
-    expect(result.ok).toBe(true);
-    expect(result.e164).toBe("+97336001234");
-  });
-
-  it("accepts a number that already includes the country code", () => {
-    const result = normalizeGccPhone("BH", "+97336001234");
-    expect(result.ok).toBe(true);
-    expect(result.e164).toBe("+97336001234");
-  });
-
-  it("strips a redundant leading trunk zero", () => {
-    const result = normalizeGccPhone("BH", "036001234");
-    expect(result.ok).toBe(true);
-    expect(result.e164).toBe("+97336001234");
-  });
-
   it("validates Saudi Arabia's 9-digit numbers", () => {
     const result = normalizeGccPhone("SA", "512345678");
     expect(result.ok).toBe(true);
     expect(result.e164).toBe("+966512345678");
+  });
+
+  it("rejects spaces, dashes, and other formatting characters", () => {
+    expect(normalizeGccPhone("BH", "3600 1234").ok).toBe(false);
+    expect(normalizeGccPhone("BH", "3600-1234").ok).toBe(false);
+    expect(normalizeGccPhone("BH", "(3600)1234").ok).toBe(false);
+  });
+
+  it("rejects a leading plus / redundant country code", () => {
+    expect(normalizeGccPhone("BH", "+97336001234").ok).toBe(false);
+  });
+
+  it("rejects a redundant leading trunk zero", () => {
+    expect(normalizeGccPhone("BH", "036001234").ok).toBe(false);
   });
 
   it("rejects letters", () => {
@@ -47,8 +53,13 @@ describe("normalizeGccPhone", () => {
     expect(result.ok).toBe(false);
   });
 
-  it("rejects the wrong number of digits", () => {
+  it("rejects too few digits for the country", () => {
     const result = normalizeGccPhone("BH", "123");
+    expect(result.ok).toBe(false);
+  });
+
+  it("rejects too many digits for the country", () => {
+    const result = normalizeGccPhone("BH", "3600123456");
     expect(result.ok).toBe(false);
   });
 

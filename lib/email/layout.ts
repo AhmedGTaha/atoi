@@ -1,10 +1,12 @@
 import type { Locale } from "@/lib/i18n/locale";
 
-const COLORS = {
-  offWhite: "#F5F5F7",
-  lightBlue: "#8EABD5",
-  darkBlue: "#486FA6",
-  black: "#000000",
+const LIGHT = {
+  ink: "#F5F7F8",
+  panel: "#FFFFFF",
+  paper: "#0F1418",
+  dim: "#414B55",
+  line: "#D8DEE3",
+  cyan: "#0A6577",
 };
 
 export interface EmailShellOptions {
@@ -17,7 +19,7 @@ export interface EmailShellOptions {
   companyName: string;
 }
 
-/** Minimal, table-free responsive HTML email shell using the brand palette. */
+/** A compact, email-safe version of the public site's system-aware UI. */
 export function emailShell(opts: EmailShellOptions): string {
   const dir = opts.locale === "ar" ? "rtl" : "ltr";
   const align = opts.locale === "ar" ? "right" : "left";
@@ -29,16 +31,16 @@ export function emailShell(opts: EmailShellOptions): string {
     opts.ctaUrl && opts.ctaLabel
       ? `<div style="margin-top:28px;">
            <a href="${escapeAttr(opts.ctaUrl)}"
-              style="display:inline-block;background:${COLORS.darkBlue};color:#ffffff;
-                     text-decoration:none;font-weight:600;padding:14px 28px;
-                     border-radius:999px;font-size:15px;">
+              class="email-cta" style="display:inline-block;background:${LIGHT.cyan};color:${LIGHT.ink};
+                     text-decoration:none;font-family:'Courier New',Courier,monospace;font-weight:700;
+                     padding:16px 24px;border-radius:0;font-size:14px;letter-spacing:.01em;">
              ${escapeHtml(opts.ctaLabel)}
            </a>
          </div>
-         <p style="margin-top:14px;font-size:12px;line-height:1.6;color:#8a8a8a;word-break:break-all;">
+         <p class="email-fallback" style="margin:18px 0 0;font-family:'Courier New',Courier,monospace;font-size:11px;line-height:1.7;color:${LIGHT.dim};word-break:break-all;">
            ${opts.locale === "ar" ? "أو انسخ هذا الرابط:" : "Or copy this link:"}
            <br />
-           <a href="${escapeAttr(opts.ctaUrl)}" style="color:${COLORS.darkBlue};">${escapeHtml(opts.ctaUrl)}</a>
+           <a href="${escapeAttr(opts.ctaUrl)}" class="email-link" style="color:${LIGHT.cyan};">${escapeHtml(opts.ctaUrl)}</a>
          </p>`
       : "";
 
@@ -47,25 +49,46 @@ export function emailShell(opts: EmailShellOptions): string {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="supported-color-schemes" content="light dark" />
     <title>${escapeHtml(opts.heading)}</title>
+    <style>
+      :root { color-scheme: light dark; supported-color-schemes: light dark; }
+      @media (prefers-color-scheme: dark) {
+        .email-body { background:#0B0D10 !important; color:#E8EBEF !important; }
+        .email-rule { border-color:#303741 !important; }
+        .email-brand, .email-heading, .email-value { color:#E8EBEF !important; }
+        .email-panel { background:#11151B !important; border-color:#303741 !important; }
+        .email-copy, .email-footer, .email-fallback, .email-label { color:#9AA4B2 !important; }
+        .email-accent, .email-link { color:#4FD1E0 !important; }
+        .email-marker, .email-cta { background:#4FD1E0 !important; }
+        .email-cta { color:#0B0D10 !important; }
+        .email-quote { background:#0B0D10 !important; border-color:#4FD1E0 !important; color:#E8EBEF !important; }
+        .email-status { border-color:#303741 !important; color:#9AA4B2 !important; }
+      }
+    </style>
   </head>
-  <body style="margin:0;padding:0;background:${COLORS.offWhite};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <body class="email-body" style="margin:0;padding:0;background:${LIGHT.ink};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${LIGHT.paper};">
     ${opts.preheader ? `<div style="display:none;max-height:0;overflow:hidden;">${escapeHtml(opts.preheader)}</div>` : ""}
-    <div style="max-width:560px;margin:0 auto;padding:32px 24px;" dir="${dir}">
-      <div style="font-weight:800;font-size:20px;color:${COLORS.black};letter-spacing:-0.02em;text-align:${align};">
-        ${escapeHtml(opts.companyName)}
+    <div style="max-width:560px;margin:0 auto;padding:40px 24px 32px;" dir="${dir}">
+      <div class="email-rule" style="border-top:1px solid ${LIGHT.line};border-bottom:1px solid ${LIGHT.line};padding:20px 0;text-align:${align};">
+        <span class="email-marker" style="display:inline-block;width:10px;height:18px;background:${LIGHT.cyan};vertical-align:middle;"></span>
+        <span class="email-brand" style="display:inline-block;margin-${opts.locale === "ar" ? "right" : "left"}:13px;vertical-align:middle;font-family:'Courier New',Courier,monospace;font-weight:700;font-size:22px;line-height:1;color:${LIGHT.paper};letter-spacing:.16em;">
+          ${escapeHtml(opts.companyName)}
+        </span>
       </div>
-      <div style="margin-top:24px;background:#ffffff;border-radius:20px;padding:32px;text-align:${align};">
-        <h1 style="margin:0 0 16px 0;font-size:22px;line-height:1.3;color:${COLORS.black};">
+      <div class="email-panel" style="margin-top:24px;background:${LIGHT.panel};border:1px solid ${LIGHT.line};padding:32px;text-align:${align};">
+        <div class="email-accent" style="margin-bottom:18px;font-family:'Courier New',Courier,monospace;font-size:11px;line-height:1;color:${LIGHT.cyan};letter-spacing:.08em;">ATOI / NOTIFICATION</div>
+        <h1 class="email-heading" style="margin:0 0 18px;font-family:'Courier New',Courier,monospace;font-size:24px;font-weight:500;line-height:1.25;letter-spacing:-.03em;color:${LIGHT.paper};">
           ${escapeHtml(opts.heading)}
         </h1>
-        <div style="font-size:15px;line-height:1.6;color:#333333;">
+        <div class="email-copy" style="font-size:15px;line-height:1.7;color:${LIGHT.dim};">
           ${opts.bodyHtml}
         </div>
         ${cta}
       </div>
-      <div style="margin-top:24px;font-size:12px;color:#8a8a8a;text-align:${align};">
-        ${escapeHtml(opts.companyName)}
+      <div class="email-footer email-rule" style="margin-top:20px;padding-top:18px;border-top:1px solid ${LIGHT.line};font-family:'Courier New',Courier,monospace;font-size:11px;line-height:1.6;color:${LIGHT.dim};text-align:${align};">
+        ${escapeHtml(opts.companyName)} · Bahrain-based software studio
       </div>
     </div>
   </body>
