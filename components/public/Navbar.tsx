@@ -1,10 +1,10 @@
-import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "./Logo";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { StartProjectTrigger } from "./StartProjectTrigger";
 import { MobileMenu } from "./MobileMenu";
+import { PrimaryNav } from "./PrimaryNav";
 import type { Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
@@ -23,33 +23,28 @@ export function Navbar({
 }) {
   const dict = getDictionary(locale);
 
+  const navItems = NAV_ITEMS.map((item) => ({
+    ...item,
+    label: dict.nav[item.key],
+  }));
+
   return (
     <header className="public-header">
-      <Container className="flex h-[58px] items-center justify-between gap-4">
+      <Container className="flex h-[64px] items-center justify-between gap-6">
         <Link href="/#home" className="shrink-0">
           <Logo name={companyName} />
         </Link>
 
-        <nav
-          className="hidden items-center gap-5 xl:gap-6 lg:flex"
-          aria-label="Primary"
-        >
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.key}
-              href={item.href}
-              className="text-xs font-display font-medium text-foreground/80 transition-colors hover:text-foreground"
-            >
-              {dict.nav[item.key]}
-            </Link>
-          ))}
-        </nav>
+        <PrimaryNav items={navItems} className="hidden lg:flex" />
 
-        <div className="hidden items-center gap-3 lg:flex">
-          <Link href="/login" className="text-xs font-display text-accent">
+        <div className="hidden items-center gap-5 lg:flex">
+          <Link
+            href="/login"
+            className="text-xs font-display text-foreground/80 transition-colors hover:text-foreground"
+          >
             {locale === "ar" ? "تسجيل الدخول" : "Sign in"}
           </Link>
-          <ThemeToggle locale={locale} />
+          <span className="nav-divider" aria-hidden="true" />
           <LanguageToggle locale={locale} />
           <StartProjectTrigger className="btn btn-primary">
             {dict.nav.startProject}
@@ -57,7 +52,6 @@ export function Navbar({
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
-          <ThemeToggle locale={locale} />
           <LanguageToggle locale={locale} />
           <MobileMenu locale={locale} navItems={NAV_ITEMS} />
         </div>

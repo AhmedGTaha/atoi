@@ -637,6 +637,7 @@ html[dir="rtl"] {
     position: sticky;
     top: 0;
     z-index: 40;
+    border-top: 1px solid var(--color-divider);
     border-bottom: 1px solid var(--color-divider);
     background: var(--color-head);
     backdrop-filter: blur(12px);
@@ -645,6 +646,43 @@ html[dir="rtl"] {
     min-height: 34px;
     font-size: 12px;
     padding: 7px 12px;
+  }
+  .nav-primary {
+    align-items: center;
+    gap: clamp(28px, 3vw, 44px);
+  }
+  .nav-link {
+    position: relative;
+    padding-block: 4px;
+    font: 500 13px/1 var(--font-heading);
+    letter-spacing: 0.02em;
+    text-transform: capitalize;
+    color: var(--color-muted);
+    transition: color var(--motion-fast);
+  }
+  .nav-link:hover {
+    color: var(--color-text);
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -13px;
+    height: 1px;
+    background: var(--color-accent);
+    opacity: 0;
+    transition: opacity var(--motion-fast);
+  }
+  .nav-link-active {
+    color: var(--color-accent);
+  }
+  .nav-link-active::after {
+    opacity: 1;
+  }
+  .nav-divider {
+    width: 1px;
+    height: 18px;
+    background: var(--color-divider);
   }
   .panel-strip {
     display: flex;
