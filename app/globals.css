@@ -1875,9 +1875,6 @@ html[dir="rtl"] .flip-rtl {
   aspect-ratio: 16 / 10;
 }
 
-/* Reference proportions: work uses the full editorial canvas while the rest
-   of the public site retains its deliberately narrower reading width. */
-.work-container,
 .public-nav-container {
   max-width: 1536px;
   padding-inline: clamp(24px, 3.4vw, 52px);
