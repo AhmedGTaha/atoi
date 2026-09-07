@@ -301,12 +301,6 @@ test("theme preference persists across routes and reloads; inquiry is accessible
     await page.screenshot({ path: info.outputPath(`inquiry-${theme}.png`) });
     await page.keyboard.press("Escape");
   }
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  expect(
-    await page
-      .locator(".cursor")
-      .evaluate((el) => getComputedStyle(el).animationDuration),
-  ).toBe("1e-05s");
 });
 
 test("admin mobile menu and deletion confirmation retain keyboard behavior", async ({
