@@ -20,8 +20,14 @@ export async function middleware(request: NextRequest) {
   }
 
   if (pathname.startsWith("/admin")) {
-    const token = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-    const session = token ? await verifyAdminToken(token) : null;
+    // Team member = Admin: a valid admin session OR a valid team session
+    // both grant access here — the deeper per-page/action check (requireAdmin
+    // in lib/auth/guards.ts) re-verifies against the database.
+    const adminToken = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+    const teamToken = request.cookies.get(TEAM_SESSION_COOKIE)?.value;
+    const session =
+      (adminToken ? await verifyAdminToken(adminToken) : null) ??
+      (teamToken ? await verifyTeamToken(teamToken) : null);
     if (!session) {
       const url = request.nextUrl.clone();
       url.pathname = "/login";
@@ -56,5 +62,10 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/portal/:path*", "/team/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/admin-preview/:path*",
+    "/portal/:path*",
+    "/team/:path*",
+  ],
 };

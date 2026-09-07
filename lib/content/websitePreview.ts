@@ -6,12 +6,7 @@ export const WEBSITE_PREVIEW_READY = "atoi:website-preview:ready";
 export const WEBSITE_PREVIEW_LOCALE = "atoi:website-preview:locale";
 
 export type WebsitePreviewSection =
-  | "hero"
-  | "services"
-  | "process"
-  | "work"
-  | "finalCta"
-  | "footer";
+  "hero" | "services" | "process" | "work" | "finalCta" | "footer";
 
 export interface WebsitePreviewUpdateMessage {
   type: typeof WEBSITE_PREVIEW_UPDATE;

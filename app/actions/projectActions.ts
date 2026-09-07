@@ -44,7 +44,7 @@ export async function publishUpdateAction(
   _prevState: PublishUpdateState,
   formData: FormData
 ): Promise<PublishUpdateState> {
-  const admin = await requireAdmin();
+  const identity = await requireAdmin();
 
   const projectId = String(formData.get("projectId") ?? "");
   const parsed = projectUpdateInputSchema.safeParse({ body: formData.get("body") });
@@ -52,7 +52,11 @@ export async function publishUpdateAction(
     return { error: parsed.error.issues[0]?.message ?? "Invalid update text." };
   }
 
-  const result = await publishProjectUpdate(projectId, admin.id, parsed.data.body);
+  const result = await publishProjectUpdate(
+    projectId,
+    { kind: identity.kind, id: identity.id },
+    parsed.data.body,
+  );
   revalidatePath(`/admin/projects/${projectId}`);
   return { success: true, emailSent: result.emailSent };
 }

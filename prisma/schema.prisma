@@ -91,24 +91,24 @@ model Customer {
 }
 
 model ProjectRequest {
-  id                  String       @id @default(uuid())
-  businessType        String?
-  description         String
-  name                String?
-  businessName        String?
-  email               String
-  phoneCountry        GccCountry
-  phoneE164           String
-  preferredLocale     Locale       @default(en)
-  state               RequestState @default(NEW)
+  id                     String             @id @default(uuid())
+  businessType           String?
+  description            String
+  name                   String?
+  businessName           String?
+  email                  String
+  phoneCountry           GccCountry
+  phoneE164              String
+  preferredLocale        Locale             @default(en)
+  state                  RequestState       @default(NEW)
   confirmationEmailState EmailDeliveryState @default(PENDING)
   internalEmailState     EmailDeliveryState @default(PENDING)
-  convertedCustomerId String?
-  convertedCustomer   Customer?    @relation(fields: [convertedCustomerId], references: [id])
-  convertedProjectId  String?      @unique
-  convertedProject    Project?     @relation(fields: [convertedProjectId], references: [id])
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
+  convertedCustomerId    String?
+  convertedCustomer      Customer?          @relation(fields: [convertedCustomerId], references: [id])
+  convertedProjectId     String?            @unique
+  convertedProject       Project?           @relation(fields: [convertedProjectId], references: [id])
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
 
   @@map("project_requests")
 }
@@ -142,8 +142,9 @@ model TeamMember {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
-  projects     ProjectMember[]
-  secureTokens SecureToken[]
+  projects        ProjectMember[]
+  secureTokens    SecureToken[]
+  authoredUpdates ProjectUpdate[]
 
   @@map("team_members")
 }
@@ -161,17 +162,21 @@ model ProjectMember {
 }
 
 model ProjectUpdate {
-  id               String             @id @default(uuid())
-  projectId        String
-  project          Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  authorAdminId    String
-  author           AdminUser          @relation(fields: [authorAdminId], references: [id])
-  body             String
-  statusSnapshot   ProjectStatus
-  progressSnapshot Int
+  id                 String             @id @default(uuid())
+  projectId          String
+  project            Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  // Team member = Admin: an update is authored by either an AdminUser or a
+  // TeamMember (both have full admin access) — exactly one of these is set.
+  authorAdminId      String?
+  author             AdminUser?         @relation(fields: [authorAdminId], references: [id])
+  authorTeamMemberId String?
+  authorTeamMember   TeamMember?        @relation(fields: [authorTeamMemberId], references: [id])
+  body               String
+  statusSnapshot     ProjectStatus
+  progressSnapshot   Int
   emailDeliveryState EmailDeliveryState @default(PENDING)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
 
   @@map("project_updates")
 }
@@ -192,26 +197,26 @@ model SupportRequest {
 }
 
 model PortfolioProject {
-  id             String   @id @default(uuid())
-  titleEn        String
-  titleAr        String
-  descriptionEn  String
-  descriptionAr  String
-  category       String?
-  clientName     String?
-  problemEn      String?
-  problemAr      String?
-  builtEn        String?
-  builtAr        String?
-  resultEn       String?
-  resultAr       String?
-  technologies   String[] @default([])
-  liveUrl        String?
-  featured       Boolean  @default(false)
-  published      Boolean  @default(false)
-  displayOrder   Int      @default(0)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id            String   @id @default(uuid())
+  titleEn       String
+  titleAr       String
+  descriptionEn String
+  descriptionAr String
+  category      String?
+  clientName    String?
+  problemEn     String?
+  problemAr     String?
+  builtEn       String?
+  builtAr       String?
+  resultEn      String?
+  resultAr      String?
+  technologies  String[] @default([])
+  liveUrl       String?
+  featured      Boolean  @default(false)
+  published     Boolean  @default(false)
+  displayOrder  Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   images PortfolioImage[]
 
@@ -248,25 +253,25 @@ model WebsiteContent {
 }
 
 model CompanySettings {
-  id                          String   @id @default(uuid())
-  companyName                 String
-  companyEmail                String
-  companyPhone                String
-  whatsappPhone                String?
-  locationEn                  String
-  locationAr                  String
-  instagramUrl                 String?
-  linkedinUrl                  String?
-  logoStorageKey               String?
+  id                            String   @id @default(uuid())
+  companyName                   String
+  companyEmail                  String
+  companyPhone                  String
+  whatsappPhone                 String?
+  locationEn                    String
+  locationAr                    String
+  instagramUrl                  String?
+  linkedinUrl                   String?
+  logoStorageKey                String?
   logoPublicUrl                 String?
   requestNotificationRecipients String[]
   supportFallbackRecipients     String[]
-  seoTitleEn                   String
-  seoTitleAr                   String
-  seoDescriptionEn             String
-  seoDescriptionAr             String
-  createdAt                    DateTime @default(now())
-  updatedAt                    DateTime @updatedAt
+  seoTitleEn                    String
+  seoTitleAr                    String
+  seoDescriptionEn              String
+  seoDescriptionAr              String
+  createdAt                     DateTime @default(now())
+  updatedAt                     DateTime @updatedAt
 
   @@map("company_settings")
 }

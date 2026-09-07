@@ -83,7 +83,7 @@ export default async function AdminProjectDetailPage({
                     {update.body}
                   </p>
                   <p className="mt-2 text-xs text-muted">
-                    by {update.author.name}
+                    by {update.author?.name ?? update.authorTeamMember?.name}
                   </p>
                 </div>
               ))}

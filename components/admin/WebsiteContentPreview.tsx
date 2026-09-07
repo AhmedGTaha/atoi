@@ -37,7 +37,9 @@ export function WebsiteContentPreview({
   const [section, setSection] = useState<WebsitePreviewSection>("hero");
 
   useEffect(() => {
-    function receivePreviewUpdate(event: MessageEvent<WebsitePreviewUpdateMessage>) {
+    function receivePreviewUpdate(
+      event: MessageEvent<WebsitePreviewUpdateMessage>,
+    ) {
       if (
         event.origin !== window.location.origin ||
         event.source !== window.parent ||

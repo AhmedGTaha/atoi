@@ -36,17 +36,17 @@ export function Navbar({
   return (
     <header className="public-header">
       <Container className="public-nav-container">
-        <Link href={previewMode ? "#home" : "/#home"} className="public-brand-link">
+        <Link
+          href={previewMode ? "#home" : "/#home"}
+          className="public-brand-link"
+        >
           <Logo name={companyName} />
         </Link>
 
         <PrimaryNav items={navItems} className="hidden lg:flex" />
 
         <div className="public-nav-actions hidden lg:flex">
-          <Link
-            href="/login"
-            className="public-sign-in"
-          >
+          <Link href="/login" className="public-sign-in">
             {locale === "ar" ? "تسجيل الدخول" : "Sign in"}
           </Link>
           <span className="nav-divider" aria-hidden="true" />

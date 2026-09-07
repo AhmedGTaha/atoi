@@ -67,7 +67,10 @@ export async function loginAction(
       email: account.email,
       name: account.name,
     });
-    redirect("/team");
+    // Team member = Admin: team members land in the same admin dashboard as
+    // admins (they pass requireAdmin — see lib/auth/guards.ts). /team still
+    // works if they navigate there directly.
+    redirect("/admin");
   }
 
   await createCustomerSession({ role: "customer", customerId: account.id, email: account.email });
@@ -122,8 +125,9 @@ export interface SetPasswordState {
 
 /**
  * Consumes an invite/reset token and sets a password. A freshly-accepted
- * team invitation signs the user straight in and lands them in the team
- * workspace — every other case (customer invite/reset, team reset) sends
+ * team invitation signs the user straight in and lands them in the admin
+ * dashboard (team member = admin) — every other case (customer invite/reset,
+ * team reset) sends
  * them to the sign-in page instead.
  */
 export async function setPasswordAction(
@@ -146,7 +150,7 @@ export async function setPasswordAction(
 
   if (result.session?.role === "team") {
     await createTeamSession(result.session);
-    redirect("/team");
+    redirect("/admin");
   }
   if (result.session?.role === "customer") {
     await createCustomerSession(result.session);

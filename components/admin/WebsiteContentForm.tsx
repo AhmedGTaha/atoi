@@ -1,7 +1,13 @@
 "use client";
 
-import { useActionState, useEffect, useMemo, useRef, useState } from "react";
-import clsx from "clsx";
+import {
+  useActionState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   saveWebsiteContentAction,
   type WebsiteContentFormState,
@@ -46,6 +52,9 @@ export function WebsiteContentForm({
   const [locale, setLocale] = useState<Locale>("en");
   const [activeSection, setActiveSection] =
     useState<WebsitePreviewSection>("hero");
+  const [openSections, setOpenSections] = useState<WebsitePreviewSection[]>([
+    "hero",
+  ]);
   const [viewport, setViewport] = useState<Viewport>("desktop");
   const [workspaceView, setWorkspaceView] = useState<WorkspaceView>("edit");
   const [frameVersion, setFrameVersion] = useState(0);
@@ -59,7 +68,7 @@ export function WebsiteContentForm({
     [fields],
   );
 
-  function sendPreviewUpdate() {
+  const sendPreviewUpdate = useCallback(() => {
     iframeRef.current?.contentWindow?.postMessage(
       {
         type: WEBSITE_PREVIEW_UPDATE,
@@ -69,11 +78,11 @@ export function WebsiteContentForm({
       },
       window.location.origin,
     );
-  }
+  }, [activeSection, content, locale]);
 
   useEffect(() => {
     sendPreviewUpdate();
-  }, [content, locale, activeSection, frameVersion]);
+  }, [sendPreviewUpdate, frameVersion]);
 
   useEffect(() => {
     function receivePreviewMessage(event: MessageEvent) {
@@ -94,7 +103,7 @@ export function WebsiteContentForm({
 
     window.addEventListener("message", receivePreviewMessage);
     return () => window.removeEventListener("message", receivePreviewMessage);
-  }, [content, locale, activeSection]);
+  }, [sendPreviewUpdate]);
 
   function updateField(key: string, value: string) {
     setContent((current) => ({
@@ -189,10 +198,8 @@ export function WebsiteContentForm({
         >
           <div className="content-pane-heading">
             <div>
-              <p className="section-marker">// content.editor</p>
-              <h2>
-                {locale === "ar" ? "المحتوى العربي" : "English content"}
-              </h2>
+              <p className="section-marker">{"// content.editor"}</p>
+              <h2>{locale === "ar" ? "المحتوى العربي" : "English content"}</h2>
             </div>
             <span className="content-language-badge">
               {locale === "ar" ? "RTL" : "LTR"}
@@ -204,9 +211,19 @@ export function WebsiteContentForm({
               <details
                 key={section}
                 className="content-section"
-                open={index === 0}
+                open={openSections.includes(section)}
                 onToggle={(event) => {
-                  if (event.currentTarget.open) setActiveSection(section);
+                  const isOpen = event.currentTarget.open;
+                  setOpenSections((current) => {
+                    if (isOpen && !current.includes(section)) {
+                      return [...current, section];
+                    }
+                    if (!isOpen && current.includes(section)) {
+                      return current.filter((item) => item !== section);
+                    }
+                    return current;
+                  });
+                  if (isOpen) setActiveSection(section);
                 }}
                 onFocusCapture={() => setActiveSection(section)}
               >
@@ -295,7 +312,7 @@ export function WebsiteContentForm({
         >
           <div className="preview-toolbar">
             <div>
-              <p className="section-marker">// live.preview</p>
+              <p className="section-marker">{"// live.preview"}</p>
               <span className="preview-live-label">
                 <i aria-hidden="true" />
                 Live website preview

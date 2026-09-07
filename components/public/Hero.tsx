@@ -47,7 +47,10 @@ export function Hero({
           <StartProjectTrigger className="btn btn-primary">
             {t(content, "hero.ctaPrimary", locale)}
           </StartProjectTrigger>
-          <Link href={previewMode ? "#work" : "/#work"} className="btn btn-secondary">
+          <Link
+            href={previewMode ? "#work" : "/#work"}
+            className="btn btn-secondary"
+          >
             {t(content, "hero.ctaSecondary", locale)}
           </Link>
         </div>

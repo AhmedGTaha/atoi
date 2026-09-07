@@ -11,6 +11,7 @@ import {
   internalNewRequestEmail,
 } from "@/lib/email/templates";
 import { getCompanySettings } from "./settingsService";
+import { listStaffNotificationEmails } from "./staffDirectory";
 import { businessTypeLabel } from "@/lib/i18n/labels";
 import type { BusinessType } from "@/lib/validation/shared";
 import { appUrl } from "@/lib/utils/appUrl";

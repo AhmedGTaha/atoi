@@ -105,7 +105,10 @@ export async function getProjectForAdmin(id: string) {
     include: {
       customer: true,
       members: { include: { teamMember: true } },
-      updates: { orderBy: { createdAt: "desc" }, include: { author: true } },
+      updates: {
+        orderBy: { createdAt: "desc" },
+        include: { author: true, authorTeamMember: true },
+      },
       supportRequests: { orderBy: { createdAt: "desc" } },
     },
   });
@@ -145,7 +148,7 @@ export interface PublishUpdateResult {
 
 export async function publishProjectUpdate(
   projectId: string,
-  authorAdminId: string,
+  author: { kind: "admin" | "team"; id: string },
   body: string
 ): Promise<PublishUpdateResult> {
   const project = await prisma.project.findUniqueOrThrow({
@@ -156,7 +159,8 @@ export async function publishProjectUpdate(
   const update = await prisma.projectUpdate.create({
     data: {
       projectId,
-      authorAdminId,
+      authorAdminId: author.kind === "admin" ? author.id : null,
+      authorTeamMemberId: author.kind === "team" ? author.id : null,
       body,
       statusSnapshot: project.status,
       progressSnapshot: project.progress,

@@ -37,11 +37,7 @@ export function PublicHomepage({
       />
       <main id="main-content">
         <Hero locale={locale} content={content} previewMode={previewMode} />
-        <SelectedWork
-          locale={locale}
-          content={content}
-          projects={portfolio}
-        />
+        <SelectedWork locale={locale} content={content} projects={portfolio} />
         <Services locale={locale} content={content} />
         <About locale={locale} content={content} />
         <FinalCta
