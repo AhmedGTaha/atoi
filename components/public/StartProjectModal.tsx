@@ -230,10 +230,8 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
                 </span>
               )}
             </div>
-            <label className="terminal-row items-start">
-              <FieldPrompt required className="pt-0.5">
-                {dict.modal.descriptionLabel}
-              </FieldPrompt>
+            <label className="terminal-row">
+              <FieldPrompt required>{dict.modal.descriptionLabel}</FieldPrompt>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -241,7 +239,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
                 required
                 minLength={20}
                 maxLength={5000}
-                rows={2}
+                rows={4}
                 aria-invalid={!!fieldErrors.description}
                 className="input resize-none"
               />
@@ -379,7 +377,7 @@ function FieldPrompt({
       className={className ? `terminal-label ${className}` : "terminal-label"}
     >
       {children}
-      {required && <span className="text-accent">*</span>} ›
+      {required && <span className="text-accent">*</span>}
     </span>
   );
 }

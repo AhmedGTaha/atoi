@@ -34,7 +34,7 @@ export function PhoneInput({
   const { max } = nationalNumberLength(country);
   const dict = getDictionary(locale);
   return (
-    <div className="inquiry-phone-input flex min-w-0 items-baseline gap-2.5">
+    <div className="inquiry-phone-input flex min-w-0 items-stretch gap-3">
       <select
         id={countryId}
         dir="ltr"

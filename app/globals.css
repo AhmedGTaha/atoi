@@ -1393,6 +1393,8 @@ html[dir="rtl"] {
   }
   .inquiry-dialog {
     width: min(calc(100vw - 48px), 760px);
+    background: var(--color-surface);
+    border-color: var(--color-line-hi);
   }
   .inquiry-panel {
     min-width: 0;
@@ -1409,7 +1411,7 @@ html[dir="rtl"] {
     padding-inline: 18px 12px;
     background: var(--color-surface);
     color: var(--color-faint);
-    font: 400 13px/1.4 var(--font-heading);
+    font: 400 13.5px/1.4 var(--font-heading);
   }
   .inquiry-title {
     min-width: 0;
@@ -1432,69 +1434,79 @@ html[dir="rtl"] {
   .inquiry-form,
   .inquiry-receipt {
     min-width: 0;
-    padding: 28px;
+    padding: 32px;
   }
   .inquiry-preamble {
     margin: 0;
     color: var(--color-muted);
-    font: 400 13px/1.4 var(--font-heading);
+    font: 400 14.5px/1.4 var(--font-heading);
   }
   .inquiry-preamble > span {
     color: var(--color-accent);
   }
   .inquiry-fields {
-    margin-top: 14px;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
   .terminal-row {
-    display: grid;
-    grid-template-columns: minmax(0, min(100px, max-content)) minmax(0, 1fr);
-    gap: 8px 12px;
-    align-items: baseline;
-    border-bottom: 1px solid var(--color-rule-soft);
-    padding-block: 9px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     min-width: 0;
   }
-  .terminal-row:focus-within {
-    border-bottom-color: var(--color-accent);
-  }
   .terminal-label {
-    font: 400 13px/1.6 var(--font-heading);
+    font: 500 13px/1.4 var(--font-heading);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
     color: var(--color-faint);
+  }
+  html[dir="rtl"] .terminal-label {
+    letter-spacing: normal;
+    text-transform: none;
   }
   .terminal-row .input {
-    border: 0;
-    background: transparent;
-    padding: 4px 0;
-    min-height: 30px;
+    min-height: 48px;
+    font-size: 15px;
+    padding-inline: var(--space-4);
+  }
+  .terminal-row textarea.input {
+    min-height: 110px;
+    padding-block: 12px;
+    line-height: 1.6;
   }
   .terminal-row [role="alert"] {
-    grid-column: 1 / -1;
-  }
-  .terminal-row .input:focus-visible {
-    outline-offset: 3px;
+    font-size: 12px;
   }
   .inquiry-types {
-    margin-top: 18px;
+    margin-top: 22px;
   }
   .inquiry-types-label {
-    margin: 0 0 9px;
+    margin: 0 0 10px;
     color: var(--color-faint);
-    font: 400 13px/1.4 var(--font-heading);
+    font: 500 13px/1.4 var(--font-heading);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+  html[dir="rtl"] .inquiry-types-label {
+    letter-spacing: normal;
+    text-transform: none;
   }
   .inquiry-type-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: 12px;
   }
   .type-option {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     min-width: 0;
-    min-height: 54px;
+    min-height: 52px;
     border: 1px solid var(--color-divider);
-    padding: 10px;
+    padding: 10px 14px;
     background: transparent;
-    font: 400 13px/1.45 var(--font-heading);
+    font: 500 14.5px/1.4 var(--font-heading);
     color: var(--color-muted);
     cursor: pointer;
   }
@@ -1532,20 +1544,35 @@ html[dir="rtl"] {
   .inquiry-submit-row {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin-top: 24px;
     border-top: 1px solid var(--color-divider);
-    padding-top: 16px;
+    padding-top: 20px;
+  }
+  .inquiry-submit-row .btn {
+    min-height: 50px;
+    padding-inline: 26px;
+    font-size: 15px;
   }
   .dial-select {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: transparent;
-    border: 0;
+    min-height: 48px;
+    min-width: 152px;
+    border: 1px solid var(--color-divider);
+    background: var(--color-field);
     color: var(--color-accent);
-    font: 400 13.5px/1.6 var(--font-heading);
+    font: 500 14px/1.4 var(--font-heading);
     cursor: pointer;
-    padding: 2px 0;
+    padding-inline: var(--space-4);
+    transition: border-color var(--motion-fast);
+  }
+  .dial-select:hover {
+    border-color: var(--color-line-hi);
+  }
+  .dial-select:focus-visible {
+    border-color: var(--color-accent);
+    outline-offset: 0;
   }
   .inquiry-phone-input {
     min-width: 0;
@@ -1637,22 +1664,14 @@ html[dir="rtl"] {
   }
   .inquiry-form,
   .inquiry-receipt {
-    padding: 20px;
+    padding: 22px;
   }
   .inquiry-preamble {
     display: none;
   }
   .inquiry-fields {
-    margin-top: 0;
-  }
-  .inquiry-dialog .terminal-row {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 4px;
-    padding-block: 8px;
-  }
-  .inquiry-dialog .terminal-row .input {
-    min-height: 40px;
-    padding-block: 3px;
+    margin-top: 4px;
+    gap: 18px;
   }
 }
 @media (min-width: 1024px) {
@@ -1795,40 +1814,45 @@ html[dir="rtl"] {
   .inquiry-receipt {
     padding: 16px;
   }
-  .inquiry-dialog .terminal-row {
-    padding-block: 7px;
+  .inquiry-fields {
+    gap: 16px;
   }
   .inquiry-dialog .terminal-row .input {
-    min-height: 40px;
-    font-size: 14px;
+    min-height: 46px;
+    font-size: 16px;
+  }
+  .inquiry-dialog .terminal-row textarea.input {
+    min-height: 96px;
   }
   .inquiry-phone-input {
     display: grid !important;
     grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
-    gap: 12px;
+    gap: 10px;
   }
   .inquiry-phone-input .dial-select {
     width: 100%;
     min-width: 0;
+    font-size: 16px;
   }
   .inquiry-types {
-    margin-top: 15px;
+    margin-top: 18px;
   }
   .inquiry-type-grid {
     gap: 8px;
   }
   .type-option {
-    min-height: 58px;
-    padding: 9px;
-    font-size: 12px;
+    min-height: 52px;
+    padding: 9px 12px;
+    font-size: 13.5px;
   }
   .inquiry-submit-row {
-    margin-top: 16px;
+    margin-top: 18px;
     border-top: 0;
     padding-top: 0;
   }
   .inquiry-submit-row .btn {
     width: 100%;
+    min-height: 50px;
   }
   .app-main .panel {
     padding: 16px;
@@ -1846,6 +1870,14 @@ html[dir="rtl"] {
   }
   .auth-panel h1 {
     font-size: 24px;
+  }
+}
+@media (max-width: 380px) {
+  .inquiry-type-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .inquiry-phone-input {
+    grid-template-columns: minmax(0, 1fr) !important;
   }
 }
 html[dir="rtl"] .flip-rtl {
