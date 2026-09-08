@@ -2895,6 +2895,7 @@ html[dir="rtl"] .section-marker-reveal::after {
   overflow: hidden;
 }
 .preview-toolbar {
+  --preview-control-height: 36px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2930,9 +2931,20 @@ html[dir="rtl"] .section-marker-reveal::after {
 }
 .preview-toolbar-actions .content-language-toggle--compact {
   flex: none;
+  height: var(--preview-control-height);
+  box-sizing: border-box;
+}
+.preview-toolbar-actions .content-language-toggle--compact button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  height: 100%;
 }
 .viewport-switcher {
   border: 1px solid var(--color-divider);
+  height: var(--preview-control-height);
+  box-sizing: border-box;
 }
 .viewport-switcher button,
 .preview-icon-button {
@@ -2940,7 +2952,8 @@ html[dir="rtl"] .section-marker-reveal::after {
   align-items: center;
   justify-content: center;
   width: 36px;
-  min-height: 34px;
+  height: calc(var(--preview-control-height) - 2px);
+  min-height: 0;
   color: var(--color-faint);
   background: transparent;
 }
@@ -2958,9 +2971,11 @@ html[dir="rtl"] .section-marker-reveal::after {
 }
 .preview-icon-button {
   border: 1px solid var(--color-divider);
+  height: var(--preview-control-height);
 }
 .viewport-switcher svg,
 .preview-icon-button svg {
+  display: block;
   width: 16px;
   height: 16px;
   fill: none;
