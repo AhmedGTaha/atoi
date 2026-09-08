@@ -307,14 +307,6 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     valueAr: "هل لديك ما يستحق البناء؟",
   },
   {
-    key: "finalCta.body",
-    section: "finalCta",
-    label: "Body",
-    multiline: true,
-    valueEn: "Two minutes in the form. We reply within two working days.",
-    valueAr: "دقيقتان في النموذج. سنرد خلال يومي عمل.",
-  },
-  {
     key: "finalCta.ctaLabel",
     section: "finalCta",
     label: "Button label",

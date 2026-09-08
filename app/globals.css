@@ -1172,6 +1172,9 @@ html[dir="rtl"] {
     border: 1px solid var(--color-modal-edge);
     box-shadow: var(--shadow-modal);
     scrollbar-gutter: stable;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
   }
   .inquiry-panel {
     padding: 0 28px 28px;
@@ -1183,11 +1186,12 @@ html[dir="rtl"] {
   }
   .terminal-row {
     display: grid;
-    grid-template-columns: minmax(100px, auto) minmax(0, 1fr);
+    grid-template-columns: minmax(0, min(100px, max-content)) minmax(0, 1fr);
     gap: 8px 12px;
     align-items: baseline;
     border-bottom: 1px solid var(--color-rule-soft);
     padding-block: 9px;
+    min-width: 0;
   }
   .terminal-row:focus-within {
     border-bottom-color: var(--color-accent);
@@ -1210,12 +1214,11 @@ html[dir="rtl"] {
   }
   .type-option {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding: 4px 0;
     font: 400 13px/1.7 var(--font-heading);
     color: var(--color-muted);
     cursor: pointer;
-    white-space: nowrap;
   }
   .type-option input {
     position: absolute;
@@ -1400,7 +1403,7 @@ html[dir="rtl"] {
     column-gap: 10px;
   }
   .terminal-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 4px;
   }
   .terminal-row .input {

@@ -19,11 +19,13 @@ const GRID_CLASS =
  * attached in a single submission (see PortfolioImageManager's create mode).
  */
 export function PortfolioForm({
+  mode,
   project,
   action,
   submitLabel,
   rightPanelExtra,
 }: {
+  mode: "create" | "edit";
   project?: PortfolioProjectWithImages;
   action: (
     state: PortfolioFormState,
@@ -33,6 +35,7 @@ export function PortfolioForm({
   rightPanelExtra?: React.ReactNode;
 }) {
   const [state, formAction, isPending] = useActionState(action, initialState);
+  const isCreate = mode === "create";
 
   return (
     <form action={formAction} className={GRID_CLASS}>
@@ -133,12 +136,12 @@ export function PortfolioForm({
       <div className="space-y-6">
         <Card>
           <PortfolioImageManager
-            mode={project ? "edit" : "create"}
+            mode={isCreate ? "create" : "edit"}
             projectId={project?.id}
             images={project?.images ?? []}
           />
         </Card>
-        {rightPanelExtra}
+        {!isCreate && rightPanelExtra}
       </div>
     </form>
   );

@@ -30,13 +30,6 @@ function readPortfolioForm(formData: FormData) {
     descriptionEn: formData.get("descriptionEn"),
     descriptionAr: formData.get("descriptionAr"),
     category: formData.get("category") || null,
-    clientName: formData.get("clientName") || null,
-    problemEn: formData.get("problemEn") || null,
-    problemAr: formData.get("problemAr") || null,
-    builtEn: formData.get("builtEn") || null,
-    builtAr: formData.get("builtAr") || null,
-    resultEn: formData.get("resultEn") || null,
-    resultAr: formData.get("resultAr") || null,
     technologies: String(formData.get("technologies") || "")
       .split(/[\n,]/)
       .map((technology) => technology.trim())
@@ -69,6 +62,7 @@ export async function createPortfolioProjectAction(
   }
 
   const project = await createPortfolioProject(parsed.data);
+  let uploaded = 0;
 
   if (files.length > 0) {
     try {
@@ -79,6 +73,7 @@ export async function createPortfolioProjectAction(
           fileName: file.name,
           fileSize: file.size,
         });
+        uploaded += 1;
       }
       const coverIndex = Number(formData.get("coverIndex") ?? 0);
       if (coverIndex > 0) {
@@ -90,6 +85,12 @@ export async function createPortfolioProjectAction(
       console.error(
         "[portfolio] Image upload failed during project creation:",
         err,
+      );
+      // The project (and any images uploaded before the failure) have already
+      // been persisted. Redirect to its editor with an explicit warning so a
+      // retry adds only the missing files instead of creating a duplicate.
+      redirect(
+        `/admin/portfolio/${project.id}?imageUpload=failed&uploaded=${uploaded}&total=${files.length}`,
       );
     }
   }

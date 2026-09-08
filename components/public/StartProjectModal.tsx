@@ -125,8 +125,10 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
             <span className="text-accent">$</span> atoi new-project
           </p>
 
-          {/* Honeypot: hidden from real users, catches naive bots. */}
-          <div className="absolute -left-[9999px]" aria-hidden="true">
+          {/* Honeypot: hidden from real users, catches naive bots. Uses
+              sr-only (clip, not offscreen positioning) so it can't create
+              horizontal scroll overflow inside the modal. */}
+          <div className="sr-only" aria-hidden="true">
             <label htmlFor={`${titleId}-website`}>Website</label>
             <input
               id={`${titleId}-website`}

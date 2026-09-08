@@ -49,12 +49,17 @@ export async function getOptionalAdmin(): Promise<AdminAccessIdentity | null> {
 }
 
 export async function requireCustomer() {
+  const customer = await getOptionalCustomer();
+  if (!customer) redirect("/login");
+  return customer;
+}
+
+export async function getOptionalCustomer() {
   const session = await getCustomerSession();
-  if (!session) redirect("/login");
+  if (!session) return null;
 
   const customer = await prisma.customer.findUnique({ where: { id: session.customerId } });
-  if (!customer || customer.accountStatus !== "ACTIVE") redirect("/login");
-
+  if (!customer || customer.accountStatus !== "ACTIVE") return null;
   return customer;
 }
 

@@ -23,9 +23,6 @@ export function FinalCta({
           <h2 className="max-w-[22ch]">
             {t(content, "finalCta.heading", locale)}
           </h2>
-          <p className="mt-4 max-w-lg text-muted">
-            {t(content, "finalCta.body", locale)}
-          </p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <StartProjectTrigger className="btn btn-primary">

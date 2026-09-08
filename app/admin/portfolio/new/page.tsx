@@ -10,9 +10,10 @@ export default async function NewPortfolioProjectPage() {
     <div>
       <PageHeader
         title="Add portfolio project"
-        description="Showcase your work on the public website."
+        description="Create a new public portfolio project."
       />
       <PortfolioForm
+        mode="create"
         action={createPortfolioProjectAction}
         submitLabel="Create project"
       />

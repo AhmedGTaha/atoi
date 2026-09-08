@@ -11,13 +11,28 @@ import {
 
 export default async function EditPortfolioProjectPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{
+    imageUpload?: string;
+    uploaded?: string;
+    total?: string;
+  }>;
 }) {
   await requireAdmin();
-  const { id } = await params;
+  const [{ id }, uploadStatus] = await Promise.all([params, searchParams]);
   const project = await getPortfolioProjectById(id);
   if (!project) notFound();
+
+  const uploaded = Number(uploadStatus.uploaded);
+  const total = Number(uploadStatus.total);
+  const hasImageUploadWarning = uploadStatus.imageUpload === "failed";
+  const hasUploadCounts =
+    Number.isInteger(uploaded) &&
+    Number.isInteger(total) &&
+    uploaded >= 0 &&
+    total >= uploaded;
 
   return (
     <div>
@@ -26,7 +41,17 @@ export default async function EditPortfolioProjectPage({
         description="Edit public portfolio content and its ordered gallery."
       />
 
+      {hasImageUploadWarning && (
+        <p role="alert" className="mb-6 text-sm text-danger">
+          Project created, but image processing did not finish.
+          {hasUploadCounts
+            ? ` ${uploaded} of ${total} selected images were uploaded. Add any remaining images below before publishing.`
+            : " Check the gallery below and add any missing images before publishing."}
+        </p>
+      )}
+
       <PortfolioForm
+        mode="edit"
         project={project}
         action={updatePortfolioProjectAction.bind(null, project.id)}
         submitLabel="Save changes"

@@ -29,7 +29,7 @@ export function PhoneInput({
   const countryId = useId();
   const { max } = nationalNumberLength(country);
   return (
-    <div className="flex items-baseline gap-2.5">
+    <div className="flex min-w-0 items-baseline gap-2.5">
       <select
         id={countryId}
         value={country}
