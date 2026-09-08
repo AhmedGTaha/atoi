@@ -6,13 +6,22 @@ import { useStartProjectModal } from "./StartProjectModalContext";
 export function StartProjectTrigger({
   className,
   children,
+  ...buttonProps
 }: {
   className?: string;
   children: React.ReactNode;
-}) {
+} & Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  "children" | "onClick" | "type"
+>) {
   const { open } = useStartProjectModal();
   return (
-    <button type="button" onClick={open} className={clsx(className)}>
+    <button
+      {...buttonProps}
+      type="button"
+      onClick={open}
+      className={clsx(className)}
+    >
       {children}
     </button>
   );
