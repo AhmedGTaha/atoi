@@ -519,7 +519,8 @@ html[dir="rtl"] {
     margin: 0;
     border: 0;
     border-bottom: 1px solid var(--color-divider);
-    padding: 22px 0;
+    padding-block: 22px;
+    padding-inline: var(--space-4);
     background: transparent;
     color: var(--color-text);
     font-family: var(--font-heading);
@@ -1349,6 +1350,7 @@ html[dir="rtl"] {
     align-items: center;
     gap: 14px clamp(14px, 2vw, 30px);
     padding-block: 25px;
+    padding-inline: var(--space-6);
   }
   .service-index,
   .service-name,
