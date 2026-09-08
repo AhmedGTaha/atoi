@@ -1,4 +1,5 @@
 import "server-only";
+import { createHash } from "node:crypto";
 import { prisma } from "@/lib/db/client";
 import {
   projectRequestInputSchema,
@@ -17,12 +18,17 @@ import type { BusinessType } from "@/lib/validation/shared";
 import { appUrl } from "@/lib/utils/appUrl";
 
 export type SubmitProjectRequestResult =
-  | { ok: true; confirmationEmailSent: boolean; reference: string }
+  | {
+      ok: true;
+      confirmationEmailSent: boolean;
+      teamNotificationSent: boolean;
+      reference: string;
+    }
   | { ok: false; fieldErrors: Record<string, string> }
   | { ok: false; blocked: true };
 
 export async function submitProjectRequest(
-  raw: unknown
+  raw: unknown,
 ): Promise<SubmitProjectRequestResult> {
   const parsed = projectRequestInputSchema.safeParse(raw);
   if (!parsed.success) {
@@ -44,7 +50,12 @@ export async function submitProjectRequest(
 
   const phoneResult = normalizeGccPhone(input.phoneCountry, input.phoneNumber);
   if (!phoneResult.ok) {
-    return { ok: false, fieldErrors: { phoneNumber: phoneResult.error ?? "Invalid phone number." } };
+    return {
+      ok: false,
+      fieldErrors: {
+        phoneNumber: phoneResult.error ?? "Invalid phone number.",
+      },
+    };
   }
 
   const request = await prisma.projectRequest.create({
@@ -65,13 +76,20 @@ export async function submitProjectRequest(
   const confirmation = requestConfirmationEmail(
     input.preferredLocale,
     settings.companyName,
-    input.description
+    input.name,
   );
   const confirmationState = await sendEmail({
     to: input.email,
     subject: confirmation.subject,
     html: confirmation.html,
+    context: "request-email/customer confirmation",
+    idempotencyKey: `project-request-${request.id}-customer-confirmation`,
   });
+  if (confirmationState === "FAILED") {
+    console.error("[request-email] customer confirmation failed.", {
+      requestId: request.id,
+    });
+  }
 
   let internalState: "SENT" | "FAILED" = "FAILED";
   // Team member = Admin: notify every active admin and team member, not a
@@ -90,13 +108,30 @@ export async function submitProjectRequest(
       submittedAt: request.createdAt.toISOString(),
       adminUrl: appUrl(`/admin/requests/${request.id}`),
     });
-    internalState = await sendEmail({
-      to: recipients,
-      subject: internal.subject,
-      html: internal.html,
-    });
+    const results = await Promise.all(
+      recipients.map((recipient) =>
+        sendEmail({
+          to: recipient,
+          subject: internal.subject,
+          html: internal.html,
+          context: "request-email/team notification",
+          idempotencyKey: `project-request-${request.id}-team-${recipientKey(recipient)}`,
+        }),
+      ),
+    );
+    const failedCount = results.filter((result) => result === "FAILED").length;
+    internalState = failedCount === 0 ? "SENT" : "FAILED";
+    if (failedCount > 0) {
+      console.error("[request-email] team notification failed.", {
+        requestId: request.id,
+        failedCount,
+        recipientCount: recipients.length,
+      });
+    }
   } else {
-    console.warn("[projectRequest] No active staff to notify (no admins or team members).");
+    console.error("[request-email] no active team recipients found.", {
+      requestId: request.id,
+    });
   }
 
   await prisma.projectRequest.update({
@@ -108,7 +143,16 @@ export async function submitProjectRequest(
   });
 
   const reference = `ATOI-${request.id.replace(/-/g, "").slice(0, 8).toUpperCase()}`;
-  return { ok: true, confirmationEmailSent: confirmationState === "SENT", reference };
+  return {
+    ok: true,
+    confirmationEmailSent: confirmationState === "SENT",
+    teamNotificationSent: internalState === "SENT",
+    reference,
+  };
+}
+
+function recipientKey(email: string): string {
+  return createHash("sha256").update(email).digest("hex").slice(0, 24);
 }
 
 // Local alias to avoid importing the Prisma enum type just for this cast.

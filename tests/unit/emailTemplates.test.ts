@@ -26,11 +26,15 @@ function expectActionableEmail(html: string, ctaLabel: string, ctaUrl: string) {
   const escapedUrl = htmlEscape(ctaUrl);
   const escapedLabel = htmlEscape(ctaLabel);
   // CTA button: an anchor with the right href and visible label text.
-  const hrefRe = new RegExp(`<a href="${escapeRe(escapedUrl)}"[^>]*>\\s*${escapeRe(escapedLabel)}\\s*<\\/a>`);
+  const hrefRe = new RegExp(
+    `<a href="${escapeRe(escapedUrl)}"[^>]*>\\s*${escapeRe(escapedLabel)}\\s*<\\/a>`,
+  );
   expect(html).toMatch(hrefRe);
   // Fallback plain-text link below the button, same URL, for clients that
   // strip button styling or block the link.
-  const fallbackCount = (html.match(new RegExp(escapeRe(escapedUrl), "g")) ?? []).length;
+  const fallbackCount = (
+    html.match(new RegExp(escapeRe(escapedUrl), "g")) ?? []
+  ).length;
   expect(fallbackCount).toBeGreaterThanOrEqual(2);
 }
 
@@ -43,12 +47,39 @@ describe("email templates — no stale branding", () => {
     const samples = [
       requestConfirmationEmail("en", COMPANY, "Need a website.").html,
       requestConfirmationEmail("ar", COMPANY, "أحتاج موقعاً.").html,
-      customerInvitationEmail("en", COMPANY, "https://atoi.online/set-password?token=abc").html,
-      customerInvitationEmail("ar", COMPANY, "https://atoi.online/set-password?token=abc").html,
-      teamMemberInvitationEmail(COMPANY, "https://atoi.online/set-password?token=abc&mode=team").html,
-      passwordResetEmail("en", COMPANY, "https://atoi.online/set-password?token=abc&mode=reset").html,
-      passwordResetEmail("ar", COMPANY, "https://atoi.online/set-password?token=abc&mode=reset").html,
-      projectUpdateEmail("en", COMPANY, "Salon Booking", "Update body.", "DEVELOPMENT", 40, "https://atoi.online/portal/projects/1").html,
+      customerInvitationEmail(
+        "en",
+        COMPANY,
+        "https://atoi.online/set-password?token=abc",
+      ).html,
+      customerInvitationEmail(
+        "ar",
+        COMPANY,
+        "https://atoi.online/set-password?token=abc",
+      ).html,
+      teamMemberInvitationEmail(
+        COMPANY,
+        "https://atoi.online/set-password?token=abc&mode=team",
+      ).html,
+      passwordResetEmail(
+        "en",
+        COMPANY,
+        "https://atoi.online/set-password?token=abc&mode=reset",
+      ).html,
+      passwordResetEmail(
+        "ar",
+        COMPANY,
+        "https://atoi.online/set-password?token=abc&mode=reset",
+      ).html,
+      projectUpdateEmail(
+        "en",
+        COMPANY,
+        "Salon Booking",
+        "Update body.",
+        "DEVELOPMENT",
+        40,
+        "https://atoi.online/portal/projects/1",
+      ).html,
       internalNewRequestEmail(COMPANY, {
         name: "A",
         businessName: null,
@@ -76,11 +107,16 @@ describe("email templates — no stale branding", () => {
 });
 
 describe("requestConfirmationEmail", () => {
-  it("has a subject and a CTA with fallback link, and escapes the description", () => {
-    const email = requestConfirmationEmail("en", COMPANY, "<script>alert(1)</script>");
-    expect(email.subject).toBe("We've received your request");
+  it("confirms receipt using the customer's escaped name", () => {
+    const email = requestConfirmationEmail(
+      "en",
+      COMPANY,
+      "<script>alert(1)</script>",
+    );
+    expect(email.subject).toBe("We received your project request");
     expect(email.html).not.toContain("<script>alert(1)</script>");
     expect(email.html).toContain("&lt;script&gt;");
+    expect(email.html).toContain("We received your project request");
     expect(email.html).toMatch(/Visit ATOI/);
   });
 
@@ -126,7 +162,9 @@ describe("teamMemberInvitationEmail", () => {
     const trickyUrl = "https://atoi.online/set-password?token=a%22b&mode=team";
     const email = teamMemberInvitationEmail(COMPANY, trickyUrl);
     expect(email.html).toContain('lang="en"');
-    expect(email.html).not.toContain('href="https://atoi.online/set-password?token=a"b&mode=team"');
+    expect(email.html).not.toContain(
+      'href="https://atoi.online/set-password?token=a"b&mode=team"',
+    );
   });
 });
 
@@ -149,7 +187,7 @@ describe("projectUpdateEmail", () => {
       "<b>Danger</b> & progress",
       "DEVELOPMENT",
       55,
-      portalUrl
+      portalUrl,
     );
     expect(email.subject).toBe("Project update: Salon Booking");
     expectActionableEmail(email.html, "View project", portalUrl);
@@ -174,6 +212,9 @@ describe("internalNewRequestEmail", () => {
     expectActionableEmail(email.html, "Open request", adminUrl);
     expect(email.html).not.toContain("<img src=x onerror=alert(1)>");
     expect(email.html).toContain("Bloom &amp; Co");
+    expect(email.subject).toBe(
+      "New project request from <img src=x onerror=alert(1)>",
+    );
   });
 });
 

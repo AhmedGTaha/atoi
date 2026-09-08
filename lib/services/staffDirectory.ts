@@ -1,5 +1,6 @@
 import "server-only";
 import { prisma } from "@/lib/db/client";
+import { emailSchema } from "@/lib/validation/auth";
 
 export interface StaffContact {
   id: string;
@@ -49,5 +50,19 @@ export async function listStaffContacts(): Promise<StaffContact[]> {
  */
 export async function listStaffNotificationEmails(): Promise<string[]> {
   const contacts = await listStaffContacts();
-  return Array.from(new Set(contacts.map((contact) => contact.email)));
+  const emails = new Set<string>();
+
+  for (const contact of contacts) {
+    const parsed = emailSchema.safeParse(contact.email);
+    if (!parsed.success) {
+      console.error("[staff-directory] Invalid active staff email skipped.", {
+        staffId: contact.id,
+        kind: contact.kind,
+      });
+      continue;
+    }
+    emails.add(parsed.data);
+  }
+
+  return Array.from(emails);
 }
