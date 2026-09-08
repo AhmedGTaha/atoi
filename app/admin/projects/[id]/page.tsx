@@ -122,7 +122,8 @@ export default async function AdminProjectDetailPage({
                 value={project.customer.businessName ?? "—"}
               />
               <Row label="Email" value={project.customer.email} />
-              <Row label="Phone" value={project.customer.phoneE164} />
+              <Row label="Customer phone" value={project.customer.phoneE164} />
+              <Row label="Project phone" value={project.phoneE164} />
               <Row
                 label="Account status"
                 value={project.customer.accountStatus}

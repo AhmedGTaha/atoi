@@ -6,7 +6,7 @@ import { getCompanySettings } from "./settingsService";
 import { sendEmail } from "@/lib/email/resend";
 import { projectUpdateEmail } from "@/lib/email/templates";
 import { appUrl } from "@/lib/utils/appUrl";
-import type { GccCountryCode } from "@/lib/validation/phone";
+import { normalizeGccPhone, type GccCountryCode } from "@/lib/validation/phone";
 import type { ProjectStatusValue } from "@/lib/validation/shared";
 
 export interface ConvertRequestInput {
@@ -42,6 +42,14 @@ export async function convertRequestToProject(
     preferredLocale: request.preferredLocale,
   });
 
+  // Phone is per-project, not per-customer: an existing customer's phone is
+  // never overwritten here, but this project still records the phone number
+  // submitted with it, which may differ from the customer's other projects.
+  const phone = normalizeGccPhone(input.phoneCountry, input.phoneNumber);
+  if (!phone.ok) {
+    throw new Error(phone.errorCode ?? "PHONE_INVALID_FOR_COUNTRY");
+  }
+
   const project = await prisma.project.create({
     data: {
       customerId: customer.id,
@@ -49,6 +57,8 @@ export async function convertRequestToProject(
       description: input.description,
       status: "PENDING_TEAM_APPROVAL",
       progress: 0,
+      phoneCountry: input.phoneCountry,
+      phoneE164: phone.e164!,
       members: {
         create: input.memberIds.map((teamMemberId) => ({ teamMemberId })),
       },
@@ -76,6 +86,59 @@ export async function convertRequestToProject(
     customerCreated: createdNew,
     invitationEmailSent,
   };
+}
+
+export interface CreateProjectForCustomerInput {
+  customerId: string;
+  projectName: string;
+  description: string;
+  phoneCountry: GccCountryCode;
+  phoneNumber: string;
+  memberIds: string[];
+}
+
+/**
+ * Creates a new project for an already-existing customer (e.g. from the
+ * admin customer page). Unlike convertRequestToProject this never touches
+ * the customer record — the phone number submitted here is stored only on
+ * the new project, so it can differ from the customer's other projects.
+ */
+export async function createProjectForCustomer(input: CreateProjectForCustomerInput) {
+  const phone = normalizeGccPhone(input.phoneCountry, input.phoneNumber);
+  if (!phone.ok) {
+    throw new Error(phone.errorCode ?? "PHONE_INVALID_FOR_COUNTRY");
+  }
+
+  const project = await prisma.project.create({
+    data: {
+      customerId: input.customerId,
+      name: input.projectName,
+      description: input.description,
+      status: "PENDING_TEAM_APPROVAL",
+      progress: 0,
+      phoneCountry: input.phoneCountry,
+      phoneE164: phone.e164!,
+      members: {
+        create: input.memberIds.map((teamMemberId) => ({ teamMemberId })),
+      },
+    },
+  });
+
+  return { projectId: project.id };
+}
+
+/**
+ * Deletes a project. A converted ProjectRequest's convertedProjectId points
+ * back at the project without a cascading FK, so it's cleared first.
+ */
+export async function deleteProject(id: string) {
+  await prisma.$transaction([
+    prisma.projectRequest.updateMany({
+      where: { convertedProjectId: id },
+      data: { convertedProjectId: null },
+    }),
+    prisma.project.delete({ where: { id } }),
+  ]);
 }
 
 export async function listProjectsForAdmin(params?: { search?: string; status?: ProjectStatusValue }) {

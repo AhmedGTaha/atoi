@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/guards";
 import { getCustomerForAdmin } from "@/lib/services/customerService";
+import { listActiveTeamMembers } from "@/lib/services/teamService";
 import { PageHeader, Card, Badge } from "@/components/admin/ui";
 import { ResendInviteButton } from "@/components/admin/ResendInviteButton";
-import { statusLabel } from "@/lib/i18n/labels";
+import { CustomerProjectsPanel } from "@/components/admin/CustomerProjectsPanel";
 
 export default async function AdminCustomerDetailPage({
   params,
@@ -15,6 +15,8 @@ export default async function AdminCustomerDetailPage({
   const { id } = await params;
   const customer = await getCustomerForAdmin(id);
   if (!customer) notFound();
+
+  const teamMembers = await listActiveTeamMembers();
 
   return (
     <div>
@@ -48,25 +50,17 @@ export default async function AdminCustomerDetailPage({
         </Card>
 
         <Card className="lg:col-span-2">
-          <h2 className="font-semibold">Projects</h2>
-          <div className="mt-4 space-y-3">
-            {customer.projects.length === 0 && (
-              <p className="text-sm text-muted">No projects yet.</p>
-            )}
-            {customer.projects.map((p) => (
-              <Link
-                key={p.id}
-                href={`/admin/projects/${p.id}`}
-                className="flex items-center justify-between border border-rule-soft p-4 hover:border-accent"
-              >
-                <div>
-                  <p className="font-semibold">{p.name}</p>
-                  <p className="text-sm text-muted">{p.progress}% complete</p>
-                </div>
-                <Badge label={statusLabel("en", p.status)} tone={p.status} />
-              </Link>
-            ))}
-          </div>
+          <CustomerProjectsPanel
+            customerId={customer.id}
+            projects={customer.projects.map((p) => ({
+              id: p.id,
+              name: p.name,
+              progress: p.progress,
+              status: p.status,
+              phoneE164: p.phoneE164,
+            }))}
+            teamMembers={teamMembers}
+          />
         </Card>
       </div>
     </div>

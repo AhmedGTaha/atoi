@@ -46,6 +46,8 @@ async function seedProjectWithAdmin() {
       description: "A booking system.",
       status: "DEVELOPMENT",
       progress: 40,
+      phoneCountry: "BH",
+      phoneE164: "+97312345678",
     },
   });
   return { admin, teamMember, customer, project };

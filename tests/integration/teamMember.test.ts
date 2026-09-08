@@ -49,6 +49,8 @@ async function createCustomerAndProject() {
       description: "A project used in tests.",
       status: "DEVELOPMENT",
       progress: 10,
+      phoneCountry: "BH",
+      phoneE164: "+97312345678",
     },
   });
   return { customer, project };

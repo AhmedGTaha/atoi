@@ -63,6 +63,8 @@ async function main() {
       description: "An online ordering system for Sam's Bakery.",
       status: "DEVELOPMENT",
       progress: 45,
+      phoneCountry: "BH",
+      phoneE164: "+97312345678",
       members: { create: [{ teamMemberId: teamMember.id }] },
     },
   });

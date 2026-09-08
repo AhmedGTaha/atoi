@@ -88,6 +88,8 @@ describe("customer project isolation", () => {
         description: "Confidential to B.",
         status: "DEVELOPMENT",
         progress: 10,
+        phoneCountry: "BH",
+        phoneE164: "+97312345678",
       },
     });
 
