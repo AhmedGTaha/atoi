@@ -1664,6 +1664,9 @@ html[dir="rtl"] {
     margin-top: 4px;
     gap: 18px;
   }
+  .terminal-row textarea.input {
+    min-height: 96px;
+  }
 }
 @media (min-width: 1024px) {
   /* Set on :root (not just .public-header) so anything anchored to the
@@ -1788,7 +1791,16 @@ html[dir="rtl"] {
     gap: 8px;
   }
   .inquiry-dialog {
-    width: 100%;
+    /* Cancels half of the Modal wrapper's own p-4 (16px) outer padding, so
+       the dialog frame isn't inset twice — once by the wrapper, once by
+       .inquiry-form's own padding below. Leaves 8px to the true viewport
+       edge; .inquiry-form's 12px then brings total edge-to-content spacing
+       to ~20px, matching the rest of the mobile design system.
+       (.studio-dialog sets max-width: 100%, so it's overridden here too —
+       otherwise it would clamp this back down to the wrapper's content box.) */
+    width: calc(100% + 16px);
+    max-width: calc(100% + 16px);
+    margin-inline: -8px;
     max-height: calc(100dvh - 24px);
   }
   .inquiry-strip {
@@ -1803,7 +1815,7 @@ html[dir="rtl"] {
   }
   .inquiry-form,
   .inquiry-receipt {
-    padding: 16px;
+    padding: 12px;
   }
   .inquiry-fields {
     gap: 16px;
@@ -1812,12 +1824,9 @@ html[dir="rtl"] {
     min-height: 46px;
     font-size: 16px;
   }
-  .inquiry-dialog .terminal-row textarea.input {
-    min-height: 96px;
-  }
   .inquiry-phone-input {
     display: grid !important;
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
     gap: 10px;
   }
   .inquiry-phone-input .dial-select {
@@ -1863,7 +1872,10 @@ html[dir="rtl"] {
     font-size: 24px;
   }
 }
-@media (max-width: 380px) {
+/* Below this, even a 2-column project-type grid or side-by-side phone row
+   gets too cramped to read comfortably — stack them. 320px covers real
+   device widths (the practical mobile floor); this only fires below it. */
+@media (max-width: 319px) {
   .inquiry-type-grid {
     grid-template-columns: minmax(0, 1fr);
   }
