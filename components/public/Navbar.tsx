@@ -47,6 +47,7 @@ export function Navbar({
         >
           <Logo
             name={companyName}
+            locale={locale}
             lightLogoUrl={lightLogoUrl}
             darkLogoUrl={darkLogoUrl}
           />

@@ -42,6 +42,10 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(appUrl()),
     title,
     description,
+    applicationName: settings.companyName,
+    appleWebApp: {
+      title: settings.companyName,
+    },
     alternates: { canonical: "/" },
     openGraph: {
       title,
@@ -50,11 +54,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: settings.companyName,
       locale: locale === "ar" ? "ar_BH" : "en_US",
       type: "website",
+      images: [{ url: "/branding/atoi-og.png", width: 1200, height: 630, alt: "ATOI" }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: ["/branding/atoi-og.png"],
     },
   };
 }

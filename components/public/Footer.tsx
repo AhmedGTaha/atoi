@@ -23,6 +23,7 @@ export function Footer({
       <Container className="flex flex-wrap items-center gap-4 py-8 font-display text-xs text-faint sm:gap-8">
         <Logo
           name={settings.companyName}
+          locale={locale}
           lightLogoUrl={settings.activeLightLogo?.publicUrl ?? settings.logoPublicUrl}
           darkLogoUrl={settings.activeDarkLogo?.publicUrl ?? settings.logoPublicUrl}
         />

@@ -2,6 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import type { Locale } from "@/lib/i18n/locale";
+
+/** Intrinsic aspect ratio (width / height) of the wordmark PNGs in public/branding. */
+const WORDMARK_ASPECT: Record<Locale, number> = {
+  en: 3244 / 1344,
+  ar: 2924 / 1954,
+};
+const LOGO_HEIGHT = 32;
 
 /**
  * The public site's colour theme is resolved client-side only (see the
@@ -31,11 +39,14 @@ function useResolvedTheme(): "light" | "dark" {
 
 export function Logo({
   name,
+  locale = "en",
   logoUrl,
   lightLogoUrl,
   darkLogoUrl,
 }: {
   name: string;
+  /** Selects the default ATOI wordmark when no admin-configured logo is set. */
+  locale?: Locale;
   /** Single-mode override; used by contexts (e.g. the footer) that don't need theme-aware swapping. */
   logoUrl?: string | null;
   lightLogoUrl?: string | null;
@@ -59,5 +70,15 @@ export function Logo({
     );
   }
 
-  return <span className="brand">{name}</span>;
+  const width = Math.round(LOGO_HEIGHT * WORDMARK_ASPECT[locale]);
+  return (
+    <Image
+      src={`/branding/atoi-wordmark-${locale}.png`}
+      alt="ATOI"
+      width={width}
+      height={LOGO_HEIGHT}
+      className="h-8 w-auto object-contain"
+      priority
+    />
+  );
 }

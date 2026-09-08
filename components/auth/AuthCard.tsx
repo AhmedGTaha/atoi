@@ -1,8 +1,15 @@
 import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
+import Image from "next/image";
 import { Panel } from "@/components/ui/Panel";
 import type { Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+
+/** Intrinsic aspect ratio (width / height) of the wordmark PNGs in public/branding. */
+const WORDMARK_ASPECT: Record<Locale, number> = {
+  en: 3244 / 1344,
+  ar: 2924 / 1954,
+};
 
 export function AuthCard({
   title,
@@ -27,7 +34,14 @@ export function AuthCard({
         <Link href="/" className="section-marker">
           {brandName} · {dict.auth.card.tagline}
         </Link>
-        <div className="auth-wordmark">ATOI</div>
+        <Image
+          src={`/branding/atoi-wordmark-${locale}.png`}
+          alt="ATOI"
+          width={Math.round(72 * WORDMARK_ASPECT[locale])}
+          height={72}
+          className="auth-wordmark"
+          priority
+        />
         <p className="max-w-sm text-muted">{dict.auth.card.portalTagline}</p>
         <Link
           href="/"

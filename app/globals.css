@@ -658,10 +658,10 @@ html[dir="rtl"] {
   .brand::before {
     content: "";
     display: inline-block;
-    width: 9px;
+    width: 16px;
     height: 16px;
     flex: none;
-    background: var(--color-accent);
+    background: url("/branding/atoi-mark.png") center / contain no-repeat;
   }
   .brand {
     display: inline-flex;
@@ -1387,13 +1387,10 @@ html[dir="rtl"] {
     font-size: 26px;
   }
   .auth-wordmark {
-    font-family: var(--font-heading);
-    font-weight: 500;
-    font-size: clamp(40px, 6vw, 72px);
-    line-height: 1;
+    display: block;
+    height: clamp(40px, 6vw, 72px);
+    width: auto;
     margin-block: 32px;
-    letter-spacing: -0.03em;
-    color: var(--color-accent-foreground);
   }
   .studio-dialog {
     background: var(--color-bg);
@@ -1781,7 +1778,7 @@ html[dir="rtl"] {
     padding-block: 32px;
   }
   .auth-wordmark {
-    font-size: 40px;
+    height: 40px;
     margin-block: 16px;
   }
   .auth-context > p {

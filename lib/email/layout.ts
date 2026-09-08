@@ -1,6 +1,12 @@
 import type { Locale } from "@/lib/i18n/locale";
+import { appUrl } from "@/lib/utils/appUrl";
 
 export const EMAIL_ACCENT = "#486FA6";
+/** Intrinsic aspect ratio (width / height) of the wordmark PNGs in public/branding. */
+const WORDMARK_ASPECT: Record<Locale, number> = {
+  en: 3244 / 1344,
+  ar: 2924 / 1954,
+};
 export const EMAIL_LIGHT_CANVAS = "#FFFFFF";
 const EMAIL_ACCENT_DARK_FOREGROUND = "#6D8CB8";
 
@@ -37,6 +43,8 @@ export function emailShell(opts: EmailShellOptions): string {
   const notificationLabel = opts.locale === "ar" ? "إشعار" : "NOTIFICATION";
   const footerTagline =
     opts.locale === "ar" ? "استوديو برمجيات من البحرين" : "Bahrain-based software studio";
+  const logoWidth = opts.locale === "ar" ? 92 : 118;
+  const logoHeight = Math.round(logoWidth / WORDMARK_ASPECT[opts.locale]);
 
   // Every actionable email needs a fallback: some clients strip button
   // styling or block the link entirely, so the raw URL is always printed
@@ -86,10 +94,13 @@ export function emailShell(opts: EmailShellOptions): string {
     ${opts.preheader ? `<div style="display:none;max-height:0;overflow:hidden;">${escapeHtml(opts.preheader)}</div>` : ""}
     <div style="max-width:560px;margin:0 auto;padding:40px 24px 32px;" dir="${dir}">
       <div class="email-rule" style="border-top:1px solid ${LIGHT.line};border-bottom:1px solid ${LIGHT.line};padding:20px 0;text-align:${align};">
-        <span class="email-marker" style="display:inline-block;width:10px;height:18px;background:${LIGHT.accent};vertical-align:middle;"></span>
-        <span class="email-brand" style="display:inline-block;margin-${opts.locale === "ar" ? "right" : "left"}:13px;vertical-align:middle;font-family:'Courier New',Courier,monospace;font-weight:700;font-size:22px;line-height:1;color:${LIGHT.paper};letter-spacing:.16em;">
-          ${escapeHtml(opts.companyName)}
-        </span>
+        <img
+          src="${appUrl(`/branding/atoi-wordmark-${opts.locale}.png`)}"
+          width="${logoWidth}"
+          height="${logoHeight}"
+          alt="ATOI"
+          style="display:inline-block;vertical-align:middle;border:0;outline:none;max-width:100%;"
+        />
       </div>
       <div class="email-panel" style="margin-top:24px;background:${LIGHT.panel};border:1px solid ${LIGHT.line};padding:32px;text-align:${align};">
         <div class="email-accent" style="margin-bottom:18px;font-family:${proseFont};font-size:11px;line-height:1;color:${LIGHT.accent};letter-spacing:.08em;">ATOI / ${notificationLabel}</div>
