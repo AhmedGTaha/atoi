@@ -4,11 +4,11 @@ The sole visual authority is `UI Mockups for ATOI/ATOI Studio.dc.html`. The refe
 
 ## Tokens and fonts
 
-`app/globals.css` defines a single semantic palette exposed through Tailwind 4. Canvas, surface, field, header, overlay, modal edge, foreground, secondary/faint text, three border strengths, accent, deep accent and semantic statuses follow Studio.
+`app/globals.css` defines a single semantic palette exposed through Tailwind 4. The first palette color (`#f1ece5`) is the light canvas and the third (`#486fa6`) is the global accent. Canvas, surface, field, header, overlay, modal edge, foreground, secondary/faint text, three border strengths, accent, deep accent and semantic statuses follow Studio.
 
 | Role        | Dark      | Light     |
 | ----------- | --------- | --------- |
-| Canvas      | `#0b0d10` | `#f5f7f8` |
+| Canvas      | `#0b0d10` | `#f1ece5` |
 | Panel       | `#11151b` | `#eceff1` |
 | Foreground  | `#e8ebef` | `#0f1418` |
 | Secondary   | `#9aa4b2` | `#414b55` |

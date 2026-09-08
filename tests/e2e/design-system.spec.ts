@@ -116,7 +116,7 @@ async function reviewRoutes(
         expect.soft(metrics.headingFont).toContain("IBM Plex Mono");
         expect
           .soft(metrics.background)
-          .toBe(theme === "dark" ? "rgb(11, 13, 16)" : "rgb(245, 247, 248)");
+          .toBe(theme === "dark" ? "rgb(11, 13, 16)" : "rgb(241, 236, 229)");
         expect.soft(metrics.accent).toBe("#486fa6");
         expect
           .soft(metrics.duplicateIds, `${route}: duplicate element IDs`)

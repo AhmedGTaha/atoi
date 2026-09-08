@@ -1,10 +1,12 @@
 import type { Locale } from "@/lib/i18n/locale";
 
 export const EMAIL_ACCENT = "#486FA6";
+export const EMAIL_LIGHT_CANVAS = "#F1ECE5";
 const EMAIL_ACCENT_DARK_FOREGROUND = "#6D8CB8";
 
 const LIGHT = {
-  ink: "#F5F7F8",
+  canvas: EMAIL_LIGHT_CANVAS,
+  onAccent: "#F5F7F8",
   panel: "#FFFFFF",
   paper: "#0F1418",
   dim: "#414B55",
@@ -43,7 +45,7 @@ export function emailShell(opts: EmailShellOptions): string {
     opts.ctaUrl && opts.ctaLabel
       ? `<div style="margin-top:28px;">
            <a href="${escapeAttr(opts.ctaUrl)}"
-              class="email-cta" style="display:inline-block;background:${LIGHT.accent};color:${LIGHT.ink};
+              class="email-cta" style="display:inline-block;background:${LIGHT.accent};color:${LIGHT.onAccent};
                      text-decoration:none;font-family:${proseFont};font-weight:700;
                      padding:16px 24px;border-radius:0;font-size:14px;letter-spacing:.01em;">
              ${escapeHtml(opts.ctaLabel)}
@@ -74,13 +76,13 @@ export function emailShell(opts: EmailShellOptions): string {
         .email-copy, .email-footer, .email-fallback, .email-label { color:#9AA4B2 !important; }
         .email-accent, .email-link { color:${EMAIL_ACCENT_DARK_FOREGROUND} !important; }
         .email-marker, .email-cta { background:${EMAIL_ACCENT} !important; }
-        .email-cta { color:${LIGHT.ink} !important; }
+        .email-cta { color:${LIGHT.onAccent} !important; }
         .email-quote { background:#0B0D10 !important; border-color:${EMAIL_ACCENT} !important; color:#E8EBEF !important; }
         .email-status { border-color:#303741 !important; color:#9AA4B2 !important; }
       }
     </style>
   </head>
-  <body class="email-body" style="margin:0;padding:0;background:${LIGHT.ink};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${LIGHT.paper};">
+  <body class="email-body" style="margin:0;padding:0;background:${LIGHT.canvas};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${LIGHT.paper};">
     ${opts.preheader ? `<div style="display:none;max-height:0;overflow:hidden;">${escapeHtml(opts.preheader)}</div>` : ""}
     <div style="max-width:560px;margin:0 auto;padding:40px 24px 32px;" dir="${dir}">
       <div class="email-rule" style="border-top:1px solid ${LIGHT.line};border-bottom:1px solid ${LIGHT.line};padding:20px 0;text-align:${align};">

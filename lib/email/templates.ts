@@ -1,4 +1,9 @@
-import { EMAIL_ACCENT, emailShell, escapeHtml } from "./layout";
+import {
+  EMAIL_ACCENT,
+  EMAIL_LIGHT_CANVAS,
+  emailShell,
+  escapeHtml,
+} from "./layout";
 import { appUrl } from "@/lib/utils/appUrl";
 import type { Locale } from "@/lib/i18n/locale";
 import { statusLabel } from "@/lib/i18n/labels";
@@ -238,7 +243,7 @@ export function internalNewRequestEmail(
       heading: c.internalRequestHeading,
       bodyHtml: `<table style="width:100%;border-collapse:collapse;font-size:14px;">${rows}</table>
                  <p class="email-accent" style="margin:20px 0 10px;font-family:'Courier New',Courier,monospace;font-size:12px;color:${EMAIL_ACCENT};">DESCRIPTION</p>
-                 <p class="email-quote" style="margin:0;padding:16px;border-left:2px solid ${EMAIL_ACCENT};background:#F5F7F8;color:#0F1418;">${escapeHtml(fields.description)}</p>`,
+                 <p class="email-quote" style="margin:0;padding:16px;border-left:2px solid ${EMAIL_ACCENT};background:${EMAIL_LIGHT_CANVAS};color:#0F1418;">${escapeHtml(fields.description)}</p>`,
       ctaUrl: fields.adminUrl,
       ctaLabel: "Open request",
     }),
@@ -267,7 +272,7 @@ export function supportNotificationEmail(
       companyName,
       heading: c.supportHeading,
       bodyHtml: `<p class="email-value" style="color:#0F1418;"><strong>${escapeHtml(fields.projectName)}</strong> — ${escapeHtml(fields.customerLabel)}</p>
-                 <p class="email-quote" style="margin-top:18px;padding:16px;border-left:2px solid ${EMAIL_ACCENT};background:#F5F7F8;color:#0F1418;">${escapeHtml(fields.message)}</p>`,
+                 <p class="email-quote" style="margin-top:18px;padding:16px;border-left:2px solid ${EMAIL_ACCENT};background:${EMAIL_LIGHT_CANVAS};color:#0F1418;">${escapeHtml(fields.message)}</p>`,
       ctaUrl: fields.adminUrl,
       ctaLabel: "Open project",
     }),
