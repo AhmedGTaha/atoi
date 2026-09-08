@@ -48,6 +48,7 @@ function useResolvedTheme(): "light" | "dark" {
 export function Logo({
   name,
   locale = "en",
+  height: heightOverride,
   logoUrl,
   lightLogoUrl,
   darkLogoUrl,
@@ -55,6 +56,8 @@ export function Logo({
   name: string;
   /** Selects the default ATOI wordmark when no admin-configured logo is set. */
   locale?: Locale;
+  /** Rendered height in px. Defaults to a per-locale size tuned for the public nav/footer. */
+  height?: number;
   /** Single-mode override; used by contexts (e.g. the footer) that don't need theme-aware swapping. */
   logoUrl?: string | null;
   lightLogoUrl?: string | null;
@@ -65,20 +68,22 @@ export function Logo({
   const resolvedUrl = logoUrl ?? themedUrl;
 
   if (resolvedUrl) {
+    const height = heightOverride ?? 32;
     return (
       <Image
         src={resolvedUrl}
         alt={name}
-        width={110}
-        height={32}
-        className="h-8 w-auto object-contain"
+        width={Math.round(height * (110 / 32))}
+        height={height}
+        style={{ height, width: "auto" }}
+        className="w-auto object-contain"
         priority
         unoptimized={resolvedUrl.startsWith("blob:")}
       />
     );
   }
 
-  const height = LOGO_HEIGHT[locale];
+  const height = heightOverride ?? LOGO_HEIGHT[locale];
   const width = Math.round(height * WORDMARK_ASPECT[locale]);
   return (
     <Image

@@ -1,5 +1,6 @@
 import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
+import { Logo } from "@/components/public/Logo";
 import { AdminBreadcrumbs } from "./AdminBreadcrumbs";
 import { AdminNav } from "./AdminNav";
 import { logoutAction } from "@/app/actions/authActions";
@@ -14,8 +15,9 @@ export function AdminShell({
   return (
     <div className="app-shell">
       <aside className="app-sidebar">
-        <Link href="/admin" className="brand">
-          ATOI <span className="section-marker">/ Admin</span>
+        <Link href="/admin" className="admin-brand">
+          <Logo name="ATOI" locale="en" height={22} />
+          <span className="section-marker">/ Admin</span>
         </Link>
         <Link
           href="/"

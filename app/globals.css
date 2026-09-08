@@ -655,23 +655,10 @@ html[dir="rtl"] {
   .auth-panel [role="alert"] {
     color: var(--color-danger);
   }
-  .brand::before {
-    content: "";
-    display: inline-block;
-    width: 11px;
-    height: 16px;
-    flex: none;
-    background: url("/branding/atoi-mark.png") center / contain no-repeat;
-  }
-  .brand {
+  .admin-brand {
     display: inline-flex;
     align-items: center;
-    gap: 11px;
-    font-family: var(--font-heading);
-    font-size: 18px;
-    letter-spacing: 0.16em;
-    text-transform: none;
-    font-weight: 600;
+    gap: 10px;
   }
   .btn,
   .icon-button {
@@ -787,15 +774,6 @@ html[dir="rtl"] {
   .public-brand-link {
     justify-self: start;
     color: var(--color-text);
-  }
-  .public-header .brand {
-    gap: 9px;
-    font: 600 15px/1 var(--font-heading);
-    letter-spacing: 0.12em;
-  }
-  .public-header .brand::before {
-    width: 7px;
-    height: 13px;
   }
   .nav-primary {
     align-items: center;
@@ -1770,9 +1748,6 @@ html[dir="rtl"] {
   }
   .app-sidebar > a:nth-child(2) {
     display: none;
-  }
-  .app-sidebar .brand {
-    font-size: 16px;
   }
 }
 @media (max-width: 767px) {
