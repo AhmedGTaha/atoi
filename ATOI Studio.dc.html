@@ -15,27 +15,27 @@
 :root{
   --ink:#0b0d10; --panel:#11151b; --paper:#e8ebef; --dim:#9aa4b2; --faint:#7b8493;
   --line:rgba(232,235,239,.14); --line-2:rgba(232,235,239,.075);
-  --amber:#4fd1e0; --amber-dim:#2c8996; --red:#e8705a;
+  --amber:#486fa6; --amber-text:color-mix(in srgb,var(--amber) 80%,white); --amber-hover:color-mix(in srgb,var(--amber) 92%,black); --amber-dim:color-mix(in srgb,var(--amber) 84%,black); --red:#e8705a;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --sans:"IBM Plex Sans",system-ui,sans-serif;
   --head:rgba(11,13,16,.86); --field:rgba(232,235,239,.045); --line-hi:rgba(232,235,239,.34);
   --pick:#4ade80;
-  --on-accent:#0b0d10; --scrim:rgba(6,7,9,.74); --modal-edge:rgba(232,235,239,.24);
+  --on-accent:#f5f7f8; --scrim:rgba(6,7,9,.74); --modal-edge:rgba(232,235,239,.24);
   --modal-shadow:0 30px 80px rgba(0,0,0,.6);
 }
 body[data-theme="light"]{
   --ink:#f5f7f8; --panel:#eceff1; --paper:#0f1418; --dim:#414b55; --faint:#586269;
   --line:rgba(15,20,24,.16); --line-2:rgba(15,20,24,.085);
-  --amber:#0a6577; --amber-dim:#084f5e; --red:#a63a25; --pick:#12703f;
+  --amber-text:color-mix(in srgb,var(--amber) 96%,black); --red:#a63a25; --pick:#12703f;
   --head:rgba(245,247,248,.88); --field:rgba(15,20,24,.035); --line-hi:rgba(15,20,24,.34);
   --on-accent:#f5f7f8; --scrim:rgba(210,217,221,.72); --modal-edge:rgba(15,20,24,.2);
   --modal-shadow:0 24px 60px rgba(15,20,24,.18);
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--sans);font-size:16px;line-height:1.6;text-wrap:pretty;-webkit-font-smoothing:antialiased}
-a{color:var(--amber);text-decoration:none}
+a{color:var(--amber-text);text-decoration:none}
 a:hover{color:var(--paper)}
-::selection{background:rgba(79,209,224,.28)}
+::selection{background:color-mix(in srgb,var(--amber) 28%,transparent)}
 :focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
 @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.99)}to{opacity:1;transform:none}}
@@ -56,18 +56,18 @@ select option{color:var(--on-accent)}
 .trow{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline;padding:9px 0;min-height:44px;border-bottom:1px solid var(--line-2)}
 .trow:focus-within{border-bottom-color:var(--amber)}
 .tprompt{font:400 13px/1.6 var(--mono);color:var(--faint);white-space:nowrap}
-.tprompt b{color:var(--amber);font-weight:400}
+.tprompt b{color:var(--amber-text);font-weight:400}
 .tin,.tin:hover,.tin:focus-visible,.tsel{background:transparent;border:0;padding:2px 0;min-height:26px;font:400 13.5px/1.6 var(--mono);color:var(--paper);width:100%}
 .tin:focus-visible,.tsel:focus-visible{outline:none}
 .tin::placeholder{color:rgba(127,138,148,.55)}
-.tsel{width:auto;color:var(--amber);cursor:pointer}
+.tsel{width:auto;color:var(--amber-text);cursor:pointer}
 textarea.tin{resize:none;height:94px;overflow:auto;display:block}
 .topt{display:flex;align-items:center;padding:4px 0;font:400 13px/1.7 var(--mono);color:var(--dim);cursor:pointer;white-space:nowrap}
 .topt input{position:absolute;opacity:0;width:0;height:0;padding:0}
 .topt::before{content:"[ ] ";color:var(--faint);white-space:pre}
 .topt:hover{color:var(--paper)}
-.topt:has(input:checked){color:var(--amber)}
-.topt:has(input:checked)::before{content:"[x] ";color:var(--amber)}
+.topt:has(input:checked){color:var(--amber-text)}
+.topt:has(input:checked)::before{content:"[x] ";color:var(--amber-text)}
 .topt:has(input:focus-visible){outline:1px dotted var(--amber);outline-offset:3px}
 </style>
 </helmet>
@@ -79,19 +79,19 @@ textarea.tin{resize:none;height:94px;overflow:auto;display:block}
       <span style="font:600 28px/1 var(--mono);letter-spacing:.18em">ATOI</span>
     </a>
     <nav aria-label="Primary navigation" style="display:flex;align-self:stretch;align-items:center;justify-content:center;gap:clamp(36px,3.5vw,74px)">
-      <a href="#work" aria-current="page" style="position:relative;display:flex;align-items:center;align-self:stretch;color:var(--amber)" style-hover="color:var(--paper)">Work<span style="position:absolute;right:0;bottom:20px;left:0;height:3px;background:var(--amber)"></span></a>
+      <a href="#work" aria-current="page" style="position:relative;display:flex;align-items:center;align-self:stretch;color:var(--amber-text)" style-hover="color:var(--paper)">Work<span style="position:absolute;right:0;bottom:20px;left:0;height:3px;background:var(--amber)"></span></a>
       <a href="#services" style="color:var(--dim)" style-hover="color:var(--paper)">Services</a>
       <a href="#about" style="color:var(--dim)" style-hover="color:var(--paper)">About</a>
     </nav>
     <div style="display:flex;align-items:center;justify-content:flex-end;gap:clamp(16px,2vw,42px);white-space:nowrap">
-      <a href="#contact" style="color:var(--paper)" style-hover="color:var(--amber)">Sign in</a>
+      <a href="#contact" style="color:var(--paper)" style-hover="color:var(--amber-text)">Sign in</a>
       <span style="width:1px;height:42px;background:var(--line)"></span>
       <span style="display:flex;align-items:center;gap:10px;font:400 16px/1 var(--mono)">
         <button type="button" onClick="{{ setEn }}" aria-pressed="{{ isEn }}" style="padding:0;background:transparent;color:{{ enFg }};border:0;cursor:pointer;font:inherit">EN</button>
         <span style="color:var(--dim)">/</span>
         <button type="button" onClick="{{ setAr }}" aria-pressed="{{ isAr }}" style="padding:0;background:transparent;color:{{ arFg }};border:0;cursor:pointer;font:inherit">عربي</button>
       </span>
-      <button type="button" onClick="{{ openModal }}" style="display:inline-flex;align-items:center;height:51px;padding:0 24px;background:var(--amber);color:var(--on-accent);border:0;font:500 17px/1 var(--mono);cursor:pointer" style-hover="background:var(--paper);color:var(--ink)">Start a project</button>
+      <button type="button" onClick="{{ openModal }}" style="display:inline-flex;align-items:center;height:51px;padding:0 24px;background:var(--amber);color:var(--on-accent);border:0;font:500 17px/1 var(--mono);cursor:pointer" style-hover="background:var(--amber-hover);color:var(--on-accent)">Start a project</button>
     </div>
   </div>
 </header>
@@ -104,11 +104,11 @@ textarea.tin{resize:none;height:94px;overflow:auto;display:block}
         <span style="display:block">Give us the</span>
         <span style="display:block">problem.</span>
         <span style="display:block">We ship the</span>
-        <span style="display:block;color:var(--amber)">software.</span>
+        <span style="display:block;color:var(--amber-text)">software.</span>
       </h1>
       <p style="font:400 clamp(16px,1.3vw,19px)/1.7 var(--sans);color:var(--dim);max-width:55ch;margin:31px 0 0">We design and build websites, web applications and internal software for businesses in Bahrain and beyond.</p>
       <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:18px;margin-top:38px;font:400 16px/1 var(--mono)">
-        <button type="button" onClick="{{ openModal }}" style="display:inline-flex;align-items:center;height:56px;padding:0 26px;background:var(--amber);color:var(--on-accent);border:0;font:500 16px/1 var(--mono);cursor:pointer" style-hover="background:var(--paper)">Start a project</button>
+        <button type="button" onClick="{{ openModal }}" style="display:inline-flex;align-items:center;height:56px;padding:0 26px;background:var(--amber);color:var(--on-accent);border:0;font:500 16px/1 var(--mono);cursor:pointer" style-hover="background:var(--amber-hover);color:var(--on-accent)">Start a project</button>
         <a href="#work" style="display:inline-flex;align-items:center;height:56px;padding:0 26px;color:var(--paper);border:1px solid var(--line-hi)" style-hover="border-color:var(--paper);background:var(--field)">View our work</a>
       </div>
       <p style="font:400 13px/1 var(--mono);letter-spacing:.01em;color:var(--faint);margin:32px 0 0">Bahrain-based software studio</p>
@@ -117,7 +117,7 @@ textarea.tin{resize:none;height:94px;overflow:auto;display:block}
 
   <section id="work" style="border-top:1px solid var(--line)">
     <div style="max-width:1200px;margin:0 auto;padding:clamp(44px,6vw,84px) clamp(18px,4vw,44px) clamp(48px,6vw,88px)">
-      <div style="font:400 12.5px/1 var(--mono);color:var(--amber);margin-bottom:18px">[01] selected work</div>
+      <div style="font:400 12.5px/1 var(--mono);color:var(--amber-text);margin-bottom:18px">[01] selected work</div>
       <h2 style="font:500 clamp(27px,3.4vw,42px)/1.08 var(--mono);letter-spacing:-.03em;margin:0 0 clamp(28px,3.4vw,44px);max-width:26ch">Three problems, solved.</h2>
 
       <article style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(20px,2.6vw,40px);align-items:center;padding-top:clamp(22px,3vw,34px);border-top:1px solid var(--line-2)">
@@ -126,7 +126,7 @@ textarea.tin{resize:none;height:94px;overflow:auto;display:block}
           <h3 style="font:500 clamp(22px,2.4vw,30px)/1.1 var(--mono);letter-spacing:-.02em;margin:0 0 16px">Mawrid Dispatch</h3>
           <p style="font:400 16px/1.65 var(--sans);color:var(--dim);margin:0 0 20px">Eleven trucks were run out of one shared spreadsheet. Now: live jobs, driver assignment, proof of delivery, invoices that write themselves.</p>
           <div style="font:400 12.5px/2 var(--mono);color:var(--faint);margin-bottom:20px">
-            internal tool · react · postgres · 9 weeks<br><span style="color:var(--amber)">dispatch time −64%</span>
+            internal tool · react · postgres · 9 weeks<br><span style="color:var(--amber-text)">dispatch time −64%</span>
           </div>
           <a href="#work" style="display:inline-flex;align-items:center;gap:9px;font:400 12.5px/1 var(--mono);padding-bottom:8px;border-bottom:1px solid var(--amber-dim)" style-hover="gap:16px">read the case study →</a>
         </div>
@@ -146,7 +146,7 @@ textarea.tin{resize:none;height:94px;overflow:auto;display:block}
           <h3 style="font:500 clamp(22px,2.4vw,30px)/1.1 var(--mono);letter-spacing:-.02em;margin:0 0 16px">Halcyon Clinics</h3>
           <p style="font:400 16px/1.65 var(--sans);color:var(--dim);margin:0 0 20px">Four clinics, one booking system. Patients book in under a minute; reception stopped copying WhatsApp messages into a paper diary.</p>
           <div style="font:400 12.5px/2 var(--mono);color:var(--faint);margin-bottom:20px">
-            website + web app · next.js · ar/en · 7 weeks<br><span style="color:var(--amber)">no-shows −31%</span>
+            website + web app · next.js · ar/en · 7 weeks<br><span style="color:var(--amber-text)">no-shows −31%</span>
           </div>
           <a href="#work" style="display:inline-flex;align-items:center;gap:9px;font:400 12.5px/1 var(--mono);padding-bottom:8px;border-bottom:1px solid var(--amber-dim)" style-hover="gap:16px">read the case study →</a>
         </div>
@@ -166,7 +166,7 @@ textarea.tin{resize:none;height:94px;overflow:auto;display:block}
         </figure>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(18px,2.6vw,40px)">
           <p style="font:400 15.5px/1.65 var(--sans);color:var(--dim);margin:0">Quotes, progress billing, retentions and VAT — built from scratch with a two-person founding team.</p>
-          <div style="font:400 12.5px/2 var(--mono);color:var(--faint)">saas product · typescript · stripe · 11 weeks<br><span style="color:var(--amber)">paying users in week one</span></div>
+          <div style="font:400 12.5px/2 var(--mono);color:var(--faint)">saas product · typescript · stripe · 11 weeks<br><span style="color:var(--amber-text)">paying users in week one</span></div>
         </div>
       </article>
     </div>
@@ -174,36 +174,36 @@ textarea.tin{resize:none;height:94px;overflow:auto;display:block}
 
   <section id="services" style="border-top:1px solid var(--line);background:var(--panel)">
     <div style="max-width:1200px;margin:0 auto;padding:clamp(44px,6vw,84px) clamp(18px,4vw,44px)">
-      <div style="font:400 12.5px/1 var(--mono);color:var(--amber);margin-bottom:18px">[02] what we build</div>
+      <div style="font:400 12.5px/1 var(--mono);color:var(--amber-text);margin-bottom:18px">[02] what we build</div>
       <h2 style="font:500 clamp(27px,3.4vw,42px)/1.08 var(--mono);letter-spacing:-.03em;margin:0 0 30px;max-width:24ch">Six things, done properly.</h2>
       <div style="height:1px;background:var(--line)"></div>
       <div style="display:grid;grid-template-columns:200px minmax(0,1fr) 96px;gap:clamp(12px,2.2vw,32px);align-items:baseline;padding:20px 0;border-bottom:1px solid var(--line-2);font:400 13px/1 var(--mono);transition:background .25s ease" style-hover="background:var(--field)">
-        <span style="color:var(--amber)">websites</span>
+        <span style="color:var(--amber-text)">websites</span>
         <p style="font:400 15.5px/1.6 var(--sans);color:var(--dim);margin:0">Fast, clear, and editable by your team.</p>
         <span style="text-align:right;color:var(--faint)">3–6 wks</span>
       </div>
       <div style="display:grid;grid-template-columns:200px minmax(0,1fr) 96px;gap:clamp(12px,2.2vw,32px);align-items:baseline;padding:20px 0;border-bottom:1px solid var(--line-2);font:400 13px/1 var(--mono);transition:background .25s ease" style-hover="background:var(--field)">
-        <span style="color:var(--amber)">web applications</span>
+        <span style="color:var(--amber-text)">web applications</span>
         <p style="font:400 15.5px/1.6 var(--sans);color:var(--dim);margin:0">Accounts, permissions and screens built for daily use.</p>
         <span style="text-align:right;color:var(--faint)">6–14 wks</span>
       </div>
       <div style="display:grid;grid-template-columns:200px minmax(0,1fr) 96px;gap:clamp(12px,2.2vw,32px);align-items:baseline;padding:20px 0;border-bottom:1px solid var(--line-2);font:400 13px/1 var(--mono);transition:background .25s ease" style-hover="background:var(--field)">
-        <span style="color:var(--amber)">saas products</span>
+        <span style="color:var(--amber-text)">saas products</span>
         <p style="font:400 15.5px/1.6 var(--sans);color:var(--dim);margin:0">Idea to paid product, then releases after launch.</p>
         <span style="text-align:right;color:var(--faint)">ongoing</span>
       </div>
       <div style="display:grid;grid-template-columns:200px minmax(0,1fr) 96px;gap:clamp(12px,2.2vw,32px);align-items:baseline;padding:20px 0;border-bottom:1px solid var(--line-2);font:400 13px/1 var(--mono);transition:background .25s ease" style-hover="background:var(--field)">
-        <span style="color:var(--amber)">internal tools</span>
+        <span style="color:var(--amber-text)">internal tools</span>
         <p style="font:400 15.5px/1.6 var(--sans);color:var(--dim);margin:0">The spreadsheet that runs your operation, rebuilt properly.</p>
         <span style="text-align:right;color:var(--faint)">4–10 wks</span>
       </div>
       <div style="display:grid;grid-template-columns:200px minmax(0,1fr) 96px;gap:clamp(12px,2.2vw,32px);align-items:baseline;padding:20px 0;border-bottom:1px solid var(--line-2);font:400 13px/1 var(--mono);transition:background .25s ease" style-hover="background:var(--field)">
-        <span style="color:var(--amber)">automation</span>
+        <span style="color:var(--amber-text)">automation</span>
         <p style="font:400 15.5px/1.6 var(--sans);color:var(--dim);margin:0">Systems that talk to each other; reports that write themselves.</p>
         <span style="text-align:right;color:var(--faint)">2–5 wks</span>
       </div>
       <div style="display:grid;grid-template-columns:200px minmax(0,1fr) 96px;gap:clamp(12px,2.2vw,32px);align-items:baseline;padding:20px 0;border-bottom:1px solid var(--line-2);font:400 13px/1 var(--mono);transition:background .25s ease" style-hover="background:var(--field)">
-        <span style="color:var(--amber)">custom software</span>
+        <span style="color:var(--amber-text)">custom software</span>
         <p style="font:400 15.5px/1.6 var(--sans);color:var(--dim);margin:0">The thing no product on the market does.</p>
         <span style="text-align:right;color:var(--faint)">by scope</span>
       </div>
@@ -213,7 +213,7 @@ textarea.tin{resize:none;height:94px;overflow:auto;display:block}
   <section id="about" style="border-top:1px solid var(--line)">
     <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,7vw,100px) clamp(18px,4vw,44px)">
       <div>
-        <div style="font:400 12.5px/1 var(--mono);color:var(--amber);margin-bottom:26px">[03] readme.md</div>
+        <div style="font:400 12.5px/1 var(--mono);color:var(--amber-text);margin-bottom:26px">[03] readme.md</div>
         <div style="font:400 clamp(18px,2.2vw,28px)/1.7 var(--mono);letter-spacing:-.02em">
           <div style="color:var(--faint)"># how we work</div>
           <div style="color:var(--dim)">→ you talk to the people building it</div>
@@ -227,11 +227,11 @@ textarea.tin{resize:none;height:94px;overflow:auto;display:block}
   <section style="border-top:1px solid var(--line);background:var(--panel)">
     <div style="max-width:1200px;margin:0 auto;padding:clamp(44px,6vw,84px) clamp(18px,4vw,44px);display:flex;flex-wrap:wrap;gap:clamp(24px,4vw,56px);align-items:end;justify-content:space-between">
       <div>
-        <div style="font:400 12.5px/1 var(--mono);color:var(--amber);margin-bottom:22px">[04] start a project</div>
+        <div style="font:400 12.5px/1 var(--mono);color:var(--amber-text);margin-bottom:22px">[04] start a project</div>
         <h2 style="font:500 clamp(27px,3.4vw,44px)/1.06 var(--mono);letter-spacing:-.03em;margin:0 0 16px;max-width:22ch">Have something worth building?</h2>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;font:400 13px/1 var(--mono)">
-        <button type="button" onClick="{{ openModal }}" style="display:inline-flex;align-items:center;height:48px;padding:0 26px;background:var(--amber);color:var(--on-accent);border:0;font:500 14px/1 var(--mono);cursor:pointer" style-hover="background:var(--paper)">open the inquiry form</button>
+        <button type="button" onClick="{{ openModal }}" style="display:inline-flex;align-items:center;height:48px;padding:0 26px;background:var(--amber);color:var(--on-accent);border:0;font:500 14px/1 var(--mono);cursor:pointer" style-hover="background:var(--amber-hover);color:var(--on-accent)">open the inquiry form</button>
         <a href="mailto:info@atoi.online" style="color:var(--dim)" style-hover="color:var(--paper)">or email info@atoi.online</a>
       </div>
     </div>
@@ -261,7 +261,7 @@ textarea.tin{resize:none;height:94px;overflow:auto;display:block}
       <sc-if value="{{ showForm }}" hint-placeholder-val="{{ true }}">
         <form onSubmit="{{ onSubmit }}" noValidate="{{ true }}" style="padding:clamp(18px,2.6vw,30px)">
           <div style="font:400 13px/1.9 var(--mono);color:var(--dim);margin-bottom:22px">
-            <span style="color:var(--amber)">$</span> atoi new-project
+            <span style="color:var(--amber-text)">$</span> atoi new-project
           </div>
 
           <label class="trow"><span class="tprompt">name<b> ›</b></span><input class="tin" name="name" placeholder="your name"></label>
@@ -271,7 +271,7 @@ textarea.tin{resize:none;height:94px;overflow:auto;display:block}
             <span class="tprompt">phone<b>*</b><b> ›</b></span>
             <span style="display:flex;align-items:baseline;gap:10px">
               <span style="position:relative;flex:none">
-                <button type="button" onClick="{{ toggleDial }}" aria-haspopup="listbox" aria-expanded="{{ dialOpen }}" style="display:inline-flex;align-items:center;gap:7px;padding:2px 0;background:transparent;border:0;color:var(--amber);font:400 13.5px/1.6 var(--mono);cursor:pointer">
+                <button type="button" onClick="{{ toggleDial }}" aria-haspopup="listbox" aria-expanded="{{ dialOpen }}" style="display:inline-flex;align-items:center;gap:7px;padding:2px 0;background:transparent;border:0;color:var(--amber-text);font:400 13.5px/1.6 var(--mono);cursor:pointer">
                   <span style="color:{{ dialColor }}">{{ dialLabel }}</span>
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
                 </button>
@@ -310,7 +310,7 @@ textarea.tin{resize:none;height:94px;overflow:auto;display:block}
           </sc-if>
 
           <div style="display:flex;justify-content:flex-end;margin-top:24px;padding-top:20px;border-top:1px solid var(--line)">
-            <button type="submit" style="display:inline-flex;align-items:center;height:46px;padding:0 24px;background:var(--amber);color:var(--on-accent);border:0;font:500 14px/1 var(--mono);gap:10px;cursor:pointer" style-hover="background:var(--paper)">{{ submitLabel }}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h13"></path><path d="M12 5l7 7-7 7"></path></svg></button>
+            <button type="submit" style="display:inline-flex;align-items:center;height:46px;padding:0 24px;background:var(--amber);color:var(--on-accent);border:0;font:500 14px/1 var(--mono);gap:10px;cursor:pointer" style-hover="background:var(--amber-hover);color:var(--on-accent)">{{ submitLabel }}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h13"></path><path d="M12 5l7 7-7 7"></path></svg></button>
           </div>
         </form>
       </sc-if>
@@ -321,7 +321,7 @@ textarea.tin{resize:none;height:94px;overflow:auto;display:block}
             <div style="color:var(--dim)">{{ line }}</div>
           </sc-for>
           <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;padding-top:20px;border-top:1px solid var(--line)">
-            <button type="button" onClick="{{ closeModal }}" style="display:inline-flex;align-items:center;height:44px;padding:0 22px;background:var(--amber);color:var(--on-accent);border:0;font:500 13.5px/1 var(--mono);cursor:pointer" style-hover="background:var(--paper)">close</button>
+            <button type="button" onClick="{{ closeModal }}" style="display:inline-flex;align-items:center;height:44px;padding:0 22px;background:var(--amber);color:var(--on-accent);border:0;font:500 13.5px/1 var(--mono);cursor:pointer" style-hover="background:var(--amber-hover);color:var(--on-accent)">close</button>
             <a href="mailto:info@atoi.online" style="display:inline-flex;align-items:center;height:44px;padding:0 18px;border:1px solid var(--line);color:var(--dim);font:400 13px/1 var(--mono)" style-hover="color:var(--paper);border-color:var(--line-hi)">email us instead</a>
           </div>
         </div>
@@ -331,7 +331,7 @@ textarea.tin{resize:none;height:94px;overflow:auto;display:block}
 </sc-if>
 
 <div style="position:fixed;left:0;right:0;bottom:0;z-index:70;height:34px;display:flex;align-items:center;gap:16px;padding:0 clamp(14px,3vw,26px);background:var(--head);backdrop-filter:blur(10px);border-top:1px solid var(--line);font:400 11.5px/1 var(--mono);color:var(--faint)">
-  <span style="color:var(--amber)">●</span>
+  <span style="color:var(--amber-text)">●</span>
   <span style="color:var(--dim)">{{ statusSection }}</span>
   <span style="margin-left:auto">{{ statusHint }}</span>
 </div>
@@ -431,7 +431,7 @@ class Component extends DCLogic {
       typedCmd: still ? this.cmd : this.cmd.slice(0, Math.min(this.cmd.length, Math.max(0, st.tick - 6))),
       log: this.feed.slice(0, shown).map(([t, tag, msg], i) => ({
         t, tag, msg,
-        color: tag === "deploy" ? "var(--pick)" : "var(--amber)",
+        color: tag === "deploy" ? "var(--pick)" : "var(--amber-text)",
         anim: i === shown - 1 ? "rowin .42s cubic-bezier(.2,.8,.3,1) both" : "none",
         dot: i === shown - 1 ? "pulse 1.6s ease-out infinite" : "none"
       })),
@@ -456,9 +456,9 @@ class Component extends DCLogic {
       isEn: st.lang === "en",
       isAr: st.lang === "ar",
       enBg: st.lang === "en" ? "var(--amber)" : "transparent",
-      enFg: st.lang === "en" ? "#0b0d10" : "var(--dim)",
+      enFg: st.lang === "en" ? "var(--on-accent)" : "var(--dim)",
       arBg: st.lang === "ar" ? "var(--amber)" : "transparent",
-      arFg: st.lang === "ar" ? "#0b0d10" : "var(--dim)",
+      arFg: st.lang === "ar" ? "var(--on-accent)" : "var(--dim)",
       toggleTheme: () => {
         this.themeLocked = true;
         const next = document.body.dataset.theme === "light" ? "dark" : "light";
@@ -471,13 +471,13 @@ class Component extends DCLogic {
       dial: st.dial,
       dialOpen: st.dialOpen,
       dialLabel: (this.dialList.find(d => d[0] === st.dial) || this.dialList[0])[1],
-      dialColor: "var(--amber)",
+      dialColor: "var(--amber-text)",
       onPhoneInput: (e) => { const v = e.target.value.replace(/[^0-9]/g, ""); if (v !== e.target.value) e.target.value = v; },
       dials: this.dialList.map(([value, label]) => ({
         label,
         selected: value === st.dial,
         mark: value === st.dial ? "[x] " : "[ ] ",
-        color: value === st.dial ? "var(--amber)" : "var(--dim)",
+        color: value === st.dial ? "var(--amber-text)" : "var(--dim)",
         pick: () => this.setState({ dial: value, dialOpen: false })
       })),
       toggleDial: () => this.setState(s => ({ dialOpen: !s.dialOpen })),

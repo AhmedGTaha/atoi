@@ -99,6 +99,9 @@ async function reviewRoutes(
           headingFont: getComputedStyle(document.querySelector("h1")!)
             .fontFamily,
           background: getComputedStyle(document.body).backgroundColor,
+          accent: getComputedStyle(document.documentElement)
+            .getPropertyValue("--color-accent")
+            .trim(),
           duplicateIds: [...document.querySelectorAll("[id]")]
             .map((el) => el.id)
             .filter((id, index, ids) => ids.indexOf(id) !== index),
@@ -114,6 +117,7 @@ async function reviewRoutes(
         expect
           .soft(metrics.background)
           .toBe(theme === "dark" ? "rgb(11, 13, 16)" : "rgb(245, 247, 248)");
+        expect.soft(metrics.accent).toBe("#486fa6");
         expect
           .soft(metrics.duplicateIds, `${route}: duplicate element IDs`)
           .toEqual([]);

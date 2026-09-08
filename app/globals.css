@@ -8,8 +8,10 @@
   --color-text: #e8ebef;
   --color-muted: #9aa4b2;
   --color-faint: #7b8493;
-  --color-accent: #4fd1e0;
-  --color-accent-deep: #2c8996;
+  --color-accent: #486fa6;
+  --color-accent-foreground: color-mix(in srgb, var(--color-accent) 80%, white);
+  --color-accent-hover: color-mix(in srgb, var(--color-accent) 92%, black);
+  --color-accent-deep: color-mix(in srgb, var(--color-accent) 84%, black);
   --color-success: #4ade80;
   --color-danger: #e8705a;
   --color-warning: #e0bc76;
@@ -18,7 +20,7 @@
   --color-line-hi: rgba(232, 235, 239, 0.34);
   --color-head: rgba(11, 13, 16, 0.86);
   --color-field: rgba(232, 235, 239, 0.045);
-  --color-on-accent: #0b0d10;
+  --color-on-accent: #f5f7f8;
   --color-overlay: rgba(6, 7, 9, 0.74);
   --color-modal-edge: rgba(232, 235, 239, 0.24);
   --shadow-modal: 0 30px 80px rgba(0, 0, 0, 0.6);
@@ -52,8 +54,7 @@ html[data-theme="light"] {
   --color-text: #0f1418;
   --color-muted: #414b55;
   --color-faint: #586269;
-  --color-accent: #0a6577;
-  --color-accent-deep: #084f5e;
+  --color-accent-foreground: color-mix(in srgb, var(--color-accent) 96%, black);
   --color-success: #12703f;
   --color-danger: #a63a25;
   --color-warning: #795718;
@@ -77,8 +78,11 @@ html[data-theme="light"] {
     --color-text: #0f1418;
     --color-muted: #414b55;
     --color-faint: #586269;
-    --color-accent: #0a6577;
-    --color-accent-deep: #084f5e;
+    --color-accent-foreground: color-mix(
+      in srgb,
+      var(--color-accent) 96%,
+      black
+    );
     --color-success: #12703f;
     --color-danger: #a63a25;
     --color-warning: #795718;
@@ -102,7 +106,8 @@ html[dir="rtl"] {
   --color-foreground: var(--color-text);
   --color-surface: var(--color-surface);
   --color-accent: var(--color-accent);
-  --color-accent-soft: var(--color-field);
+  --color-accent-foreground: var(--color-accent-foreground);
+  --color-accent-soft: color-mix(in srgb, var(--color-accent) 14%, transparent);
   --color-muted: var(--color-muted);
   --color-faint: var(--color-faint);
   --color-success: var(--color-success);
@@ -266,7 +271,7 @@ html[dir="rtl"] {
     outline-offset: 0;
   }
   td a {
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
   }
   td {
     vertical-align: middle;
@@ -311,26 +316,34 @@ html[dir="rtl"] {
     font-weight: 400;
     letter-spacing: 0;
     text-transform: none;
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
   }
   .panel {
     border: 1px solid var(--color-divider);
     background: var(--color-surface);
     min-width: 0;
   }
-  /* The reference uses cyan fill with an explicit contrasting foreground. */
+  /* Accent fills retain an explicit contrasting foreground in both themes. */
   .btn-primary {
     background: var(--color-accent);
     border-color: var(--color-accent);
     color: var(--color-on-accent);
   }
   .btn-primary:hover {
-    background: var(--color-text);
-    color: var(--color-bg);
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: var(--color-on-accent);
   }
   .btn-primary:active {
     background: var(--color-accent-deep);
+    border-color: var(--color-accent-deep);
     color: var(--color-on-accent);
+  }
+  .btn-primary:disabled {
+    background: color-mix(in srgb, var(--color-accent) 55%, var(--color-bg));
+    border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-bg));
+    color: color-mix(in srgb, var(--color-on-accent) 65%, transparent);
+    opacity: 1;
   }
   .btn-secondary {
     background: transparent;
@@ -346,7 +359,7 @@ html[dir="rtl"] {
   }
   .btn-ghost {
     border-color: transparent;
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
   }
   .btn-destructive {
     color: var(--color-danger);
@@ -363,7 +376,7 @@ html[dir="rtl"] {
     align-items: center;
     gap: 7px;
     padding: 3px 0;
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0;
@@ -508,7 +521,7 @@ html[dir="rtl"] {
     border-color: var(--color-line-hi);
   }
   .work-item:hover .work-title {
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
   }
   .work-title {
     font-family: var(--font-heading);
@@ -563,7 +576,7 @@ html[dir="rtl"] {
   }
   .service-name {
     grid-column: 1 / -1;
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
     font: 500 15px/1.35 var(--font-heading);
   }
   .service-description {
@@ -586,7 +599,7 @@ html[dir="rtl"] {
     grid-column: 2;
     align-self: center;
     justify-self: end;
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
     font-size: 12px;
     line-height: 1.2;
     text-align: end;
@@ -699,7 +712,7 @@ html[dir="rtl"] {
   }
   .icon-action-btn:hover,
   .icon-action-btn:focus-visible {
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
     border-color: var(--color-accent);
     background: var(--color-field);
   }
@@ -815,7 +828,7 @@ html[dir="rtl"] {
     transition: opacity var(--motion-fast);
   }
   .nav-link-active {
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
   }
   .nav-link-active::after {
     opacity: 1;
@@ -837,7 +850,7 @@ html[dir="rtl"] {
     transition: color var(--motion-fast);
   }
   .public-sign-in:hover {
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
   }
   .public-header .language-toggle.public-language-toggle {
     align-items: center;
@@ -857,7 +870,7 @@ html[dir="rtl"] {
   }
   .public-header .public-language-toggle .language-active {
     background: transparent;
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
   }
   .public-header .public-language-toggle .language-separator {
     color: var(--color-muted);
@@ -901,7 +914,7 @@ html[dir="rtl"] {
     border-bottom: 0;
   }
   .mobile-nav-link:hover {
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
   }
   .mobile-nav-footer {
     display: flex;
@@ -976,7 +989,7 @@ html[dir="rtl"] {
     transform-origin: left center;
   }
   .studio-statusbar a:hover {
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
   }
   .studio-footer {
     padding-bottom: 64px;
@@ -1212,7 +1225,7 @@ html[dir="rtl"] {
     margin-bottom: 20px;
   }
   .work-result {
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
   }
   .work-cta {
     display: inline-flex;
@@ -1289,7 +1302,7 @@ html[dir="rtl"] {
   }
   .app-nav a[aria-current="page"] {
     border-inline-start-color: var(--color-accent);
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
     background: var(--color-field);
   }
   .app-main {
@@ -1380,7 +1393,7 @@ html[dir="rtl"] {
     line-height: 1;
     margin-block: 32px;
     letter-spacing: -0.03em;
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
   }
   .studio-dialog {
     background: var(--color-bg);
@@ -1442,7 +1455,7 @@ html[dir="rtl"] {
     font: 400 14.5px/1.4 var(--font-heading);
   }
   .inquiry-preamble > span {
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
   }
   .inquiry-fields {
     margin-top: 24px;
@@ -1531,11 +1544,11 @@ html[dir="rtl"] {
   }
   .type-option:has(input:checked) {
     border-color: var(--color-accent);
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
   }
   .type-option:has(input:checked)::before {
     content: "▣";
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
   }
   .type-option:has(input:focus-visible) {
     outline: 2px solid var(--color-accent);
@@ -1561,7 +1574,7 @@ html[dir="rtl"] {
     min-width: 152px;
     border: 1px solid var(--color-divider);
     background: var(--color-field);
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
     font: 500 14px/1.4 var(--font-heading);
     cursor: pointer;
     padding-inline: var(--space-4);
@@ -1587,7 +1600,7 @@ html[dir="rtl"] {
   .empty-state::before {
     display: block;
     margin-bottom: var(--space-4);
-    color: var(--color-accent);
+    color: var(--color-accent-foreground);
     font-size: 24px;
     content: "[ ]";
     font: 400 14px/1 var(--font-heading);
@@ -1955,7 +1968,7 @@ html[dir="rtl"] .section-marker-reveal::after {
 
 /* Previous Work — a dense editorial gallery, shared by public cards and admin preview. */
 .selected-work-marker {
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
   margin-bottom: 14px;
 }
 .selected-work-heading {
@@ -1981,7 +1994,7 @@ html[dir="rtl"] .section-marker-reveal::after {
 }
 .selected-work-actions .work-cta,
 .selected-work-footer .work-cta {
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
   border-bottom: 0;
   padding-bottom: 0;
 }
@@ -2024,7 +2037,7 @@ html[dir="rtl"] .section-marker-reveal::after {
 .work-card-footer .work-cta {
   border-bottom: 0;
   padding-bottom: 0;
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
 }
 .project-tags {
   display: flex;
@@ -2088,7 +2101,7 @@ html[dir="rtl"] .section-marker-reveal::after {
 .project-gallery-arrow:hover,
 .project-gallery-arrow:focus-visible {
   border-color: var(--color-accent);
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
 }
 .project-gallery-arrow-previous {
   left: 10px;
@@ -2222,7 +2235,7 @@ html[dir="rtl"] .section-marker-reveal::after {
 }
 .all-project-card > svg {
   align-self: end;
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
 }
 .all-project-image {
   position: relative;
@@ -2277,7 +2290,7 @@ html[dir="rtl"] .section-marker-reveal::after {
 .project-external-link {
   display: inline-grid;
   place-items: center;
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
 }
 .project-detail-lead > p,
 .project-detail-overview > p {
@@ -2318,7 +2331,7 @@ html[dir="rtl"] .section-marker-reveal::after {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
   word-break: break-all;
 }
 .project-detail-overview .project-tags {
@@ -2452,7 +2465,7 @@ html[dir="rtl"] .section-marker-reveal::after {
 .portfolio-cover-badge {
   border: 1px solid var(--color-accent-deep);
   padding: 4px 7px;
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
   font-size: 10px;
 }
 .portfolio-text-action {
@@ -2460,7 +2473,7 @@ html[dir="rtl"] .section-marker-reveal::after {
   font: 400 10px/1 var(--font-heading);
 }
 .portfolio-text-action:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
 }
 .portfolio-drag-handle {
   color: var(--color-muted);
@@ -2591,7 +2604,7 @@ html[dir="rtl"] .section-marker-reveal::after {
 }
 .logo-mode-badge {
   border-color: var(--color-accent-deep);
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
 }
 .logo-mode-badge:hover:not(:disabled) {
   color: var(--color-danger);
@@ -2806,7 +2819,7 @@ html[dir="rtl"] .section-marker-reveal::after {
   padding: 4px 7px;
   border: 1px solid var(--color-divider);
   font: 400 10px/1 var(--font-heading);
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
 }
 .content-sections {
   padding-inline: 18px;
@@ -2832,11 +2845,11 @@ html[dir="rtl"] .section-marker-reveal::after {
   display: none;
 }
 .content-section summary:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
 }
 .content-section-index {
   font-size: 10px;
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
 }
 .content-section-chevron {
   font-size: 20px;
@@ -2846,10 +2859,10 @@ html[dir="rtl"] .section-marker-reveal::after {
 }
 .content-section[open] .content-section-chevron {
   transform: rotate(45deg);
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
 }
 .content-section[open] summary {
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
 }
 .content-section-fields {
   display: grid;
@@ -2953,7 +2966,7 @@ html[dir="rtl"] .section-marker-reveal::after {
   background: var(--color-field);
 }
 .viewport-switcher button[aria-pressed="true"] {
-  color: var(--color-accent);
+  color: var(--color-accent-foreground);
   background: var(--color-field);
 }
 .preview-icon-button {

@@ -93,7 +93,7 @@ export default async function AdminRequestDetailPage({
               {request.convertedProjectId && (
                 <Link
                   href={`/admin/projects/${request.convertedProjectId}`}
-                  className="mt-3 inline-block font-semibold text-accent hover:underline"
+                  className="mt-3 inline-block font-semibold text-accent-foreground hover:underline"
                 >
                   View project →
                 </Link>

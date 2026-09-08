@@ -22,11 +22,11 @@ export function AdminBreadcrumbs() {
       aria-label="Breadcrumb"
       className="mb-5 flex flex-wrap gap-3 text-xs text-muted"
     >
-      <Link href="/admin" className="hover:text-accent">
+      <Link href="/admin" className="hover:text-accent-foreground">
         Admin
       </Link>
       <span aria-hidden="true">/</span>
-      <Link href={`/admin/${section}`} className="hover:text-accent">
+      <Link href={`/admin/${section}`} className="hover:text-accent-foreground">
         {sections[section] ?? section}
       </Link>
       <span aria-hidden="true">/</span>

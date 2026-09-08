@@ -110,7 +110,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
   const contents = (
     <div className="inquiry-panel relative">
       <div className="inquiry-strip">
-        <span aria-hidden="true" className="text-accent">
+        <span aria-hidden="true" className="text-accent-foreground">
           ●
         </span>{" "}
         <bdi dir="ltr" className="inquiry-title">
@@ -137,7 +137,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
       ) : (
         <form onSubmit={handleSubmit} noValidate className="inquiry-form">
           <p id={titleId} className="inquiry-preamble">
-            <span className="text-accent">$</span>{" "}
+            <span className="text-accent-foreground">$</span>{" "}
             <bdi dir="ltr">{dict.modal.terminalPreamble}</bdi>
           </p>
 
@@ -377,7 +377,7 @@ function FieldPrompt({
       className={className ? `terminal-label ${className}` : "terminal-label"}
     >
       {children}
-      {required && <span className="text-accent">*</span>}
+      {required && <span className="text-accent-foreground">*</span>}
     </span>
   );
 }

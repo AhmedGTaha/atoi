@@ -39,7 +39,7 @@ export function PortalShell({
         </div>
       </header>
       <div className="site-container border-b py-3 flex justify-between text-sm">
-        <Link href="/portal" className="text-accent">
+        <Link href="/portal" className="text-accent-foreground">
           {dict.portal.yourProjects}
         </Link>
         <Link href="/" className="text-muted">

@@ -1,4 +1,4 @@
-import { emailShell, escapeHtml } from "./layout";
+import { EMAIL_ACCENT, emailShell, escapeHtml } from "./layout";
 import { appUrl } from "@/lib/utils/appUrl";
 import type { Locale } from "@/lib/i18n/locale";
 import { statusLabel } from "@/lib/i18n/labels";
@@ -41,7 +41,7 @@ const COPY = {
     ) =>
       `<p><strong>${escapeHtml(projectName)}</strong></p>
        <p style="margin-top:12px;">${escapeHtml(body)}</p>
-       <p class="email-status" style="margin-top:18px;padding-top:14px;border-top:1px solid #D8DEE3;color:#414B55;font-family:'Courier New',Courier,monospace;font-size:12px;">Status: <span class="email-accent" style="color:#0A6577;">${escapeHtml(status)}</span> · Progress: <span class="email-value" style="color:#0F1418;">${formatPercent("en", progress)}</span></p>`,
+       <p class="email-status" style="margin-top:18px;padding-top:14px;border-top:1px solid #D8DEE3;color:#414B55;font-family:'Courier New',Courier,monospace;font-size:12px;">Status: <span class="email-accent" style="color:${EMAIL_ACCENT};">${escapeHtml(status)}</span> · Progress: <span class="email-value" style="color:#0F1418;">${formatPercent("en", progress)}</span></p>`,
     updateCta: "View project",
     internalRequestSubject: (requester: string) =>
       `New project request from ${requester}`,
@@ -86,7 +86,7 @@ const COPY = {
     ) =>
       `<p><strong>${escapeHtml(projectName)}</strong></p>
        <p style="margin-top:12px;">${escapeHtml(body)}</p>
-       <p class="email-status" style="margin-top:18px;padding-top:14px;border-top:1px solid #D8DEE3;color:#414B55;font-family:Tahoma,Arial,sans-serif;font-size:12px;">الحالة: <span class="email-accent" style="color:#0A6577;">${escapeHtml(status)}</span> · نسبة الإنجاز: <span class="email-value" style="color:#0F1418;">${formatPercent("ar", progress)}</span></p>`,
+       <p class="email-status" style="margin-top:18px;padding-top:14px;border-top:1px solid #D8DEE3;color:#414B55;font-family:Tahoma,Arial,sans-serif;font-size:12px;">الحالة: <span class="email-accent" style="color:${EMAIL_ACCENT};">${escapeHtml(status)}</span> · نسبة الإنجاز: <span class="email-value" style="color:#0F1418;">${formatPercent("ar", progress)}</span></p>`,
     updateCta: "عرض المشروع",
     internalRequestSubject: "طلب مشروع جديد",
     internalRequestHeading: "تم استلام طلب مشروع جديد.",
@@ -237,8 +237,8 @@ export function internalNewRequestEmail(
       companyName,
       heading: c.internalRequestHeading,
       bodyHtml: `<table style="width:100%;border-collapse:collapse;font-size:14px;">${rows}</table>
-                 <p class="email-accent" style="margin:20px 0 10px;font-family:'Courier New',Courier,monospace;font-size:12px;color:#0A6577;">DESCRIPTION</p>
-                 <p class="email-quote" style="margin:0;padding:16px;border-left:2px solid #0A6577;background:#F5F7F8;color:#0F1418;">${escapeHtml(fields.description)}</p>`,
+                 <p class="email-accent" style="margin:20px 0 10px;font-family:'Courier New',Courier,monospace;font-size:12px;color:${EMAIL_ACCENT};">DESCRIPTION</p>
+                 <p class="email-quote" style="margin:0;padding:16px;border-left:2px solid ${EMAIL_ACCENT};background:#F5F7F8;color:#0F1418;">${escapeHtml(fields.description)}</p>`,
       ctaUrl: fields.adminUrl,
       ctaLabel: "Open request",
     }),
@@ -267,7 +267,7 @@ export function supportNotificationEmail(
       companyName,
       heading: c.supportHeading,
       bodyHtml: `<p class="email-value" style="color:#0F1418;"><strong>${escapeHtml(fields.projectName)}</strong> — ${escapeHtml(fields.customerLabel)}</p>
-                 <p class="email-quote" style="margin-top:18px;padding:16px;border-left:2px solid #0A6577;background:#F5F7F8;color:#0F1418;">${escapeHtml(fields.message)}</p>`,
+                 <p class="email-quote" style="margin-top:18px;padding:16px;border-left:2px solid ${EMAIL_ACCENT};background:#F5F7F8;color:#0F1418;">${escapeHtml(fields.message)}</p>`,
       ctaUrl: fields.adminUrl,
       ctaLabel: "Open project",
     }),

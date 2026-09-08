@@ -36,7 +36,7 @@ export function TeamShell({
         </div>
       </header>
       <div className="site-container border-b py-3 flex justify-between text-sm">
-        <Link href="/team" className="text-accent">
+        <Link href="/team" className="text-accent-foreground">
           Your projects
         </Link>
         <Link href="/" className="text-muted">

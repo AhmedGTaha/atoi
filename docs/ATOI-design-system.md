@@ -13,14 +13,14 @@ The sole visual authority is `UI Mockups for ATOI/ATOI Studio.dc.html`. The refe
 | Foreground  | `#e8ebef` | `#0f1418` |
 | Secondary   | `#9aa4b2` | `#414b55` |
 | Metadata    | `#7b8493` | `#586269` |
-| Accent      | `#4fd1e0` | `#0a6577` |
-| Deep accent | `#2c8996` | `#084f5e` |
+| Accent      | `#486fa6` | `#486fa6` |
+| Deep accent | derived   | derived   |
 | Positive    | `#4ade80` | `#12703f` |
 | Destructive | `#e8705a` | `#a63a25` |
 
 IBM Plex Mono supplies headings, navigation, buttons, labels, status, metrics and metadata. IBM Plex Sans supplies readable body copy. Both are self-hosted through `next/font/google` with swap and fallbacks. Cairo is retained for Arabic glyph coverage. Controls and panels use square geometry. Motion has 150ms/220ms/300ms roles and respects reduced motion.
 
-Dark is the default regardless of OS preference. The `atoi-theme` localStorage preference is applied before first paint by the root layout and persists across public, auth, portal and admin routes. Storage failures do not disable switching. Light mode uses the reference's deliberate palette; it does not invert the UI.
+Dark is the default regardless of OS preference. The `atoi-theme` localStorage preference is applied before first paint by the root layout and persists across public, auth, portal and admin routes. Storage failures do not disable switching. Light mode uses the reference's deliberate palette; it does not invert the UI. Accent hover, pressed, soft and disabled treatments are derived from `#486fa6`; accent text uses subtle theme-aware derivatives for accessible contrast while fills and focus indicators retain the base accent.
 
 ## Components and routes
 

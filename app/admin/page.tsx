@@ -31,7 +31,7 @@ export default async function AdminDashboardPage() {
               <Link
                 key={r.id}
                 href={`/admin/requests/${r.id}`}
-                className="activity-item block hover:text-accent"
+                className="activity-item block hover:text-accent-foreground"
               >
                 <p className="font-semibold">
                   {r.businessName || r.name || r.email}
@@ -54,7 +54,7 @@ export default async function AdminDashboardPage() {
               <Link
                 key={p.id}
                 href={`/admin/projects/${p.id}`}
-                className="activity-item block hover:text-accent"
+                className="activity-item block hover:text-accent-foreground"
               >
                 <div className="flex items-center justify-between gap-2">
                   <p className="font-semibold">{p.name}</p>
@@ -80,7 +80,7 @@ export default async function AdminDashboardPage() {
               <Link
                 key={s.id}
                 href={`/admin/projects/${s.projectId}`}
-                className="activity-item block hover:text-accent"
+                className="activity-item block hover:text-accent-foreground"
               >
                 <p className="font-semibold">{s.project.name}</p>
                 <p className="mt-0.5 line-clamp-1 text-sm text-muted">

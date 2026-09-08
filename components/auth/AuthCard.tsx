@@ -31,7 +31,7 @@ export function AuthCard({
         <p className="max-w-sm text-muted">{dict.auth.card.portalTagline}</p>
         <Link
           href="/"
-          className="mt-8 inline-block text-sm text-accent hover:underline"
+          className="mt-8 inline-block text-sm text-accent-foreground hover:underline"
         >
           {dict.auth.card.backToWebsite}
         </Link>
@@ -69,7 +69,7 @@ export function AuthInput({
       <span className="mb-1.5 block text-sm font-semibold">
         {label}
         {props.required && (
-          <span aria-hidden="true" className="ms-1 text-accent">
+          <span aria-hidden="true" className="ms-1 text-accent-foreground">
             *
           </span>
         )}

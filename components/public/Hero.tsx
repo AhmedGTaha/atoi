@@ -33,7 +33,7 @@ export function Hero({
               <MotionReveal
                 key={`${line}-${index}`}
                 as="span"
-                className={`hero-line ${/software\.?$|البرمجي\.?$/i.test(line) ? "text-accent" : ""}`}
+                className={`hero-line ${/software\.?$|البرمجي\.?$/i.test(line) ? "text-accent-foreground" : ""}`}
                 delay={index * 75}
                 immediate
               >

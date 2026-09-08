@@ -27,7 +27,7 @@ export function About({
           {[1, 2, 3].map((n) => (
             <MotionReveal className="readme-row" key={n} delay={140 + n * 115}>
               <p>
-                <span className="text-accent" aria-hidden="true">
+                <span className="text-accent-foreground" aria-hidden="true">
                   →{" "}
                 </span>
                 {t(content, `process.step${n}.name`, locale)}

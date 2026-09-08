@@ -44,7 +44,7 @@ export default async function TermsPage() {
       <div className="flex items-center justify-between">
         <Link
           href="/"
-          className="text-sm font-semibold text-accent hover:underline"
+          className="text-sm font-semibold text-accent-foreground hover:underline"
         >
           {dict.legal.backHome}
         </Link>

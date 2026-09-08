@@ -93,7 +93,7 @@ export function AdminInput({
       <span className="mb-1.5 block text-sm font-semibold">
         {label}
         {props.required && (
-          <span aria-hidden="true" className="ms-1 text-accent">
+          <span aria-hidden="true" className="ms-1 text-accent-foreground">
             *
           </span>
         )}
@@ -139,7 +139,7 @@ export function AdminTextarea({
       <span className="mb-1.5 block text-sm font-semibold">
         {label}
         {props.required && (
-          <span aria-hidden="true" className="ms-1 text-accent">
+          <span aria-hidden="true" className="ms-1 text-accent-foreground">
             *
           </span>
         )}
@@ -179,7 +179,7 @@ export function AdminSelect({
       <span className="mb-1.5 block text-sm font-semibold">
         {label}
         {props.required && (
-          <span aria-hidden="true" className="ms-1 text-accent">
+          <span aria-hidden="true" className="ms-1 text-accent-foreground">
             *
           </span>
         )}

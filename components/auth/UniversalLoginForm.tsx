@@ -59,7 +59,7 @@ export function UniversalLoginForm({
       </Button>
       <Link
         href="/forgot-password"
-        className="block text-center text-sm text-accent hover:underline"
+        className="block text-center text-sm text-accent-foreground hover:underline"
       >
         {dict.auth.signIn.forgotLink}
       </Link>

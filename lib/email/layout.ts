@@ -1,12 +1,15 @@
 import type { Locale } from "@/lib/i18n/locale";
 
+export const EMAIL_ACCENT = "#486FA6";
+const EMAIL_ACCENT_DARK_FOREGROUND = "#6D8CB8";
+
 const LIGHT = {
   ink: "#F5F7F8",
   panel: "#FFFFFF",
   paper: "#0F1418",
   dim: "#414B55",
   line: "#D8DEE3",
-  cyan: "#0A6577",
+  accent: EMAIL_ACCENT,
 };
 
 export interface EmailShellOptions {
@@ -40,7 +43,7 @@ export function emailShell(opts: EmailShellOptions): string {
     opts.ctaUrl && opts.ctaLabel
       ? `<div style="margin-top:28px;">
            <a href="${escapeAttr(opts.ctaUrl)}"
-              class="email-cta" style="display:inline-block;background:${LIGHT.cyan};color:${LIGHT.ink};
+              class="email-cta" style="display:inline-block;background:${LIGHT.accent};color:${LIGHT.ink};
                      text-decoration:none;font-family:${proseFont};font-weight:700;
                      padding:16px 24px;border-radius:0;font-size:14px;letter-spacing:.01em;">
              ${escapeHtml(opts.ctaLabel)}
@@ -49,7 +52,7 @@ export function emailShell(opts: EmailShellOptions): string {
          <p class="email-fallback" style="margin:18px 0 0;font-family:${proseFont};font-size:11px;line-height:1.7;color:${LIGHT.dim};word-break:break-all;">
            ${opts.locale === "ar" ? "أو انسخ هذا الرابط:" : "Or copy this link:"}
            <br />
-           <a href="${escapeAttr(opts.ctaUrl)}" class="email-link" style="color:${LIGHT.cyan};">${escapeHtml(opts.ctaUrl)}</a>
+           <a href="${escapeAttr(opts.ctaUrl)}" class="email-link" style="color:${LIGHT.accent};">${escapeHtml(opts.ctaUrl)}</a>
          </p>`
       : "";
 
@@ -69,10 +72,10 @@ export function emailShell(opts: EmailShellOptions): string {
         .email-brand, .email-heading, .email-value { color:#E8EBEF !important; }
         .email-panel { background:#11151B !important; border-color:#303741 !important; }
         .email-copy, .email-footer, .email-fallback, .email-label { color:#9AA4B2 !important; }
-        .email-accent, .email-link { color:#4FD1E0 !important; }
-        .email-marker, .email-cta { background:#4FD1E0 !important; }
-        .email-cta { color:#0B0D10 !important; }
-        .email-quote { background:#0B0D10 !important; border-color:#4FD1E0 !important; color:#E8EBEF !important; }
+        .email-accent, .email-link { color:${EMAIL_ACCENT_DARK_FOREGROUND} !important; }
+        .email-marker, .email-cta { background:${EMAIL_ACCENT} !important; }
+        .email-cta { color:${LIGHT.ink} !important; }
+        .email-quote { background:#0B0D10 !important; border-color:${EMAIL_ACCENT} !important; color:#E8EBEF !important; }
         .email-status { border-color:#303741 !important; color:#9AA4B2 !important; }
       }
     </style>
@@ -81,13 +84,13 @@ export function emailShell(opts: EmailShellOptions): string {
     ${opts.preheader ? `<div style="display:none;max-height:0;overflow:hidden;">${escapeHtml(opts.preheader)}</div>` : ""}
     <div style="max-width:560px;margin:0 auto;padding:40px 24px 32px;" dir="${dir}">
       <div class="email-rule" style="border-top:1px solid ${LIGHT.line};border-bottom:1px solid ${LIGHT.line};padding:20px 0;text-align:${align};">
-        <span class="email-marker" style="display:inline-block;width:10px;height:18px;background:${LIGHT.cyan};vertical-align:middle;"></span>
+        <span class="email-marker" style="display:inline-block;width:10px;height:18px;background:${LIGHT.accent};vertical-align:middle;"></span>
         <span class="email-brand" style="display:inline-block;margin-${opts.locale === "ar" ? "right" : "left"}:13px;vertical-align:middle;font-family:'Courier New',Courier,monospace;font-weight:700;font-size:22px;line-height:1;color:${LIGHT.paper};letter-spacing:.16em;">
           ${escapeHtml(opts.companyName)}
         </span>
       </div>
       <div class="email-panel" style="margin-top:24px;background:${LIGHT.panel};border:1px solid ${LIGHT.line};padding:32px;text-align:${align};">
-        <div class="email-accent" style="margin-bottom:18px;font-family:${proseFont};font-size:11px;line-height:1;color:${LIGHT.cyan};letter-spacing:.08em;">ATOI / ${notificationLabel}</div>
+        <div class="email-accent" style="margin-bottom:18px;font-family:${proseFont};font-size:11px;line-height:1;color:${LIGHT.accent};letter-spacing:.08em;">ATOI / ${notificationLabel}</div>
         <h1 class="email-heading" style="margin:0 0 18px;font-family:${proseFont};font-size:24px;font-weight:500;line-height:1.25;letter-spacing:-.03em;color:${LIGHT.paper};">
           ${escapeHtml(opts.heading)}
         </h1>

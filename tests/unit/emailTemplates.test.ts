@@ -102,6 +102,8 @@ describe("email templates — no stale branding", () => {
       expect(html).not.toMatch(/atrio/i);
       expect(html).not.toMatch(/أتريو/);
       expect(html).toContain("ATOI");
+      expect(html).toContain("#486FA6");
+      expect(html).not.toMatch(/#(?:4FD1E0|0A6577|2C8996|084F5E)/i);
     }
   });
 });
