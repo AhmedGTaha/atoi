@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
+import clsx from "clsx";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/locale";
@@ -17,10 +18,12 @@ export function MobileMenu({
   locale,
   navItems,
   onLocaleChange,
+  className,
 }: {
   locale: Locale;
   navItems: NavItem[];
   onLocaleChange?: (locale: Locale) => void;
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
@@ -50,7 +53,7 @@ export function MobileMenu({
   }, [open, close]);
 
   return (
-    <div className="mobile-nav-root" ref={rootRef}>
+    <div className={clsx("mobile-nav-root", className)} ref={rootRef}>
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}

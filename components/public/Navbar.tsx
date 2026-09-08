@@ -60,13 +60,12 @@ export function Navbar({
           </StartProjectTrigger>
         </div>
 
-        <div className="justify-self-end lg:hidden">
-          <MobileMenu
-            locale={locale}
-            navItems={navItems}
-            onLocaleChange={onLocaleChange}
-          />
-        </div>
+        <MobileMenu
+          locale={locale}
+          navItems={navItems}
+          onLocaleChange={onLocaleChange}
+          className="justify-self-end lg:hidden"
+        />
       </Container>
     </header>
   );
