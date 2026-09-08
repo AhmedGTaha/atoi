@@ -658,7 +658,7 @@ html[dir="rtl"] {
   .brand::before {
     content: "";
     display: inline-block;
-    width: 16px;
+    width: 11px;
     height: 16px;
     flex: none;
     background: url("/branding/atoi-mark.png") center / contain no-repeat;
@@ -2532,6 +2532,9 @@ html[dir="rtl"] .section-marker-reveal::after {
 .logo-preview-stage[data-preview-mode="dark"] {
   background: #17171a;
 }
+.logo-preview-stage[data-preview-mode="icon"] {
+  background: #0b0d10;
+}
 .logo-preview-empty {
   max-width: 220px;
   text-align: center;
@@ -2546,6 +2549,12 @@ html[dir="rtl"] .section-marker-reveal::after {
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--color-faint);
+}
+.logo-manager-hint {
+  margin-bottom: 14px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--color-muted);
 }
 .logo-manager-empty {
   padding: 14px 0;

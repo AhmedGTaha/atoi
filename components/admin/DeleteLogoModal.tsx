@@ -9,6 +9,7 @@ export function DeleteLogoModal({
   target,
   isLight,
   isDark,
+  isIcon,
   isPending,
   onClose,
   onConfirm,
@@ -16,14 +17,16 @@ export function DeleteLogoModal({
   target: LogoAsset | null;
   isLight: boolean;
   isDark: boolean;
+  isIcon: boolean;
   isPending: boolean;
   onClose: () => void;
   onConfirm: () => void;
 }) {
   const titleId = useId();
   const assignments = [
-    isLight && "light-mode",
-    isDark && "dark-mode",
+    isLight && "light-mode logo",
+    isDark && "dark-mode logo",
+    isIcon && "app icon",
   ].filter(Boolean) as string[];
 
   return (
@@ -45,9 +48,9 @@ export function DeleteLogoModal({
         </h2>
         {assignments.length > 0 ? (
           <p className="mt-3 text-muted">
-            This logo is currently assigned as the {assignments.join(" and ")}{" "}
-            logo. Deleting it will clear that assignment — the public site will
-            fall back to the ATOI wordmark until you assign a replacement.
+            This file is currently assigned as the {assignments.join(" and ")}.
+            Deleting it will clear that assignment — the site will fall back
+            to the default ATOI branding until you assign a replacement.
             This cannot be undone.
           </p>
         ) : (

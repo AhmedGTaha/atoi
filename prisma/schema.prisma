@@ -277,6 +277,8 @@ model CompanySettings {
   activeLightLogo               LogoAsset? @relation("ActiveLightLogo", fields: [activeLightLogoId], references: [id], onDelete: SetNull)
   activeDarkLogoId              String?
   activeDarkLogo                LogoAsset? @relation("ActiveDarkLogo", fields: [activeDarkLogoId], references: [id], onDelete: SetNull)
+  activeAppIconId               String?
+  activeAppIcon                 LogoAsset? @relation("ActiveAppIcon", fields: [activeAppIconId], references: [id], onDelete: SetNull)
   requestNotificationRecipients String[]
   supportFallbackRecipients     String[]
   seoTitleEn                    String
@@ -301,6 +303,7 @@ model LogoAsset {
 
   lightForSettings CompanySettings[] @relation("ActiveLightLogo")
   darkForSettings  CompanySettings[] @relation("ActiveDarkLogo")
+  iconForSettings  CompanySettings[] @relation("ActiveAppIcon")
 
   @@map("logo_assets")
 }

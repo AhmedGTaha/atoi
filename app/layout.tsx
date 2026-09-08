@@ -38,6 +38,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const description =
     locale === "ar" ? settings.seoDescriptionAr : settings.seoDescriptionEn;
 
+  const customIconUrl = settings.activeAppIcon?.publicUrl;
+
   return {
     metadataBase: new URL(appUrl()),
     title,
@@ -46,6 +48,15 @@ export async function generateMetadata(): Promise<Metadata> {
     appleWebApp: {
       title: settings.companyName,
     },
+    // Omitted when no admin-uploaded icon is set, so Next.js's file-based
+    // favicon.ico / icon.png / apple-icon.png conventions apply instead.
+    ...(customIconUrl && {
+      icons: {
+        icon: customIconUrl,
+        shortcut: customIconUrl,
+        apple: customIconUrl,
+      },
+    }),
     alternates: { canonical: "/" },
     openGraph: {
       title,

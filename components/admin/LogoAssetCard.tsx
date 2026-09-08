@@ -14,17 +14,21 @@ export function LogoAssetCard({
   asset,
   isLight,
   isDark,
+  isIcon,
   disabled,
   onSetLight,
   onSetDark,
+  onSetIcon,
   onDelete,
 }: {
   asset: LogoAsset;
   isLight: boolean;
   isDark: boolean;
+  isIcon: boolean;
   disabled: boolean;
   onSetLight: () => void;
   onSetDark: () => void;
+  onSetIcon: () => void;
   onDelete: () => void;
 }) {
   return (
@@ -57,6 +61,13 @@ export function LogoAssetCard({
           disabled={disabled}
           onAssign={onSetDark}
         />
+        <ModeControl
+          label="App icon"
+          noun="icon"
+          active={isIcon}
+          disabled={disabled}
+          onAssign={onSetIcon}
+        />
       </div>
       <button
         type="button"
@@ -75,11 +86,14 @@ export function LogoAssetCard({
 
 function ModeControl({
   label,
+  noun = "logo",
   active,
   disabled,
   onAssign,
 }: {
   label: string;
+  /** What this asset becomes when assigned — "logo" (default) or "icon" for the app icon slot. */
+  noun?: "logo" | "icon";
   active: boolean;
   disabled: boolean;
   onAssign: () => void;
@@ -91,10 +105,10 @@ function ModeControl({
         className="logo-mode-badge"
         disabled={disabled}
         onClick={onAssign}
-        aria-label={`Currently the ${label.toLowerCase()}-mode logo — click to unassign`}
+        aria-label={`Currently the ${label.toLowerCase()} ${noun} — click to unassign`}
       >
         <CheckIcon />
-        {label} logo
+        {noun === "icon" ? label : `${label} logo`}
       </button>
     );
   }
@@ -104,7 +118,7 @@ function ModeControl({
       className="logo-mode-button"
       disabled={disabled}
       onClick={onAssign}
-      aria-label={`Set as ${label.toLowerCase()}-mode logo`}
+      aria-label={`Set as the ${label.toLowerCase()} ${noun}`}
     >
       Set {label.toLowerCase()}
     </button>

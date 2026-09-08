@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db/client";
 import { deletePortfolioImage as deleteBlobAsset } from "@/lib/storage/blob";
 import { COMPANY_SETTINGS_TAG } from "@/lib/services/settingsService";
 
-export type LogoMode = "light" | "dark";
+export type LogoMode = "light" | "dark" | "icon";
 
 export async function getLogoAssets() {
   return prisma.logoAsset.findMany({ orderBy: { createdAt: "desc" } });
@@ -28,10 +28,7 @@ export async function setActiveLogo(assetId: string, mode: LogoMode) {
 
   await prisma.companySettings.update({
     where: { id: settings.id },
-    data:
-      mode === "light"
-        ? { activeLightLogoId: assetId }
-        : { activeDarkLogoId: assetId },
+    data: { [FIELD_BY_MODE[mode]]: assetId },
   });
   revalidateTag(COMPANY_SETTINGS_TAG);
 }
@@ -42,11 +39,16 @@ export async function unsetActiveLogo(mode: LogoMode) {
 
   await prisma.companySettings.update({
     where: { id: settings.id },
-    data:
-      mode === "light" ? { activeLightLogoId: null } : { activeDarkLogoId: null },
+    data: { [FIELD_BY_MODE[mode]]: null },
   });
   revalidateTag(COMPANY_SETTINGS_TAG);
 }
+
+const FIELD_BY_MODE: Record<LogoMode, "activeLightLogoId" | "activeDarkLogoId" | "activeAppIconId"> = {
+  light: "activeLightLogoId",
+  dark: "activeDarkLogoId",
+  icon: "activeAppIconId",
+};
 
 export async function deleteLogoAsset(assetId: string) {
   const asset = await prisma.logoAsset.findUnique({ where: { id: assetId } });

@@ -11,6 +11,7 @@ export { DEFAULT_COMPANY_SETTINGS };
 const settingsInclude = {
   activeLightLogo: true,
   activeDarkLogo: true,
+  activeAppIcon: true,
 } as const;
 
 export type CompanySettingsWithLogos = Prisma.CompanySettingsGetPayload<{

@@ -21,12 +21,13 @@ export default async function AdminSettingsPage() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Card>
-          <h2 className="font-semibold">Logo</h2>
+          <h2 className="font-semibold">Logo &amp; app icon</h2>
           <div className="mt-4">
             <LogoManager
               assets={logoAssets}
               activeLightLogoId={settings.activeLightLogoId}
               activeDarkLogoId={settings.activeDarkLogoId}
+              activeAppIconId={settings.activeAppIconId}
             />
           </div>
         </Card>

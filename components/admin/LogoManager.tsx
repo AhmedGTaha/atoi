@@ -16,16 +16,18 @@ import { DeleteLogoModal } from "@/components/admin/DeleteLogoModal";
 const ACCEPTED_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 const MAX_BYTES = 5 * 1024 * 1024;
 
-type PreviewMode = "light" | "dark";
+type PreviewMode = "light" | "dark" | "icon";
 
 export function LogoManager({
   assets,
   activeLightLogoId,
   activeDarkLogoId,
+  activeAppIconId,
 }: {
   assets: LogoAsset[];
   activeLightLogoId: string | null;
   activeDarkLogoId: string | null;
+  activeAppIconId: string | null;
 }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -36,7 +38,9 @@ export function LogoManager({
 
   const activeLightLogo = assets.find((asset) => asset.id === activeLightLogoId) ?? null;
   const activeDarkLogo = assets.find((asset) => asset.id === activeDarkLogoId) ?? null;
-  const previewAsset = previewMode === "light" ? activeLightLogo : activeDarkLogo;
+  const activeAppIcon = assets.find((asset) => asset.id === activeAppIconId) ?? null;
+  const previewAsset =
+    previewMode === "light" ? activeLightLogo : previewMode === "dark" ? activeDarkLogo : activeAppIcon;
 
   function submitFile(file: File) {
     if (!ACCEPTED_TYPES.has(file.type)) {
@@ -86,7 +90,7 @@ export function LogoManager({
       <div
         className="logo-preview-toggle content-language-toggle content-language-toggle--compact"
         role="group"
-        aria-label="Preview logo for colour mode"
+        aria-label="Preview logo or app icon"
       >
         <button
           type="button"
@@ -102,6 +106,13 @@ export function LogoManager({
         >
           Dark mode
         </button>
+        <button
+          type="button"
+          aria-pressed={previewMode === "icon"}
+          onClick={() => setPreviewMode("icon")}
+        >
+          App icon
+        </button>
       </div>
 
       <div
@@ -112,11 +123,15 @@ export function LogoManager({
         {previewAsset ? (
           <Image
             src={previewAsset.publicUrl}
-            alt={`Active ${previewMode}-mode logo`}
-            width={160}
+            alt={previewMode === "icon" ? "Active app icon" : `Active ${previewMode}-mode logo`}
+            width={previewMode === "icon" ? 48 : 160}
             height={48}
-            className="h-10 w-auto object-contain"
+            className={previewMode === "icon" ? "h-12 w-12 object-contain" : "h-10 w-auto object-contain"}
           />
+        ) : previewMode === "icon" ? (
+          <span className="logo-preview-empty">
+            No app icon assigned — the default ATOI icon is used for the favicon and app icon.
+          </span>
         ) : (
           <span className="logo-preview-empty">
             No {previewMode}-mode logo assigned — the ATOI wordmark is shown instead.
@@ -124,7 +139,12 @@ export function LogoManager({
         )}
       </div>
 
-      <p className="logo-manager-label">Uploaded logos</p>
+      <p className="logo-manager-label">Uploaded files</p>
+      <p className="logo-manager-hint">
+        Upload a logo or app icon below, then assign it as the light-mode logo, dark-mode
+        logo, and/or app icon (used for the favicon, browser tab icon, and home-screen
+        icon). A square image works best for the app icon.
+      </p>
 
       {assets.length > 0 ? (
         <div className="logo-asset-grid">
@@ -134,6 +154,7 @@ export function LogoManager({
               asset={asset}
               isLight={asset.id === activeLightLogoId}
               isDark={asset.id === activeDarkLogoId}
+              isIcon={asset.id === activeAppIconId}
               disabled={isPending}
               onSetLight={() =>
                 asset.id === activeLightLogoId ? unassign("light") : assign(asset.id, "light")
@@ -141,12 +162,15 @@ export function LogoManager({
               onSetDark={() =>
                 asset.id === activeDarkLogoId ? unassign("dark") : assign(asset.id, "dark")
               }
+              onSetIcon={() =>
+                asset.id === activeAppIconId ? unassign("icon") : assign(asset.id, "icon")
+              }
               onDelete={() => setDeleteTarget(asset)}
             />
           ))}
         </div>
       ) : (
-        <p className="logo-manager-empty">No logos uploaded yet.</p>
+        <p className="logo-manager-empty">No logos or icons uploaded yet.</p>
       )}
 
       {error && (
@@ -158,7 +182,7 @@ export function LogoManager({
       <input
         ref={inputRef}
         type="file"
-        aria-label="Upload logo"
+        aria-label="Upload logo or app icon"
         accept="image/png,image/jpeg,image/webp"
         className="sr-only"
         disabled={isPending}
@@ -174,13 +198,14 @@ export function LogoManager({
         disabled={isPending}
         onClick={() => inputRef.current?.click()}
       >
-        {isPending ? "Uploading…" : "+ Upload logo"}
+        {isPending ? "Uploading…" : "+ Upload logo or icon"}
       </button>
 
       <DeleteLogoModal
         target={deleteTarget}
         isLight={deleteTarget?.id === activeLightLogoId}
         isDark={deleteTarget?.id === activeDarkLogoId}
+        isIcon={deleteTarget?.id === activeAppIconId}
         isPending={isPending}
         onClose={() => setDeleteTarget(null)}
         onConfirm={confirmDelete}
