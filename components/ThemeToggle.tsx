@@ -8,13 +8,31 @@ export function ThemeToggle({ locale = "en" }: { locale?: string }) {
       aria-label={locale === "ar" ? "تبديل المظهر" : "Switch colour mode"}
       title={locale === "ar" ? "تبديل المظهر" : "Switch colour mode"}
       onClick={() => {
-        const next =
-          document.documentElement.dataset.theme === "light" ? "dark" : "light";
-        document.documentElement.dataset.theme = next;
+        let stored: string | null = null;
         try {
-          localStorage.setItem("atoi-theme", next);
+          stored = localStorage.getItem("atoi-theme");
         } catch {
-          /* Theme still works when storage is unavailable. */
+          /* Treat storage-unavailable the same as no manual preference. */
+        }
+        const current = stored === "light" || stored === "dark" ? stored : "system";
+        const next =
+          current === "light" ? "dark" : current === "dark" ? "system" : "light";
+
+        if (next === "system") {
+          try {
+            localStorage.removeItem("atoi-theme");
+          } catch {
+            /* Theme still works when storage is unavailable. */
+          }
+          const media = window.matchMedia("(prefers-color-scheme: light)");
+          document.documentElement.dataset.theme = media.matches ? "light" : "dark";
+        } else {
+          document.documentElement.dataset.theme = next;
+          try {
+            localStorage.setItem("atoi-theme", next);
+          } catch {
+            /* Theme still works when storage is unavailable. */
+          }
         }
       }}
     >
