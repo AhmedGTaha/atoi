@@ -70,6 +70,210 @@ service layer against a real Postgres database — point `DATABASE_URL` in
 in `tests/e2e` run against a production build; configure `.env.e2e`
 similarly, then `npm run test:e2e`.
 
+## Database and Prisma Migrations
+
+Prisma uses two different migration commands depending on the environment:
+
+- `prisma migrate dev` is for local development. It creates new migration
+  files from schema changes and applies migrations to the local database.
+- `prisma migrate deploy` is for production. It only applies migration files
+  that already exist in `prisma/migrations/`; it does not create or edit them.
+
+Production commands must use the Vercel **production** environment variables.
+Before applying a production migration, check Prisma's datasource output and
+verify that the target database is not `localhost`.
+
+### Production Migration on macOS
+
+```bash
+cd /Users/ahmed/Developer/atoi
+
+# Install dependencies and generate Prisma client
+npm install
+npx prisma generate
+
+# Pull production environment variables from Vercel
+npx vercel env pull .env.production.local --environment=production
+
+# Check production migration status
+npx --yes dotenv-cli -e .env.production.local -- npx prisma migrate status
+
+# Apply all pending migrations to production
+npx --yes dotenv-cli -e .env.production.local -- npx prisma migrate deploy
+
+# Verify production database is fully migrated
+npx --yes dotenv-cli -e .env.production.local -- npx prisma migrate status
+```
+
+Expected final result:
+
+```text
+Database schema is up to date!
+```
+
+### Production Migration on Windows PowerShell
+
+```powershell
+cd C:\Developer\atoi
+
+# Install dependencies and generate Prisma client
+npm install
+npx prisma generate
+
+# Pull production environment variables from Vercel
+npx vercel env pull .env.production.local --environment=production
+
+# Check production migration status
+npx --yes dotenv-cli -e .env.production.local -- npx prisma migrate status
+
+# Apply all pending migrations to production
+npx --yes dotenv-cli -e .env.production.local -- npx prisma migrate deploy
+
+# Verify production database is fully migrated
+npx --yes dotenv-cli -e .env.production.local -- npx prisma migrate status
+```
+
+Expected final result:
+
+```text
+Database schema is up to date!
+```
+
+### Local Development Migration on macOS
+
+These commands use the local `DATABASE_URL`:
+
+```bash
+cd /Users/ahmed/Developer/atoi
+
+npx prisma generate
+npx prisma migrate status
+npx prisma migrate dev
+npx prisma migrate status
+```
+
+### Local Development Migration on Windows PowerShell
+
+These commands use the local `DATABASE_URL`:
+
+```powershell
+cd C:\Developer\atoi
+
+npx prisma generate
+npx prisma migrate status
+npx prisma migrate dev
+npx prisma migrate status
+```
+
+### Creating a New Migration
+
+When changing `prisma/schema.prisma` locally, create a new migration with:
+
+```bash
+npx prisma migrate dev --name descriptive_migration_name
+npx prisma generate
+```
+
+Then:
+
+1. Review the generated migration.
+2. Test it locally.
+3. Commit:
+   - `prisma/schema.prisma`
+   - The new folder under `prisma/migrations/`
+4. Push the changes to GitHub.
+5. Apply the migration in production, with the Vercel production environment
+   loaded, using:
+
+   ```bash
+   npx prisma migrate deploy
+   ```
+
+Production must never use:
+
+```bash
+npx prisma migrate dev
+```
+
+### Important Production Safety Notes
+
+Before applying production migrations, verify that Prisma is not targeting the
+local database. If Prisma reports something like:
+
+```text
+Datasource "db": PostgreSQL database "atoi", schema "public" at "localhost:5432"
+```
+
+then Prisma is connected to the local PostgreSQL database. **Do not run
+production migrations against that connection.** Always load the Vercel
+production environment before running production migration commands.
+
+Never run the following command against production:
+
+```bash
+npx prisma migrate reset
+```
+
+Also:
+
+- Do not delete old migration folders after they have been deployed.
+- Do not rewrite previously deployed migrations.
+- Commit all new migration folders to Git.
+- Run `npx prisma migrate status` before deploying.
+- Run `npx prisma migrate status` again after deploying.
+- Confirm the final result says:
+
+  ```text
+  Database schema is up to date!
+  ```
+
+### Vercel Setup
+
+The local repository must already be linked to the correct Vercel project. If
+it is not linked, run:
+
+```bash
+npx vercel link
+```
+
+The production database environment variables must also exist in the Vercel
+project. Do not add actual database credentials or secrets to this README.
+
+### Recommended Production Workflow
+
+```text
+Change Prisma schema locally
+        ↓
+Create migration with prisma migrate dev
+        ↓
+Test locally
+        ↓
+Commit schema + migration folder
+        ↓
+Push to GitHub
+        ↓
+Pull Vercel production environment
+        ↓
+Check prisma migrate status
+        ↓
+Run prisma migrate deploy
+        ↓
+Check prisma migrate status again
+```
+
+### Prisma Configuration Warning
+
+The project may currently show a Prisma warning similar to:
+
+```text
+The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7.
+Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+```
+
+This warning does not currently prevent migrations from running. However, the
+Prisma configuration should eventually be migrated to `prisma.config.ts`
+before upgrading to Prisma 7.
+
 ## Deploying to Vercel
 
 1. Provision a Postgres database (Neon, Vercel Postgres, Supabase, etc.)
