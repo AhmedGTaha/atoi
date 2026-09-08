@@ -3,10 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth/guards";
 import { companySettingsSchema } from "@/lib/validation/settings";
+import { updateCompanySettings } from "@/lib/services/settingsService";
 import {
-  updateCompanySettings,
-  updateCompanyLogo,
-} from "@/lib/services/settingsService";
+  addLogoAsset,
+  deleteLogoAsset,
+  setActiveLogo,
+  unsetActiveLogo,
+  type LogoMode,
+} from "@/lib/services/logoService";
 import { validateImageFile, uploadPortfolioImage } from "@/lib/storage/blob";
 
 export interface SettingsFormState {
@@ -67,11 +71,35 @@ export async function uploadLogoAction(
 
   try {
     const asset = await uploadPortfolioImage(file, "logo");
-    await updateCompanyLogo(asset.storageKey, asset.publicUrl);
+    await addLogoAsset({
+      ...asset,
+      fileName: file.name,
+      fileSize: file.size,
+      mimeType: file.type,
+    });
   } catch (err) {
     console.error("[settings] Logo upload failed:", err);
     return { error: "Upload failed. Check that image storage is configured." };
   }
 
+  revalidatePath("/admin/settings");
   return { success: true };
+}
+
+export async function setActiveLogoAction(assetId: string, mode: LogoMode) {
+  await requireAdmin();
+  await setActiveLogo(assetId, mode);
+  revalidatePath("/admin/settings");
+}
+
+export async function unsetActiveLogoAction(mode: LogoMode) {
+  await requireAdmin();
+  await unsetActiveLogo(mode);
+  revalidatePath("/admin/settings");
+}
+
+export async function deleteLogoAssetAction(assetId: string) {
+  await requireAdmin();
+  await deleteLogoAsset(assetId);
+  revalidatePath("/admin/settings");
 }

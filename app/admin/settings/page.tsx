@@ -1,12 +1,16 @@
 import { requireAdmin } from "@/lib/auth/guards";
 import { getCompanySettingsForAdmin } from "@/lib/services/settingsService";
+import { getLogoAssets } from "@/lib/services/logoService";
 import { PageHeader, Card } from "@/components/admin/ui";
 import { SettingsForm } from "@/components/admin/SettingsForm";
-import { LogoUploadForm } from "@/components/admin/LogoUploadForm";
+import { LogoManager } from "@/components/admin/LogoManager";
 
 export default async function AdminSettingsPage() {
   await requireAdmin();
-  const settings = await getCompanySettingsForAdmin();
+  const [settings, logoAssets] = await Promise.all([
+    getCompanySettingsForAdmin(),
+    getLogoAssets(),
+  ]);
 
   return (
     <div>
@@ -19,7 +23,11 @@ export default async function AdminSettingsPage() {
         <Card>
           <h2 className="font-semibold">Logo</h2>
           <div className="mt-4">
-            <LogoUploadForm currentLogoUrl={settings.logoPublicUrl} />
+            <LogoManager
+              assets={logoAssets}
+              activeLightLogoId={settings.activeLightLogoId}
+              activeDarkLogoId={settings.activeDarkLogoId}
+            />
           </div>
         </Card>
 

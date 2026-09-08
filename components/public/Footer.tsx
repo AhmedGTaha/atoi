@@ -4,7 +4,7 @@ import type { Locale } from "@/lib/i18n/locale";
 import type { WebsiteContentMap } from "@/lib/services/websiteContentService";
 import { t } from "@/lib/content/helpers";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import type { CompanySettings } from "@prisma/client";
+import type { CompanySettingsWithLogos } from "@/lib/services/settingsService";
 
 export function Footer({
   locale,
@@ -13,7 +13,7 @@ export function Footer({
 }: {
   locale: Locale;
   content: WebsiteContentMap;
-  settings: CompanySettings;
+  settings: CompanySettingsWithLogos;
 }) {
   const dict = getDictionary(locale);
   const location = locale === "ar" ? settings.locationAr : settings.locationEn;
@@ -21,7 +21,11 @@ export function Footer({
   return (
     <footer id="footer" className="studio-footer border-t">
       <Container className="flex flex-wrap items-center gap-4 py-8 font-display text-xs text-faint sm:gap-8">
-        <Logo name={settings.companyName} logoUrl={settings.logoPublicUrl} />
+        <Logo
+          name={settings.companyName}
+          lightLogoUrl={settings.activeLightLogo?.publicUrl ?? settings.logoPublicUrl}
+          darkLogoUrl={settings.activeDarkLogo?.publicUrl ?? settings.logoPublicUrl}
+        />
         <a href={`mailto:${settings.companyEmail}`} className="hover:text-foreground" dir="ltr">
           {settings.companyEmail}
         </a>

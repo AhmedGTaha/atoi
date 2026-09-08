@@ -263,8 +263,15 @@ model CompanySettings {
   locationAr                    String
   instagramUrl                  String?
   linkedinUrl                   String?
+  // Deprecated: superseded by activeLightLogo/activeDarkLogo below. Kept
+  // only as a migration source for installations that predate the logo
+  // asset library, and as a last-resort fallback if both are unset.
   logoStorageKey                String?
   logoPublicUrl                 String?
+  activeLightLogoId             String?
+  activeLightLogo               LogoAsset? @relation("ActiveLightLogo", fields: [activeLightLogoId], references: [id], onDelete: SetNull)
+  activeDarkLogoId              String?
+  activeDarkLogo                LogoAsset? @relation("ActiveDarkLogo", fields: [activeDarkLogoId], references: [id], onDelete: SetNull)
   requestNotificationRecipients String[]
   supportFallbackRecipients     String[]
   seoTitleEn                    String
@@ -275,6 +282,22 @@ model CompanySettings {
   updatedAt                     DateTime @updatedAt
 
   @@map("company_settings")
+}
+
+model LogoAsset {
+  id           String   @id @default(uuid())
+  storageKey   String
+  publicUrl    String
+  fileName     String?
+  fileSize     Int?
+  mimeType     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  lightForSettings CompanySettings[] @relation("ActiveLightLogo")
+  darkForSettings  CompanySettings[] @relation("ActiveDarkLogo")
+
+  @@map("logo_assets")
 }
 
 model SecureToken {

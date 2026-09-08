@@ -139,30 +139,6 @@ export function WebsiteContentForm({
       })}
 
       <div className="content-editor-controls">
-        <div>
-          <span className="content-control-label">Editing language</span>
-          <div
-            className="content-language-toggle"
-            role="group"
-            aria-label="Editing language"
-          >
-            <button
-              type="button"
-              aria-pressed={locale === "en"}
-              onClick={() => setLocale("en")}
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              aria-pressed={locale === "ar"}
-              onClick={() => setLocale("ar")}
-            >
-              عربي
-            </button>
-          </div>
-        </div>
-
         <div className="workspace-view-control">
           <span className="content-control-label">Workspace</span>
           <div
@@ -319,6 +295,26 @@ export function WebsiteContentForm({
               </span>
             </div>
             <div className="preview-toolbar-actions">
+              <div
+                className="content-language-toggle content-language-toggle--compact"
+                role="group"
+                aria-label="Content language"
+              >
+                <button
+                  type="button"
+                  aria-pressed={locale === "en"}
+                  onClick={() => setLocale("en")}
+                >
+                  EN
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={locale === "ar"}
+                  onClick={() => setLocale("ar")}
+                >
+                  عربي
+                </button>
+              </div>
               <div
                 className="viewport-switcher"
                 role="group"

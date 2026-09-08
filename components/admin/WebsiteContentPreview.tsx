@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { CompanySettings } from "@prisma/client";
+import type { CompanySettingsWithLogos } from "@/lib/services/settingsService";
 import type { Locale } from "@/lib/i18n/locale";
 import type { WebsiteContentMap } from "@/lib/services/websiteContentService";
 import type { PortfolioProjectWithImages } from "@/lib/services/portfolioService.types";
@@ -29,7 +29,7 @@ export function WebsiteContentPreview({
   portfolio,
 }: {
   initialContent: WebsiteContentMap;
-  settings: CompanySettings;
+  settings: CompanySettingsWithLogos;
   portfolio: PortfolioProjectWithImages[];
 }) {
   const [content, setContent] = useState(initialContent);

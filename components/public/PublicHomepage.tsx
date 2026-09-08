@@ -1,4 +1,4 @@
-import type { CompanySettings } from "@prisma/client";
+import type { CompanySettingsWithLogos } from "@/lib/services/settingsService";
 import type { Locale } from "@/lib/i18n/locale";
 import type { WebsiteContentMap } from "@/lib/services/websiteContentService";
 import type { PortfolioProjectWithImages } from "@/lib/services/portfolioService.types";
@@ -22,7 +22,7 @@ export function PublicHomepage({
 }: {
   locale: Locale;
   content: WebsiteContentMap;
-  settings: CompanySettings;
+  settings: CompanySettingsWithLogos;
   portfolio: PortfolioProjectWithImages[];
   previewMode?: boolean;
   onLocaleChange?: (locale: Locale) => void;
@@ -32,6 +32,8 @@ export function PublicHomepage({
       <Navbar
         locale={locale}
         companyName={settings.companyName}
+        lightLogoUrl={settings.activeLightLogo?.publicUrl ?? settings.logoPublicUrl}
+        darkLogoUrl={settings.activeDarkLogo?.publicUrl ?? settings.logoPublicUrl}
         previewMode={previewMode}
         onLocaleChange={onLocaleChange}
       />

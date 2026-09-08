@@ -2,23 +2,37 @@ import "server-only";
 import { unstable_cache, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/db/client";
 import type { CompanySettingsInput } from "@/lib/validation/settings";
-import type { CompanySettings } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { DEFAULT_COMPANY_SETTINGS } from "@/lib/content/defaultCompanySettings";
 
 export const COMPANY_SETTINGS_TAG = "company-settings";
 export { DEFAULT_COMPANY_SETTINGS };
 
-async function loadSettings(): Promise<CompanySettings> {
-  const existing = await prisma.companySettings.findFirst();
+const settingsInclude = {
+  activeLightLogo: true,
+  activeDarkLogo: true,
+} as const;
+
+export type CompanySettingsWithLogos = Prisma.CompanySettingsGetPayload<{
+  include: typeof settingsInclude;
+}>;
+
+async function loadSettings() {
+  const existing = await prisma.companySettings.findFirst({
+    include: settingsInclude,
+  });
   if (existing) return existing;
-  return prisma.companySettings.create({ data: DEFAULT_COMPANY_SETTINGS });
+  return prisma.companySettings.create({
+    data: DEFAULT_COMPANY_SETTINGS,
+    include: settingsInclude,
+  });
 }
 
 export const getCompanySettings = unstable_cache(loadSettings, ["company-settings"], {
   tags: [COMPANY_SETTINGS_TAG],
 });
 
-export async function getCompanySettingsForAdmin(): Promise<CompanySettings> {
+export async function getCompanySettingsForAdmin(): Promise<CompanySettingsWithLogos> {
   return loadSettings();
 }
 
@@ -27,15 +41,6 @@ export async function updateCompanySettings(input: CompanySettingsInput): Promis
   await prisma.companySettings.update({
     where: { id: existing.id },
     data: input,
-  });
-  revalidateTag(COMPANY_SETTINGS_TAG);
-}
-
-export async function updateCompanyLogo(storageKey: string, publicUrl: string): Promise<void> {
-  const existing = await loadSettings();
-  await prisma.companySettings.update({
-    where: { id: existing.id },
-    data: { logoStorageKey: storageKey, logoPublicUrl: publicUrl },
   });
   revalidateTag(COMPANY_SETTINGS_TAG);
 }

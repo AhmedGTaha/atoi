@@ -18,11 +18,15 @@ const NAV_ITEMS = [
 export function Navbar({
   locale,
   companyName,
+  lightLogoUrl,
+  darkLogoUrl,
   previewMode = false,
   onLocaleChange,
 }: {
   locale: Locale;
   companyName: string;
+  lightLogoUrl?: string | null;
+  darkLogoUrl?: string | null;
   previewMode?: boolean;
   onLocaleChange?: (locale: Locale) => void;
 }) {
@@ -41,7 +45,11 @@ export function Navbar({
           href={previewMode ? "#home" : "/#home"}
           className="public-brand-link"
         >
-          <Logo name={companyName} />
+          <Logo
+            name={companyName}
+            lightLogoUrl={lightLogoUrl}
+            darkLogoUrl={darkLogoUrl}
+          />
         </Link>
 
         <PrimaryNav items={navItems} className="hidden lg:flex" />

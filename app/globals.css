@@ -2456,6 +2456,161 @@ html[dir="rtl"] .section-marker-reveal::after {
   aspect-ratio: 16 / 10;
 }
 
+/* Logo management */
+.logo-manager {
+  font-family: var(--font-heading);
+}
+.content-language-toggle--compact {
+  min-width: 0;
+}
+.content-language-toggle--compact button {
+  min-width: 0;
+  min-height: 34px;
+  padding: 6px 12px;
+  font-size: 11px;
+}
+.logo-preview-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 84px;
+  margin-top: 12px;
+  padding: 16px;
+  border: 1px solid var(--color-divider);
+}
+.logo-preview-stage[data-preview-mode="light"] {
+  background: #f5f4ef;
+}
+.logo-preview-stage[data-preview-mode="dark"] {
+  background: #17171a;
+}
+.logo-preview-empty {
+  max-width: 220px;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+.logo-manager-label {
+  margin-top: 18px;
+  margin-bottom: 10px;
+  font: 400 10px/1.2 var(--font-heading);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+.logo-manager-empty {
+  padding: 14px 0;
+  color: var(--color-muted);
+  font-size: 12px;
+}
+.logo-asset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+.logo-asset-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  border: 1px solid var(--color-divider);
+  padding: 10px;
+  background: var(--color-field);
+}
+.logo-asset-thumb {
+  position: relative;
+  height: 56px;
+  border: 1px solid var(--color-divider);
+  background: var(--color-surface);
+}
+.logo-asset-file {
+  min-width: 0;
+}
+.logo-asset-file strong,
+.logo-asset-file span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.logo-asset-file strong {
+  font-size: 11px;
+  color: var(--color-text);
+}
+.logo-asset-file span {
+  margin-top: 2px;
+  color: var(--color-faint);
+  font-size: 10px;
+}
+.logo-mode-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.logo-mode-badge,
+.logo-mode-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 8px;
+  font: 500 10px/1 var(--font-heading);
+  border: 1px solid var(--color-divider);
+}
+.logo-mode-badge {
+  border-color: var(--color-accent-deep);
+  color: var(--color-accent);
+}
+.logo-mode-badge:hover:not(:disabled) {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+.logo-mode-badge:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.logo-mode-button {
+  color: var(--color-muted);
+  background: var(--color-surface);
+}
+.logo-mode-button:hover:not(:disabled) {
+  color: var(--color-text);
+  border-color: var(--color-line-hi);
+}
+.logo-mode-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.logo-asset-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 6px 8px;
+  color: var(--color-muted);
+  font: 500 10px/1 var(--font-heading);
+  border: 1px solid var(--color-divider);
+}
+.logo-asset-delete:hover:not(:disabled) {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+.logo-asset-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.logo-upload-trigger {
+  margin-top: 14px;
+  width: 100%;
+}
+
+@media (max-width: 430px) {
+  .logo-asset-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (min-width: 1024px) {
   .app-shell {
     grid-template-columns: 198px minmax(0, 1fr);
@@ -2739,6 +2894,10 @@ html[dir="rtl"] .section-marker-reveal::after {
 }
 .preview-toolbar-actions {
   gap: 7px;
+  flex-wrap: wrap;
+}
+.preview-toolbar-actions .content-language-toggle--compact {
+  flex: none;
 }
 .viewport-switcher {
   border: 1px solid var(--color-divider);
@@ -2887,6 +3046,13 @@ html[dir="rtl"] .section-marker-reveal::after {
   }
   .preview-toolbar-actions {
     width: 100%;
+  }
+  .preview-toolbar-actions .content-language-toggle--compact {
+    width: auto;
+  }
+  .preview-toolbar-actions .content-language-toggle--compact button {
+    width: auto;
+    padding-inline: 10px;
   }
   .viewport-switcher {
     flex: 1;
