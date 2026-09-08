@@ -60,9 +60,12 @@ export function Navbar({
           </StartProjectTrigger>
         </div>
 
-        <div className="flex items-center gap-2 lg:hidden">
-          <LanguageToggle locale={locale} onLocaleChange={onLocaleChange} />
-          <MobileMenu locale={locale} navItems={NAV_ITEMS} />
+        <div className="justify-self-end lg:hidden">
+          <MobileMenu
+            locale={locale}
+            navItems={navItems}
+            onLocaleChange={onLocaleChange}
+          />
         </div>
       </Container>
     </header>

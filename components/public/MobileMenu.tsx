@@ -1,102 +1,131 @@
 "use client";
 
-import { useCallback, useId, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
-import { Modal } from "@/components/ui/Modal";
+import { LanguageToggle } from "@/components/LanguageToggle";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/locale";
 import { useStartProjectModal } from "./StartProjectModalContext";
 
 interface NavItem {
   href: string;
-  key: "home" | "services" | "work" | "about" | "contact";
+  key: string;
+  label: string;
 }
 
 export function MobileMenu({
   locale,
   navItems,
+  onLocaleChange,
 }: {
   locale: Locale;
   navItems: NavItem[];
+  onLocaleChange?: (locale: Locale) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const titleId = useId();
-  const close = useCallback(() => setOpen(false), []);
+  const panelId = useId();
+  const rootRef = useRef<HTMLDivElement>(null);
   const dict = getDictionary(locale);
   const { open: openProjectModal } = useStartProjectModal();
+  const close = useCallback(() => setOpen(false), []);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function handlePointerDown(event: PointerEvent) {
+      if (rootRef.current && !rootRef.current.contains(event.target as Node)) {
+        close();
+      }
+    }
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") close();
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open, close]);
+
   return (
-    <>
+    <div className="mobile-nav-root" ref={rootRef}>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => setOpen((value) => !value)}
         aria-expanded={open}
-        aria-haspopup="dialog"
-        aria-label={dict.nav.menu}
-        className="btn btn-secondary px-3"
+        aria-controls={panelId}
+        aria-label={open ? dict.nav.close : dict.nav.menu}
+        className="icon-button"
       >
-        <svg
-          width="18"
-          height="14"
-          viewBox="0 0 18 14"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M0 1H18M0 7H18M0 13H18"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          />
-        </svg>
+        {open ? <CloseIcon /> : <MenuIcon />}
       </button>
-      <Modal
-        isOpen={open}
-        onClose={close}
-        titleId={titleId}
-        className="max-w-md p-6"
-      >
-        <div className="flex items-center justify-between border-b pb-4">
-          <h2 id={titleId} className="brand">
-            {dict.nav.menu}
-          </h2>
-          <button
-            type="button"
-            onClick={close}
-            aria-label={dict.nav.close}
-            className="btn btn-secondary px-4"
-          >
-            ×
-          </button>
-        </div>
-        <nav className="flex flex-col py-4" aria-label="Primary">
-          {navItems.map((item) => (
+
+      {open && (
+        <div id={panelId} role="menu" className="mobile-nav-panel">
+          <nav className="mobile-nav-links" aria-label="Primary">
+            {navItems.map((item) => (
+              <Link
+                key={item.key}
+                href={item.href}
+                onClick={close}
+                role="menuitem"
+                className="mobile-nav-link"
+              >
+                {item.label}
+              </Link>
+            ))}
             <Link
-              key={item.key}
-              href={item.href}
+              href="/login"
               onClick={close}
-              className="border-b py-3 font-display text-2xl"
+              role="menuitem"
+              className="mobile-nav-link"
             >
-              {dict.nav[item.key]}
+              {locale === "ar" ? "تسجيل الدخول" : "Sign in"}
             </Link>
-          ))}
-          <Link
-            href="/login"
-            onClick={close}
-            className="border-b py-3 font-display text-2xl"
-          >
-            {locale === "ar" ? "تسجيل الدخول" : "Sign in"}
-          </Link>
-        </nav>
-        <button
-          type="button"
-          onClick={() => {
-            setOpen(false);
-            openProjectModal();
-          }}
-          className="btn btn-primary w-full"
-        >
-          {dict.nav.startProject}
-        </button>
-      </Modal>
-    </>
+          </nav>
+
+          <div className="mobile-nav-footer">
+            <LanguageToggle
+              locale={locale}
+              className="mobile-nav-language"
+              onLocaleChange={onLocaleChange}
+            />
+            <button
+              type="button"
+              onClick={() => {
+                close();
+                openProjectModal();
+              }}
+              className="btn btn-primary w-full"
+            >
+              {dict.nav.startProject}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+      <path d="M0 1H16M0 6H16M0 11H16" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path
+        d="M1 1L13 13M13 1L1 13"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }

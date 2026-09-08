@@ -41,6 +41,7 @@
   --page-width: 1200px;
   --page-gutter: clamp(18px, 4vw, 44px);
   --section-space: clamp(44px, 6vw, 84px);
+  --nav-height: 56px;
   --type-title: clamp(26px, 3vw, 36px);
   --type-section: clamp(27px, 3.4vw, 42px);
 }
@@ -117,7 +118,7 @@ html[dir="rtl"] {
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 84px;
+    scroll-padding-top: calc(var(--nav-height) + 16px);
   }
   h1,
   h2,
