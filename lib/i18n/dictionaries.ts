@@ -39,7 +39,7 @@ export const dictionaries = {
       close: "Close",
       emailUsInstead: "email us instead",
       websiteHoneypotLabel: "Website",
-      terminalStrip: "atoi ~ new-project.inquiry",
+      terminalStrip: "ATOI",
       terminalPreamble: "atoi new-project",
     },
     success: {
@@ -281,7 +281,7 @@ export const dictionaries = {
       close: "إغلاق",
       emailUsInstead: "أو راسلنا عبر البريد الإلكتروني",
       websiteHoneypotLabel: "الموقع الإلكتروني",
-      terminalStrip: "atoi ~ new-project.inquiry",
+      terminalStrip: "ATOI",
       terminalPreamble: "atoi new-project",
     },
     success: {
