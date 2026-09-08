@@ -116,12 +116,36 @@ async function reviewRoutes(
         expect.soft(metrics.headingFont).toContain("IBM Plex Mono");
         expect
           .soft(metrics.background)
-          .toBe(theme === "dark" ? "rgb(11, 13, 16)" : "rgb(241, 236, 229)");
+          .toBe(theme === "dark" ? "rgb(11, 13, 16)" : "rgb(255, 255, 255)");
         expect.soft(metrics.accent).toBe("#486fa6");
         expect
           .soft(metrics.duplicateIds, `${route}: duplicate element IDs`)
           .toEqual([]);
-        if (width === 1440 || width === 390)
+        if (width === 1440 || width === 390) {
+          await page.evaluate(() => {
+            window.scrollTo(0, 0);
+            if (document.activeElement instanceof HTMLElement) {
+              document.activeElement.blur();
+            }
+            document
+              .querySelectorAll<HTMLElement>("[data-motion-ready]")
+              .forEach((element) => {
+                element.dataset.motionVisible = "true";
+              });
+            document
+              .querySelectorAll<HTMLElement>(".hero-depth")
+              .forEach((element) => {
+                element.style.setProperty("--hero-scroll-y", "0");
+                element.style.setProperty("--hero-scroll-opacity", "1");
+              });
+            const statusBar =
+              document.querySelector<HTMLElement>(".studio-statusbar");
+            if (statusBar) {
+              statusBar.style.position = "absolute";
+              statusBar.style.insetBlockStart = `${document.documentElement.scrollHeight - statusBar.offsetHeight}px`;
+              statusBar.style.insetBlockEnd = "auto";
+            }
+          });
           await page.screenshot({
             animations: "disabled",
             path: outputPath(
@@ -129,6 +153,14 @@ async function reviewRoutes(
             ),
             fullPage: true,
           });
+          await page.evaluate(() => {
+            const statusBar =
+              document.querySelector<HTMLElement>(".studio-statusbar");
+            statusBar?.style.removeProperty("position");
+            statusBar?.style.removeProperty("inset-block-start");
+            statusBar?.style.removeProperty("inset-block-end");
+          });
+        }
       }
       const audit = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21aa"])

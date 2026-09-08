@@ -1,7 +1,7 @@
 import type { Locale } from "@/lib/i18n/locale";
 
 export const EMAIL_ACCENT = "#486FA6";
-export const EMAIL_LIGHT_CANVAS = "#F1ECE5";
+export const EMAIL_LIGHT_CANVAS = "#FFFFFF";
 const EMAIL_ACCENT_DARK_FOREGROUND = "#6D8CB8";
 
 const LIGHT = {

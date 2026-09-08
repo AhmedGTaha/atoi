@@ -49,7 +49,7 @@
 }
 html[data-theme="light"] {
   color-scheme: light;
-  --color-bg: #f1ece5;
+  --color-bg: #ffffff;
   --color-surface: #eceff1;
   --color-text: #0f1418;
   --color-muted: #414b55;
@@ -61,7 +61,7 @@ html[data-theme="light"] {
   --color-divider: rgba(15, 20, 24, 0.16);
   --color-rule-soft: rgba(15, 20, 24, 0.085);
   --color-line-hi: rgba(15, 20, 24, 0.34);
-  --color-head: rgba(241, 236, 229, 0.88);
+  --color-head: rgba(255, 255, 255, 0.88);
   --color-field: rgba(15, 20, 24, 0.035);
   --color-on-accent: #f5f7f8;
   --color-overlay: rgba(210, 217, 221, 0.72);
@@ -73,7 +73,7 @@ html[data-theme="light"] {
 @media (prefers-color-scheme: light) {
   html:not([data-theme]) {
     color-scheme: light;
-    --color-bg: #f1ece5;
+    --color-bg: #ffffff;
     --color-surface: #eceff1;
     --color-text: #0f1418;
     --color-muted: #414b55;
@@ -89,7 +89,7 @@ html[data-theme="light"] {
     --color-divider: rgba(15, 20, 24, 0.16);
     --color-rule-soft: rgba(15, 20, 24, 0.085);
     --color-line-hi: rgba(15, 20, 24, 0.34);
-    --color-head: rgba(241, 236, 229, 0.88);
+    --color-head: rgba(255, 255, 255, 0.88);
     --color-field: rgba(15, 20, 24, 0.035);
     --color-on-accent: #f5f7f8;
     --color-overlay: rgba(210, 217, 221, 0.72);
