@@ -186,6 +186,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
               <FieldPrompt required>{dict.modal.emailLabel}</FieldPrompt>
               <input
                 type="email"
+                dir="ltr"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={dict.modal.emailPlaceholder}

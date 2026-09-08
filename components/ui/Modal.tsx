@@ -92,7 +92,11 @@ export function Modal({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+      className={clsx(
+        "fixed inset-0 z-50 flex items-start justify-center",
+        "p-4 pt-[calc(var(--nav-height)_+_12px)]",
+        "sm:p-6 sm:pt-[calc(var(--nav-height)_+_24px)]",
+      )}
       role="presentation"
     >
       <div
@@ -110,7 +114,9 @@ export function Modal({
         aria-modal="true"
         aria-labelledby={titleId}
         className={clsx(
-          "studio-dialog relative z-10 w-full max-h-[90dvh] overflow-y-auto",
+          "studio-dialog relative z-10 w-full overflow-y-auto",
+          "max-h-[calc(100dvh_-_var(--nav-height)_-_28px)]",
+          "sm:max-h-[calc(100dvh_-_var(--nav-height)_-_48px)]",
           "animate-[modal-in_0.18s_ease-out]",
           className,
         )}

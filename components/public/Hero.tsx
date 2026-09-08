@@ -43,7 +43,7 @@ export function Hero({
           </h1>
           <MotionReveal
             as="p"
-            className="mt-8 max-w-lg text-lg leading-relaxed text-foreground/80"
+            className="hero-subtitle mt-8 max-w-lg text-lg leading-relaxed text-foreground/80"
             delay={310}
             immediate
           >

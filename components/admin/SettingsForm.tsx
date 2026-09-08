@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import {
   updateSettingsAction,
   type SettingsFormState,
@@ -11,11 +11,53 @@ import type { CompanySettings } from "@prisma/client";
 
 const initialState: SettingsFormState = {};
 
+interface SettingsFormValues {
+  companyName: string;
+  companyEmail: string;
+  companyPhone: string;
+  whatsappPhone: string;
+  locationEn: string;
+  locationAr: string;
+  instagramUrl: string;
+  linkedinUrl: string;
+  seoTitleEn: string;
+  seoTitleAr: string;
+  seoDescriptionEn: string;
+  seoDescriptionAr: string;
+}
+
 export function SettingsForm({ settings }: { settings: CompanySettings }) {
   const [state, formAction, isPending] = useActionState(
     updateSettingsAction,
     initialState,
   );
+  // React resets uncontrolled forms after a server action completes. Keep the
+  // settings controlled so a successful save does not snap the fields back to
+  // the values from the preceding render.
+  const [values, setValues] = useState<SettingsFormValues>({
+    companyName: settings.companyName,
+    companyEmail: settings.companyEmail,
+    companyPhone: settings.companyPhone,
+    whatsappPhone: settings.whatsappPhone ?? "",
+    locationEn: settings.locationEn,
+    locationAr: settings.locationAr,
+    instagramUrl: settings.instagramUrl ?? "",
+    linkedinUrl: settings.linkedinUrl ?? "",
+    seoTitleEn: settings.seoTitleEn,
+    seoTitleAr: settings.seoTitleAr,
+    seoDescriptionEn: settings.seoDescriptionEn,
+    seoDescriptionAr: settings.seoDescriptionAr,
+  });
+  const [isDirty, setIsDirty] = useState(false);
+
+  useEffect(() => {
+    if (state.success) setIsDirty(false);
+  }, [state]);
+
+  function updateValue(field: keyof SettingsFormValues, value: string) {
+    setValues((current) => ({ ...current, [field]: value }));
+    setIsDirty(true);
+  }
 
   return (
     <form action={formAction} className="space-y-5">
@@ -24,25 +66,29 @@ export function SettingsForm({ settings }: { settings: CompanySettings }) {
           label="Company name"
           name="companyName"
           required
-          defaultValue={settings.companyName}
+          value={values.companyName}
+          onChange={(event) => updateValue("companyName", event.target.value)}
         />
         <AdminInput
           label="Company email"
           name="companyEmail"
           type="email"
           required
-          defaultValue={settings.companyEmail}
+          value={values.companyEmail}
+          onChange={(event) => updateValue("companyEmail", event.target.value)}
         />
         <AdminInput
           label="Company phone"
           name="companyPhone"
           required
-          defaultValue={settings.companyPhone}
+          value={values.companyPhone}
+          onChange={(event) => updateValue("companyPhone", event.target.value)}
         />
         <AdminInput
           label="WhatsApp number"
           name="whatsappPhone"
-          defaultValue={settings.whatsappPhone ?? ""}
+          value={values.whatsappPhone}
+          onChange={(event) => updateValue("whatsappPhone", event.target.value)}
         />
       </div>
 
@@ -51,13 +97,15 @@ export function SettingsForm({ settings }: { settings: CompanySettings }) {
           label="Location (English)"
           name="locationEn"
           required
-          defaultValue={settings.locationEn}
+          value={values.locationEn}
+          onChange={(event) => updateValue("locationEn", event.target.value)}
         />
         <AdminInput
           label="Location (Arabic)"
           name="locationAr"
           required
-          defaultValue={settings.locationAr}
+          value={values.locationAr}
+          onChange={(event) => updateValue("locationAr", event.target.value)}
           dir="rtl"
         />
       </div>
@@ -66,12 +114,14 @@ export function SettingsForm({ settings }: { settings: CompanySettings }) {
         <AdminInput
           label="Instagram URL"
           name="instagramUrl"
-          defaultValue={settings.instagramUrl ?? ""}
+          value={values.instagramUrl}
+          onChange={(event) => updateValue("instagramUrl", event.target.value)}
         />
         <AdminInput
           label="LinkedIn URL"
           name="linkedinUrl"
-          defaultValue={settings.linkedinUrl ?? ""}
+          value={values.linkedinUrl}
+          onChange={(event) => updateValue("linkedinUrl", event.target.value)}
         />
       </div>
 
@@ -85,13 +135,15 @@ export function SettingsForm({ settings }: { settings: CompanySettings }) {
           label="SEO title (English)"
           name="seoTitleEn"
           required
-          defaultValue={settings.seoTitleEn}
+          value={values.seoTitleEn}
+          onChange={(event) => updateValue("seoTitleEn", event.target.value)}
         />
         <AdminInput
           label="SEO title (Arabic)"
           name="seoTitleAr"
           required
-          defaultValue={settings.seoTitleAr}
+          value={values.seoTitleAr}
+          onChange={(event) => updateValue("seoTitleAr", event.target.value)}
           dir="rtl"
         />
       </div>
@@ -101,14 +153,20 @@ export function SettingsForm({ settings }: { settings: CompanySettings }) {
           name="seoDescriptionEn"
           rows={2}
           required
-          defaultValue={settings.seoDescriptionEn}
+          value={values.seoDescriptionEn}
+          onChange={(event) =>
+            updateValue("seoDescriptionEn", event.target.value)
+          }
         />
         <AdminTextarea
           label="SEO description (Arabic)"
           name="seoDescriptionAr"
           rows={2}
           required
-          defaultValue={settings.seoDescriptionAr}
+          value={values.seoDescriptionAr}
+          onChange={(event) =>
+            updateValue("seoDescriptionAr", event.target.value)
+          }
           dir="rtl"
         />
       </div>
@@ -118,7 +176,7 @@ export function SettingsForm({ settings }: { settings: CompanySettings }) {
           {state.error}
         </p>
       )}
-      {state.success && (
+      {state.success && !isDirty && (
         <p role="status" className="text-sm text-success">
           Settings saved.
         </p>

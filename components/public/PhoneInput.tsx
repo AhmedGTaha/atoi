@@ -37,6 +37,7 @@ export function PhoneInput({
     <div className="inquiry-phone-input flex min-w-0 items-baseline gap-2.5">
       <select
         id={countryId}
+        dir="ltr"
         value={country}
         onChange={(e) => onCountryChange(e.target.value as GccCountryCode)}
         className="dial-select shrink-0"
@@ -50,6 +51,7 @@ export function PhoneInput({
       </select>
       <input
         type="tel"
+        dir="ltr"
         aria-label={placeholder}
         inputMode="numeric"
         pattern="[0-9]*"

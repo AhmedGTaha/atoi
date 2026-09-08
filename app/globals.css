@@ -1405,7 +1405,8 @@ html[dir="rtl"] {
     gap: 12px;
     min-height: 56px;
     border-bottom: 1px solid var(--color-divider);
-    padding: 8px 12px 8px 18px;
+    padding-block: 8px;
+    padding-inline: 18px 12px;
     background: var(--color-surface);
     color: var(--color-faint);
     font: 400 13px/1.4 var(--font-heading);
@@ -1655,7 +1656,10 @@ html[dir="rtl"] {
   }
 }
 @media (min-width: 1024px) {
-  .public-header {
+  /* Set on :root (not just .public-header) so anything anchored to the
+     header's real height — including the modal, portaled to document.body
+     outside the header's subtree — reads the correct value. */
+  :root {
     --nav-height: 64px;
   }
   .service-row {
@@ -1846,6 +1850,31 @@ html[dir="rtl"] {
 }
 html[dir="rtl"] .flip-rtl {
   transform: scaleX(-1);
+}
+/* Arabic hero composition. Unlayered so it beats both the .hero-title /
+   .hero-grid component rules and the max-w-lg utility on the subtitle,
+   regardless of Tailwind's utilities-layer priority.
+   - overflow-wrap/word-break: the sitewide `overflow-wrap: anywhere` (set
+     on all headings for long unbroken Latin strings) forces Arabic to
+     break mid-word or one word per line; restore normal wrapping.
+   - letter-spacing: the tight display tracking on .hero-title is tuned for
+     Latin capitals and breaks Arabic letter joining at this size.
+   - wider measure + taller line-height: give the two sentence-lines room
+     to sit 2-3 lines instead of collapsing into single-word rows, and stop
+     tall Arabic letterforms feeling clipped at line-height 1.02.
+*/
+html[dir="rtl"] .hero-grid {
+  max-width: 960px;
+}
+html[dir="rtl"] .hero-title {
+  overflow-wrap: normal;
+  word-break: normal;
+  letter-spacing: normal;
+  line-height: 1.45;
+  font-size: clamp(32px, 5.4vw, 62px);
+}
+html[dir="rtl"] .hero-subtitle {
+  max-width: 42rem;
 }
 @keyframes modal-in {
   from {

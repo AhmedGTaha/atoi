@@ -1,8 +1,12 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth/guards";
 import { companySettingsSchema } from "@/lib/validation/settings";
-import { updateCompanySettings, updateCompanyLogo } from "@/lib/services/settingsService";
+import {
+  updateCompanySettings,
+  updateCompanyLogo,
+} from "@/lib/services/settingsService";
 import { validateImageFile, uploadPortfolioImage } from "@/lib/storage/blob";
 
 export interface SettingsFormState {
@@ -12,7 +16,7 @@ export interface SettingsFormState {
 
 export async function updateSettingsAction(
   _prevState: SettingsFormState,
-  formData: FormData
+  formData: FormData,
 ): Promise<SettingsFormState> {
   await requireAdmin();
 
@@ -36,6 +40,7 @@ export async function updateSettingsAction(
   }
 
   await updateCompanySettings(parsed.data);
+  revalidatePath("/admin/settings");
   return { success: true };
 }
 
@@ -46,7 +51,7 @@ export interface LogoUploadState {
 
 export async function uploadLogoAction(
   _prevState: LogoUploadState,
-  formData: FormData
+  formData: FormData,
 ): Promise<LogoUploadState> {
   await requireAdmin();
 
