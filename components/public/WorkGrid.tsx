@@ -9,6 +9,7 @@ import type { PortfolioProjectWithImages } from "@/lib/services/portfolioService
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { ProjectGallery } from "./ProjectGallery";
 import { WorkDetailModal } from "./WorkDetailModal";
+import { MotionReveal } from "./MotionReveal";
 
 const FEATURED_COUNT = 3;
 
@@ -41,14 +42,19 @@ export function WorkGrid({
       </div>
       <div className="work-grid">
         {featured.map((project, index) => (
-          <WorkCard
+          <MotionReveal
             key={project.id}
-            project={project}
-            locale={locale}
-            number={index + 1}
-            actionLabel={dict.work.caseStudy}
-            onOpen={() => setSelected(project)}
-          />
+            className="motion-work-card"
+            delay={120 + index * 110}
+          >
+            <WorkCard
+              project={project}
+              locale={locale}
+              number={index + 1}
+              actionLabel={dict.work.caseStudy}
+              onOpen={() => setSelected(project)}
+            />
+          </MotionReveal>
         ))}
       </div>
       <div className="selected-work-footer">
@@ -113,10 +119,7 @@ function WorkCard({
         <h3 className="work-title">{title}</h3>
         <p className="work-desc">{description}</p>
         {project.technologies.length > 0 && (
-          <ul
-            className="project-tags"
-            aria-label={dict.portfolio.technologies}
-          >
+          <ul className="project-tags" aria-label={dict.portfolio.technologies}>
             {project.technologies.map((technology) => (
               <li key={technology}>{technology}</li>
             ))}

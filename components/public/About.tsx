@@ -2,6 +2,7 @@ import { Container } from "@/components/ui/Container";
 import type { Locale } from "@/lib/i18n/locale";
 import type { WebsiteContentMap } from "@/lib/services/websiteContentService";
 import { t } from "@/lib/content/helpers";
+import { MotionReveal } from "./MotionReveal";
 
 export function About({
   locale,
@@ -11,13 +12,20 @@ export function About({
   content: WebsiteContentMap;
 }) {
   return (
-    <section id="about" className="public-section about-section">
+    <section id="about" className="public-section about-section motion-section">
       <Container>
-        <p className="section-marker mb-6">[03] how-we-work.md</p>
+        <MotionReveal
+          as="p"
+          className="section-marker section-marker-reveal mb-6"
+        >
+          [03] how-we-work.md
+        </MotionReveal>
         <div className="readme">
-          <h3># {t(content, "process.heading", locale)}</h3>
+          <MotionReveal as="h3" delay={70}>
+            # {t(content, "process.heading", locale)}
+          </MotionReveal>
           {[1, 2, 3].map((n) => (
-            <div className="readme-row" key={n}>
+            <MotionReveal className="readme-row" key={n} delay={140 + n * 115}>
               <p>
                 <span className="text-accent" aria-hidden="true">
                   →{" "}
@@ -27,7 +35,7 @@ export function About({
               <p className="readme-row-description">
                 {t(content, `process.step${n}.description`, locale)}
               </p>
-            </div>
+            </MotionReveal>
           ))}
         </div>
       </Container>

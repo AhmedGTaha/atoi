@@ -5,6 +5,7 @@ import { LanguageToggle } from "@/components/LanguageToggle";
 import { StartProjectTrigger } from "./StartProjectTrigger";
 import { MobileMenu } from "./MobileMenu";
 import { PrimaryNav } from "./PrimaryNav";
+import { ScrollHeader } from "./ScrollHeader";
 import type { Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
@@ -34,7 +35,7 @@ export function Navbar({
   }));
 
   return (
-    <header className="public-header">
+    <ScrollHeader>
       <Container className="public-nav-container">
         <Link
           href={previewMode ? "#home" : "/#home"}
@@ -67,6 +68,6 @@ export function Navbar({
           className="justify-self-end lg:hidden"
         />
       </Container>
-    </header>
+    </ScrollHeader>
   );
 }

@@ -17,6 +17,30 @@ export function StatusBar({ email }: { email: string }) {
       .forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
+  useEffect(() => {
+    const bar = document.querySelector<HTMLElement>(".studio-statusbar");
+    if (!bar) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.setProperty(
+        "--page-progress",
+        `${max > 0 ? Math.min(1, window.scrollY / max) : 0}`,
+      );
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
   return (
     <div className="studio-statusbar">
       <span className="status">~/{section}</span>

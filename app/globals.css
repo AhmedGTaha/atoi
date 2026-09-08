@@ -467,6 +467,15 @@ html[dir="rtl"] {
     text-transform: none;
     font-weight: 500;
   }
+  .hero-depth {
+    transform: translateY(var(--hero-scroll-y, 0));
+    opacity: var(--hero-scroll-opacity, 1);
+    will-change: transform, opacity;
+  }
+  .hero-line {
+    display: block;
+    overflow: hidden;
+  }
   .public-section {
     padding-block: var(--section-space);
     border-top: 1px solid var(--color-divider);
@@ -508,6 +517,9 @@ html[dir="rtl"] {
   }
   .services-table {
     border-top: 1px solid var(--color-divider);
+  }
+  .motion-service-row + .motion-service-row .service-row {
+    border-top: 0;
   }
   .service-row {
     display: grid;
@@ -742,6 +754,15 @@ html[dir="rtl"] {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     font: 400 14px/1 var(--font-heading);
+    transition:
+      background-color var(--motion-normal),
+      border-color var(--motion-normal),
+      box-shadow var(--motion-normal);
+  }
+  .public-header[data-scrolled] {
+    background: color-mix(in srgb, var(--color-head) 94%, var(--color-bg));
+    border-color: var(--color-line-hi);
+    box-shadow: 0 5px 18px color-mix(in srgb, var(--color-bg) 18%, transparent);
   }
   .public-nav-container {
     display: grid;
@@ -943,6 +964,17 @@ html[dir="rtl"] {
     font: 400 11px/1 var(--font-heading);
     color: var(--color-faint);
   }
+  .studio-statusbar::before {
+    content: "";
+    position: absolute;
+    inset-block-start: -1px;
+    inset-inline-start: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--color-accent);
+    transform: scaleX(var(--page-progress, 0));
+    transform-origin: left center;
+  }
   .studio-statusbar a:hover {
     color: var(--color-accent);
   }
@@ -963,6 +995,7 @@ html[dir="rtl"] {
     color: var(--color-faint);
   }
   .readme-row {
+    position: relative;
     font: inherit;
     color: var(--color-muted);
   }
@@ -974,6 +1007,133 @@ html[dir="rtl"] {
     font: 400 15px/1.6 var(--font-body);
     letter-spacing: normal;
     color: var(--color-faint);
+  }
+
+  /* Content is visible by default: animations are strictly progressive enhancement. */
+  .motion-reveal[data-motion-ready]:not([data-motion-visible]) {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  .motion-reveal[data-motion-ready] {
+    transition:
+      opacity 420ms var(--motion-ease) var(--reveal-delay, 0ms),
+      transform 420ms var(--motion-ease) var(--reveal-delay, 0ms);
+  }
+  .motion-reveal[data-motion-visible] {
+    opacity: 1;
+    transform: none;
+  }
+  .hero-line.motion-reveal[data-motion-ready]:not([data-motion-visible]) {
+    transform: translateY(105%);
+  }
+  .section-marker-reveal {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-marker-reveal::after {
+    content: "";
+    display: block;
+    width: min(84px, 14vw);
+    height: 1px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 400ms var(--motion-ease)
+      calc(var(--reveal-delay, 0ms) + 90ms);
+  }
+  .section-marker-reveal[data-motion-visible]::after {
+    transform: scaleX(1);
+  }
+  .motion-work-card {
+    min-width: 0;
+  }
+  .motion-work-card .work-card {
+    transition: border-color var(--motion-fast);
+  }
+  .motion-work-card[data-motion-ready]:not([data-motion-visible]) {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  .motion-work-card[data-motion-ready] {
+    transition:
+      opacity 440ms var(--motion-ease) var(--reveal-delay, 0ms),
+      transform 440ms var(--motion-ease) var(--reveal-delay, 0ms);
+  }
+  .motion-work-card[data-motion-visible] {
+    opacity: 1;
+    transform: none;
+  }
+  .motion-work-card[data-motion-visible] .project-gallery-stage > img {
+    animation: work-image-settle 520ms var(--motion-ease)
+      var(--reveal-delay, 0ms) both;
+  }
+  .motion-service-row {
+    overflow: hidden;
+  }
+  .motion-service-row[data-motion-ready]:not([data-motion-visible]) {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .motion-service-row[data-motion-ready] {
+    transition:
+      opacity 320ms var(--motion-ease) var(--reveal-delay, 0ms),
+      transform 320ms var(--motion-ease) var(--reveal-delay, 0ms);
+  }
+  .motion-service-row[data-motion-visible] {
+    opacity: 1;
+    transform: none;
+  }
+  .readme {
+    position: relative;
+  }
+  .readme-row::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: -16px;
+    inset-block-start: -12px;
+    width: 1px;
+    height: calc(100% + 24px);
+    background: var(--color-accent);
+    transform: scaleY(0);
+    transform-origin: center top;
+    transition: transform 380ms var(--motion-ease) var(--reveal-delay, 0ms);
+  }
+  .readme-row[data-motion-visible]::before {
+    transform: scaleY(1);
+  }
+  .final-cta-button {
+    position: relative;
+    overflow: hidden;
+  }
+  .final-cta-button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      110deg,
+      transparent 35%,
+      color-mix(in srgb, var(--color-text) 38%, transparent) 50%,
+      transparent 65%
+    );
+    transform: translateX(-110%);
+  }
+  .motion-reveal[data-motion-visible] .final-cta-button::after {
+    animation: cta-sweep 620ms var(--motion-ease) 280ms both;
+  }
+
+  @keyframes work-image-settle {
+    from {
+      transform: scale(1.025);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  @keyframes cta-sweep {
+    to {
+      transform: translateX(110%);
+    }
   }
   .work-image {
     position: relative;
@@ -1715,6 +1875,21 @@ html[dir="rtl"] .flip-rtl {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  .hero-depth,
+  .motion-reveal[data-motion-ready]:not([data-motion-visible]),
+  .motion-work-card[data-motion-ready]:not([data-motion-visible]),
+  .motion-service-row[data-motion-ready]:not([data-motion-visible]) {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .section-marker-reveal::after,
+  .readme-row::before {
+    transform: none !important;
+  }
+}
+
+html[dir="rtl"] .section-marker-reveal::after {
+  transform-origin: right center;
 }
 
 /* Previous Work — a dense editorial gallery, shared by public cards and admin preview. */
