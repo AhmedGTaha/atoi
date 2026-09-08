@@ -1392,6 +1392,9 @@ html[dir="rtl"] {
     width: auto;
     margin-block: 32px;
   }
+  .auth-wordmark-ar {
+    height: clamp(64px, 9.6vw, 115px);
+  }
   .studio-dialog {
     background: var(--color-bg);
     border: 1px solid var(--color-modal-edge);
@@ -1780,6 +1783,9 @@ html[dir="rtl"] {
   .auth-wordmark {
     height: 40px;
     margin-block: 16px;
+  }
+  .auth-wordmark-ar {
+    height: 64px;
   }
   .auth-context > p {
     display: none;

@@ -9,7 +9,15 @@ const WORDMARK_ASPECT: Record<Locale, number> = {
   en: 3244 / 1344,
   ar: 2924 / 1954,
 };
-const LOGO_HEIGHT = 32;
+/**
+ * Rendered height per locale. The Arabic wordmark's tight alpha-crop carries
+ * a lot of built-in vertical space (a decorative flourish above the word and
+ * a diacritic dot below it), so its letterforms sit in a much smaller
+ * fraction of the image than the English wordmark's do. Matching pixel
+ * heights therefore makes the Arabic mark read as noticeably smaller — this
+ * per-locale height keeps the two optically balanced instead.
+ */
+const LOGO_HEIGHT: Record<Locale, number> = { en: 32, ar: 52 };
 
 /**
  * The public site's colour theme is resolved client-side only (see the
@@ -70,14 +78,16 @@ export function Logo({
     );
   }
 
-  const width = Math.round(LOGO_HEIGHT * WORDMARK_ASPECT[locale]);
+  const height = LOGO_HEIGHT[locale];
+  const width = Math.round(height * WORDMARK_ASPECT[locale]);
   return (
     <Image
       src={`/branding/atoi-wordmark-${locale}.png`}
       alt="ATOI"
       width={width}
-      height={LOGO_HEIGHT}
-      className="h-8 w-auto object-contain"
+      height={height}
+      style={{ height, width: "auto" }}
+      className="w-auto object-contain"
       priority
     />
   );

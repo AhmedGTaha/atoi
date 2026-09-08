@@ -1,6 +1,7 @@
 import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
 import Image from "next/image";
+import clsx from "clsx";
 import { Panel } from "@/components/ui/Panel";
 import type { Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
@@ -10,6 +11,14 @@ const WORDMARK_ASPECT: Record<Locale, number> = {
   en: 3244 / 1344,
   ar: 2924 / 1954,
 };
+/**
+ * The Arabic wordmark's tight alpha-crop carries a lot of built-in vertical
+ * space (a decorative flourish above the word, a diacritic dot below it), so
+ * its letterforms fill a smaller fraction of the image than the English
+ * wordmark's do. Rendering both at the same height makes the Arabic mark
+ * read as noticeably smaller — the .auth-wordmark-ar modifier (globals.css)
+ * renders it taller to keep the two optically balanced.
+ */
 
 export function AuthCard({
   title,
@@ -39,7 +48,7 @@ export function AuthCard({
           alt="ATOI"
           width={Math.round(72 * WORDMARK_ASPECT[locale])}
           height={72}
-          className="auth-wordmark"
+          className={clsx("auth-wordmark", locale === "ar" && "auth-wordmark-ar")}
           priority
         />
         <p className="max-w-sm text-muted">{dict.auth.card.portalTagline}</p>
