@@ -43,7 +43,7 @@ export function PortalShell({
           {dict.portal.yourProjects}
         </Link>
         <Link href="/" className="text-muted">
-          {locale === "ar" ? "الموقع الرئيسي" : "Public website"} ↗
+          {dict.portal.publicWebsite} ↗
         </Link>
       </div>
       <main id="main-content" className="site-container app-main">

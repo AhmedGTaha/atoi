@@ -5,6 +5,9 @@ import {
   DEFAULT_GCC_COUNTRY,
   dialCodeFor,
   nationalNumberLength,
+  countryLabel,
+  getPhoneErrorMessage,
+  GCC_COUNTRY_CODES,
 } from "@/lib/validation/phone";
 
 describe("normalizeGccPhone", () => {
@@ -71,6 +74,39 @@ describe("normalizeGccPhone", () => {
   it("rejects an empty number", () => {
     const result = normalizeGccPhone("BH", "");
     expect(result.ok).toBe(false);
+  });
+});
+
+describe("countryLabel", () => {
+  it("returns an Arabic name for every GCC country", () => {
+    const arabicNames: Record<string, string> = {
+      BH: "البحرين",
+      SA: "المملكة العربية السعودية",
+      AE: "الإمارات العربية المتحدة",
+      QA: "قطر",
+      KW: "الكويت",
+      OM: "عُمان",
+    };
+    for (const code of GCC_COUNTRY_CODES) {
+      expect(countryLabel("ar", code)).toBe(arabicNames[code]);
+      expect(countryLabel("en", code)).toMatch(/[a-zA-Z]/);
+    }
+  });
+});
+
+describe("getPhoneErrorMessage", () => {
+  it("resolves a phone validation error to localized text with the country name interpolated", () => {
+    const result = normalizeGccPhone("BH", "123");
+    expect(result.ok).toBe(false);
+    const ar = getPhoneErrorMessage("ar", result);
+    const en = getPhoneErrorMessage("en", result);
+    expect(ar).toContain("البحرين");
+    expect(en).toMatch(/Bahrain/i);
+  });
+
+  it("returns undefined for a successful result", () => {
+    const result = normalizeGccPhone("BH", "36001234");
+    expect(getPhoneErrorMessage("ar", result)).toBeUndefined();
   });
 });
 

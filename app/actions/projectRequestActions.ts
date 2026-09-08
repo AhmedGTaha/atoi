@@ -12,7 +12,7 @@ export async function submitProjectRequestAction(
 
   const limit = rateLimit(`project-request:${ip}`, { limit: 8, windowMs: 10 * 60 * 1000 });
   if (!limit.allowed) {
-    return { ok: false, fieldErrors: { form: "Too many requests. Please try again in a few minutes." } };
+    return { ok: false, fieldErrors: { form: "RATE_LIMITED" } };
   }
 
   const raw = {

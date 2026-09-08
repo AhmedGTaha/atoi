@@ -4,6 +4,7 @@ import { getOwnedCustomerProject } from "@/lib/services/projectService";
 import { getLocale } from "@/lib/i18n/getLocale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { statusLabel } from "@/lib/i18n/labels";
+import { formatDateTime, formatPercent } from "@/lib/i18n/format";
 import { SupportForm } from "@/components/portal/SupportForm";
 
 export default async function PortalProjectPage({
@@ -37,7 +38,7 @@ export default async function PortalProjectPage({
         <div className="mt-5">
           <div className="flex items-center justify-between text-sm text-muted">
             <span>{dict.portal.progress}</span>
-            <span>{project.progress}%</span>
+            <span>{formatPercent(locale, project.progress)}</span>
           </div>
           <div
             role="progressbar"
@@ -55,7 +56,7 @@ export default async function PortalProjectPage({
         </div>
 
         <p className="mt-4 text-sm text-muted">
-          {dict.portal.lastUpdated}: {project.updatedAt.toLocaleString()}
+          {dict.portal.lastUpdated}: {formatDateTime(locale, project.updatedAt)}
         </p>
       </div>
 
@@ -68,7 +69,7 @@ export default async function PortalProjectPage({
             project.updates.map((update) => (
               <div key={update.id} className="activity-item">
                 <p className="text-xs text-muted">
-                  {update.createdAt.toLocaleString()}
+                  {formatDateTime(locale, update.createdAt)}
                 </p>
                 <p className="mt-1 whitespace-pre-wrap text-foreground/80">
                   {update.body}

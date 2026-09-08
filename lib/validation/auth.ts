@@ -4,30 +4,30 @@ export const emailSchema = z
   .string()
   .trim()
   .toLowerCase()
-  .min(1, "Email is required.")
-  .email("Enter a valid email address.");
+  .min(1, "EMAIL_REQUIRED")
+  .email("INVALID_EMAIL");
 
 export const passwordSchema = z
   .string()
-  .min(8, "Password must be at least 8 characters.")
-  .max(200, "Password is too long.")
+  .min(8, "PASSWORD_TOO_SHORT")
+  .max(200, "PASSWORD_TOO_LONG")
   .refine((v) => /[a-zA-Z]/.test(v) && /[0-9]/.test(v), {
-    message: "Password must contain at least one letter and one number.",
+    message: "PASSWORD_REQUIRES_LETTER_AND_NUMBER",
   });
 
 export const loginSchema = z.object({
   email: emailSchema,
-  password: z.string().min(1, "Password is required."),
+  password: z.string().min(1, "PASSWORD_REQUIRED"),
 });
 
 export const setPasswordSchema = z
   .object({
     token: z.string().min(1),
     password: passwordSchema,
-    confirmPassword: z.string().min(1, "Please confirm your password."),
+    confirmPassword: z.string().min(1, "PASSWORD_CONFIRMATION_REQUIRED"),
   })
   .refine((v) => v.password === v.confirmPassword, {
-    message: "Passwords do not match.",
+    message: "PASSWORDS_DO_NOT_MATCH",
     path: ["confirmPassword"],
   });
 

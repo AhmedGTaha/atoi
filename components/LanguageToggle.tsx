@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 import { setLocaleAction } from "@/lib/i18n/actions";
 import type { Locale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 import clsx from "clsx";
 
 export function LanguageToggle({
@@ -15,6 +16,7 @@ export function LanguageToggle({
   onLocaleChange?: (locale: Locale) => void;
 }) {
   const [isPending, startTransition] = useTransition();
+  const dict = getDictionary(locale);
 
   function switchTo(next: Locale) {
     if (next === locale || isPending) return;
@@ -31,13 +33,14 @@ export function LanguageToggle({
     <div
       className={clsx("language-toggle", className)}
       role="group"
-      aria-label="Language"
+      aria-label={dict.languageToggle.groupLabel}
     >
       <button
         type="button"
         disabled={isPending}
         onClick={() => switchTo("en")}
         aria-pressed={locale === "en"}
+        aria-label={dict.languageToggle.englishAccessible}
         className={clsx(
           "px-2.5 transition-colors",
           locale === "en"
@@ -45,7 +48,7 @@ export function LanguageToggle({
             : "text-muted hover:text-foreground",
         )}
       >
-        EN
+        {dict.languageToggle.englishVisible}
       </button>
       {className?.includes("public-language-toggle") ? (
         <span className="language-separator" aria-hidden="true">
@@ -57,6 +60,7 @@ export function LanguageToggle({
         disabled={isPending}
         onClick={() => switchTo("ar")}
         aria-pressed={locale === "ar"}
+        aria-label={dict.languageToggle.arabicAccessible}
         className={clsx(
           "px-2.5 transition-colors",
           locale === "ar"
@@ -64,7 +68,7 @@ export function LanguageToggle({
             : "text-muted hover:text-foreground",
         )}
       >
-        عربي
+        {dict.languageToggle.arabicVisible}
       </button>
     </div>
   );

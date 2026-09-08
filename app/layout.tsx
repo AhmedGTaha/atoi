@@ -3,6 +3,7 @@ import { IBM_Plex_Sans, IBM_Plex_Mono, Cairo } from "next/font/google";
 import "./globals.css";
 import { getLocale } from "@/lib/i18n/getLocale";
 import { dirFor } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 import { I18nProvider } from "@/lib/i18n/I18nProvider";
 import { getCompanySettings } from "@/lib/services/settingsService";
 import { appUrl } from "@/lib/utils/appUrl";
@@ -60,6 +61,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const locale = await getLocale();
+  const dict = getDictionary(locale);
 
   return (
     <html
@@ -77,7 +79,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="min-h-full flex flex-col bg-canvas text-foreground">
         <a href="#main-content" className="skip-link">
-          {locale === "ar" ? "انتقل إلى المحتوى" : "Skip to content"}
+          {dict.nav.skipToContent}
         </a>
         <I18nProvider locale={locale}>{children}</I18nProvider>
       </body>

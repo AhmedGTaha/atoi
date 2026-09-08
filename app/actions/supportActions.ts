@@ -6,6 +6,7 @@ import { submitSupportRequest } from "@/lib/services/supportService";
 import { getOwnedCustomerProject } from "@/lib/services/projectService";
 
 export interface SupportFormState {
+  /** Semantic error code (see lib/i18n/errors.ts), not display text. */
   error?: string;
   success?: boolean;
   emailSent?: boolean;
@@ -21,12 +22,12 @@ export async function submitSupportRequestAction(
   // Authorization: the project must actually belong to this customer.
   const project = await getOwnedCustomerProject(customer.id, projectId);
   if (!project) {
-    return { error: "Project not found." };
+    return { error: "PROJECT_NOT_FOUND" };
   }
 
   const parsed = supportRequestInputSchema.safeParse({ message: formData.get("message") });
   if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message ?? "Invalid message." };
+    return { error: parsed.error.issues[0]?.message ?? "INVALID_INPUT" };
   }
 
   const result = await submitSupportRequest(projectId, customer.id, parsed.data.message);

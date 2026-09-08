@@ -67,7 +67,7 @@ export function MobileMenu({
 
       {open && (
         <div id={panelId} role="menu" className="mobile-nav-panel">
-          <nav className="mobile-nav-links" aria-label="Primary">
+          <nav className="mobile-nav-links" aria-label={dict.nav.mobilePrimaryLabel}>
             {navItems.map((item) => (
               <Link
                 key={item.key}
@@ -85,7 +85,7 @@ export function MobileMenu({
               role="menuitem"
               className="mobile-nav-link"
             >
-              {locale === "ar" ? "تسجيل الدخول" : "Sign in"}
+              {dict.nav.signIn}
             </Link>
           </nav>
 

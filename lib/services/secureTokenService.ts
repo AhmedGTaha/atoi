@@ -6,6 +6,7 @@ import type { TeamSessionPayload, CustomerSessionPayload } from "@/lib/auth/sess
 
 export interface TokenConsumeResult {
   ok: boolean;
+  /** Semantic error code (see lib/i18n/errors.ts), not display text. */
   error?: string;
   /**
    * Present only for a freshly-accepted team invitation — the caller must
@@ -30,10 +31,10 @@ export async function consumeSetPasswordToken(
   const tokenHash = hashToken(rawToken);
   const token = await prisma.secureToken.findUnique({ where: { tokenHash } });
 
-  if (!token) return { ok: false, error: "This link is invalid or has already been used." };
-  if (token.usedAt) return { ok: false, error: "This link has already been used." };
+  if (!token) return { ok: false, error: "TOKEN_INVALID_OR_USED" };
+  if (token.usedAt) return { ok: false, error: "TOKEN_ALREADY_USED" };
   if (token.expiresAt < new Date()) {
-    return { ok: false, error: "This link has expired. Please request a new one." };
+    return { ok: false, error: "TOKEN_EXPIRED" };
   }
 
   const passwordHash = await hashPassword(newPassword);
@@ -41,7 +42,7 @@ export async function consumeSetPasswordToken(
   if (token.teamMemberId) {
     const member = await prisma.teamMember.findUniqueOrThrow({ where: { id: token.teamMemberId } });
     if (!member.isActive) {
-      return { ok: false, error: "This account has been deactivated. Contact an admin for access." };
+      return { ok: false, error: "ACCOUNT_DEACTIVATED" };
     }
 
     await prisma.$transaction([
@@ -72,5 +73,5 @@ export async function consumeSetPasswordToken(
     return { ok: true, redirectTo: "/login?passwordSet=1" };
   }
 
-  return { ok: false, error: "This link is invalid." };
+  return { ok: false, error: "TOKEN_INVALID" };
 }

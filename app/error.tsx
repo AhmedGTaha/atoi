@@ -11,24 +11,17 @@ export default function ErrorPage({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const { locale } = useI18n();
-  const ar = locale === "ar";
+  const { dict } = useI18n();
   return (
     <main id="main-content" className="site-container py-16">
       <Panel className="max-w-xl p-8">
-        <p className="section-marker mb-4">
-          ATOI / {ar ? "تعذر التحميل" : "Unable to load"}
-        </p>
-        <h1>{ar ? "تعذر إكمال الطلب" : "We couldn’t complete that request"}</h1>
-        <p className="my-6 text-muted">
-          {ar
-            ? "يرجى إعادة المحاولة. إذا استمرت المشكلة، تواصل مع فريقنا."
-            : "Please try again. If the problem continues, contact our team."}
-        </p>
+        <p className="section-marker mb-4">ATOI / {dict.errorPage.badgeLabel}</p>
+        <h1>{dict.errorPage.heading}</h1>
+        <p className="my-6 text-muted">{dict.errorPage.body}</p>
         <div className="flex flex-wrap gap-3">
-          <Button onClick={reset}>{ar ? "إعادة المحاولة" : "Try again"}</Button>
+          <Button onClick={reset}>{dict.errorPage.retry}</Button>
           <Link className="btn btn-secondary" href="/">
-            {ar ? "الرئيسية" : "Back home"}
+            {dict.errorPage.backHome}
           </Link>
         </div>
       </Panel>

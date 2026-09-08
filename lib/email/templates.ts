@@ -2,6 +2,7 @@ import { emailShell, escapeHtml } from "./layout";
 import { appUrl } from "@/lib/utils/appUrl";
 import type { Locale } from "@/lib/i18n/locale";
 import { statusLabel } from "@/lib/i18n/labels";
+import { formatPercent } from "@/lib/i18n/format";
 import type { ProjectStatusValue } from "@/lib/validation/shared";
 
 export interface EmailContent {
@@ -40,7 +41,7 @@ const COPY = {
     ) =>
       `<p><strong>${escapeHtml(projectName)}</strong></p>
        <p style="margin-top:12px;">${escapeHtml(body)}</p>
-       <p class="email-status" style="margin-top:18px;padding-top:14px;border-top:1px solid #D8DEE3;color:#414B55;font-family:'Courier New',Courier,monospace;font-size:12px;">Status: <span class="email-accent" style="color:#0A6577;">${escapeHtml(status)}</span> · Progress: <span class="email-value" style="color:#0F1418;">${progress}%</span></p>`,
+       <p class="email-status" style="margin-top:18px;padding-top:14px;border-top:1px solid #D8DEE3;color:#414B55;font-family:'Courier New',Courier,monospace;font-size:12px;">Status: <span class="email-accent" style="color:#0A6577;">${escapeHtml(status)}</span> · Progress: <span class="email-value" style="color:#0F1418;">${formatPercent("en", progress)}</span></p>`,
     updateCta: "View project",
     internalRequestSubject: (requester: string) =>
       `New project request from ${requester}`,
@@ -56,27 +57,27 @@ const COPY = {
     teamInvitationCta: "Set password & sign in",
   },
   ar: {
-    requestConfirmationSubject: "لقد استلمنا طلبك",
-    requestConfirmationHeading: "شكراً لتواصلك معنا.",
+    requestConfirmationSubject: "تم استلام طلب مشروعك",
+    requestConfirmationHeading: "شكرًا لتواصلك معنا.",
     requestConfirmationBody: (name: string | null) =>
-      `<p>مرحباً ${escapeHtml(name || "بك")}،</p>
-       <p style="margin-top:16px;">لقد استلمنا طلب مشروعك وسيقوم فريقنا بمراجعته قريباً.</p>
-       <p style="margin-top:16px;">سنتواصل معك باستخدام بيانات الاتصال التي قدمتها.</p>`,
+      `<p>مرحبًا ${escapeHtml(name || "بك")}،</p>
+       <p style="margin-top:16px;">استلمنا طلب مشروعك، وسيراجعه فريقنا قريبًا.</p>
+       <p style="margin-top:16px;">سنتواصل معك عبر بيانات الاتصال التي أرسلتها.</p>`,
     requestConfirmationCta: (companyName: string) => `زيارة ${companyName}`,
     invitationSubject: (companyName: string) =>
-      `قم بإعداد حساب العميل الخاص بك في ${companyName}`,
-    invitationHeading: (companyName: string) => `تمت دعوتك إلى ${companyName}.`,
+      `أكمل إعداد حسابك في ${companyName}`,
+    invitationHeading: (companyName: string) => `تمت دعوتك إلى ${companyName}`,
     invitationBody: (companyName: string) =>
-      `<p>قام أحد أعضاء فريق ${escapeHtml(companyName)} بإنشاء مشروع لك. قم بتعيين كلمة مرور للوصول إلى بوابة العملاء الخاصة بك ومتابعة تقدم مشروعك.</p>`,
+      `<p>أنشأ فريق ${escapeHtml(companyName)} مشروعًا لك. عيّن كلمة مرور للدخول إلى بوابة العميل ومتابعة تقدّم مشروعك.</p>`,
     invitationCta: "تعيين كلمة المرور",
     resetSubject: (companyName: string) =>
-      `إعادة تعيين كلمة مرور ${companyName}`,
-    resetHeading: "إعادة تعيين كلمة المرور.",
+      `إعادة تعيين كلمة مرور حسابك في ${companyName}`,
+    resetHeading: "إعادة تعيين كلمة المرور",
     resetBody:
-      "<p>تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بك. إذا لم تطلب ذلك، يمكنك تجاهل هذه الرسالة.</p>",
+      "<p>تلقينا طلبًا لإعادة تعيين كلمة مرور حسابك. إذا لم تكن أنت من طلب ذلك، يمكنك تجاهل هذه الرسالة.</p>",
     resetCta: "إعادة تعيين كلمة المرور",
-    updateSubject: (projectName: string) => `تحديث المشروع: ${projectName}`,
-    updateHeading: "لديك تحديث جديد على مشروعك.",
+    updateSubject: (projectName: string) => `تحديث لمشروعك: ${projectName}`,
+    updateHeading: "تم نشر تحديث جديد لمشروعك.",
     updateBody: (
       projectName: string,
       body: string,
@@ -85,7 +86,7 @@ const COPY = {
     ) =>
       `<p><strong>${escapeHtml(projectName)}</strong></p>
        <p style="margin-top:12px;">${escapeHtml(body)}</p>
-       <p class="email-status" style="margin-top:18px;padding-top:14px;border-top:1px solid #D8DEE3;color:#414B55;font-family:'Courier New',Courier,monospace;font-size:12px;">الحالة: <span class="email-accent" style="color:#0A6577;">${escapeHtml(status)}</span> · نسبة الإنجاز: <span class="email-value" style="color:#0F1418;">${progress}%</span></p>`,
+       <p class="email-status" style="margin-top:18px;padding-top:14px;border-top:1px solid #D8DEE3;color:#414B55;font-family:Tahoma,Arial,sans-serif;font-size:12px;">الحالة: <span class="email-accent" style="color:#0A6577;">${escapeHtml(status)}</span> · نسبة الإنجاز: <span class="email-value" style="color:#0F1418;">${formatPercent("ar", progress)}</span></p>`,
     updateCta: "عرض المشروع",
     internalRequestSubject: "طلب مشروع جديد",
     internalRequestHeading: "تم استلام طلب مشروع جديد.",

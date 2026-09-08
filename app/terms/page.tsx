@@ -2,14 +2,42 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getCompanySettings } from "@/lib/services/settingsService";
+import { getLocale } from "@/lib/i18n/getLocale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { interpolate, interpolateNodes } from "@/lib/i18n/format";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getCompanySettings();
-  return { title: `Terms of Service — ${settings.companyName}` };
+  const [settings, locale] = await Promise.all([
+    getCompanySettings(),
+    getLocale(),
+  ]);
+  const dict = getDictionary(locale);
+  return {
+    title: interpolate(dict.legal.terms.metaTitle, {
+      companyName: settings.companyName,
+    }),
+  };
 }
 
 export default async function TermsPage() {
-  const settings = await getCompanySettings();
+  const [settings, locale] = await Promise.all([
+    getCompanySettings(),
+    getLocale(),
+  ]);
+  const dict = getDictionary(locale);
+
+  const companyNode = (
+    <bdi key="companyName" dir="ltr">
+      {settings.companyName}
+    </bdi>
+  );
+  const emailNode = (
+    <bdi key="email" dir="ltr">
+      <a href={`mailto:${settings.companyEmail}`} className="underline">
+        {settings.companyEmail}
+      </a>
+    </bdi>
+  );
 
   return (
     <main id="main-content" className="legal-page">
@@ -18,31 +46,28 @@ export default async function TermsPage() {
           href="/"
           className="text-sm font-semibold text-accent hover:underline"
         >
-          ← Back home
+          {dict.legal.backHome}
         </Link>
-        <ThemeToggle />
+        <ThemeToggle locale={locale} />
       </div>
       <h1 className="mt-6 text-3xl font-semibold tracking-normal">
-        Terms of Service
+        {dict.legal.terms.heading}
       </h1>
       <div className="mt-6 space-y-4 text-foreground/70">
         <p>
-          By submitting a project request or using the {settings.companyName}{" "}
-          customer portal, you agree to provide accurate contact information so
-          we can respond to you.
+          {interpolateNodes(dict.legal.terms.paragraph1, {
+            companyName: companyNode,
+          })}
         </p>
         <p>
-          Project scope, timelines and deliverables are agreed directly between
-          you and {settings.companyName} outside of this website. This site is
-          used to submit requests, track project status and progress, and reach
-          our team for support.
+          {interpolateNodes(dict.legal.terms.paragraph2, {
+            companyName: companyNode,
+          })}
         </p>
         <p>
-          Contact us at{" "}
-          <a href={`mailto:${settings.companyEmail}`} className="underline">
-            {settings.companyEmail}
-          </a>{" "}
-          with any questions.
+          {interpolateNodes(dict.legal.terms.paragraph3, {
+            email: emailNode,
+          })}
         </p>
       </div>
     </main>

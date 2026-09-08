@@ -75,11 +75,20 @@ export function PortfolioForm({
             />
           </div>
 
-          <AdminInput
-            label="Category / business type"
-            name="category"
-            defaultValue={project?.category ?? ""}
-          />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <AdminInput
+              label="Category / business type (English)"
+              name="category"
+              defaultValue={project?.category ?? ""}
+            />
+            <AdminInput
+              label="Category / business type (Arabic)"
+              name="categoryAr"
+              dir="rtl"
+              hint="Optional — falls back to the English category when empty."
+              defaultValue={project?.categoryAr ?? ""}
+            />
+          </div>
 
           <AdminInput
             label="Live URL (optional)"

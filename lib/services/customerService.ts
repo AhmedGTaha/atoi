@@ -43,7 +43,7 @@ export async function findOrCreateCustomer(
 
   const phone = normalizeGccPhone(input.phoneCountry, input.phoneNumber);
   if (!phone.ok) {
-    throw new Error(phone.error ?? "Invalid phone number.");
+    throw new Error(phone.errorCode ?? "PHONE_INVALID_FOR_COUNTRY");
   }
 
   const customer = await prisma.customer.create({
@@ -66,7 +66,7 @@ export async function updateCustomerContact(
   input: { name: string | null; businessName: string | null; phoneCountry: GccCountryCode; phoneNumber: string }
 ) {
   const phone = normalizeGccPhone(input.phoneCountry, input.phoneNumber);
-  if (!phone.ok) throw new Error(phone.error ?? "Invalid phone number.");
+  if (!phone.ok) throw new Error(phone.errorCode ?? "PHONE_INVALID_FOR_COUNTRY");
 
   return prisma.customer.update({
     where: { id: customerId },

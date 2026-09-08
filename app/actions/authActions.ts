@@ -16,6 +16,7 @@ import {
 import { rateLimit, clientIpFrom } from "@/lib/utils/rateLimit";
 
 export interface LoginState {
+  /** Semantic error code (see lib/i18n/errors.ts), not display text. */
   error?: string;
 }
 
@@ -34,7 +35,7 @@ export async function loginAction(
   const ip = clientIpFrom(headerList);
   const limit = rateLimit(`login:${ip}`, { limit: 10, windowMs: 10 * 60 * 1000 });
   if (!limit.allowed) {
-    return { error: "Too many attempts. Please try again in a few minutes." };
+    return { error: "TOO_MANY_ATTEMPTS" };
   }
 
   const parsed = loginSchema.safeParse({
@@ -42,12 +43,12 @@ export async function loginAction(
     password: formData.get("password"),
   });
   if (!parsed.success) {
-    return { error: "Incorrect email or password." };
+    return { error: "INVALID_CREDENTIALS" };
   }
 
   const account = await authenticateAny(parsed.data.email, parsed.data.password);
   if (!account) {
-    return { error: "Incorrect email or password." };
+    return { error: "INVALID_CREDENTIALS" };
   }
 
   if (account.role === "admin") {
@@ -85,6 +86,7 @@ export async function logoutAction() {
 
 export interface ForgotPasswordState {
   submitted?: boolean;
+  /** Semantic error code (see lib/i18n/errors.ts), not display text. */
   error?: string;
 }
 
@@ -103,12 +105,12 @@ export async function forgotPasswordAction(
   const ip = clientIpFrom(headerList);
   const limit = rateLimit(`forgot-password:${ip}`, { limit: 5, windowMs: 15 * 60 * 1000 });
   if (!limit.allowed) {
-    return { error: "Too many attempts. Please try again later." };
+    return { error: "TOO_MANY_ATTEMPTS" };
   }
 
   const parsed = forgotPasswordSchema.safeParse({ email: formData.get("email") });
   if (!parsed.success) {
-    return { error: "Enter a valid email address." };
+    return { error: "INVALID_EMAIL" };
   }
 
   await Promise.all([
@@ -120,6 +122,7 @@ export async function forgotPasswordAction(
 }
 
 export interface SetPasswordState {
+  /** Semantic error code (see lib/i18n/errors.ts), not display text. */
   error?: string;
 }
 
@@ -140,7 +143,7 @@ export async function setPasswordAction(
     confirmPassword: formData.get("confirmPassword"),
   });
   if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message ?? "Invalid input." };
+    return { error: parsed.error.issues[0]?.message ?? "INVALID_INPUT" };
   }
 
   const result = await consumeSetPasswordToken(parsed.data.token, parsed.data.password);

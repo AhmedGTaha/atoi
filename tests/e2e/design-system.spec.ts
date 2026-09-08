@@ -203,7 +203,7 @@ test("portal routes and Arabic layout remain usable", async ({
     ["/portal", `/portal/projects/${projectId}`],
     info.outputPath.bind(info),
   );
-  await page.getByRole("button", { name: "عربي" }).click();
+  await page.getByRole("button", { name: "العربية" }).click();
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   for (const width of widths) {
     await page.setViewportSize({ width, height: 960 });

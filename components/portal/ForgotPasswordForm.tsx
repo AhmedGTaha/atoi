@@ -7,10 +7,14 @@ import {
 } from "@/app/actions/authActions";
 import { AuthInput } from "@/components/auth/AuthCard";
 import { Button } from "@/components/ui/Button";
+import type { Locale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getErrorMessage, isErrorCode } from "@/lib/i18n/errors";
 
 const initialState: ForgotPasswordState = {};
 
-export function ForgotPasswordForm() {
+export function ForgotPasswordForm({ locale }: { locale: Locale }) {
+  const dict = getDictionary(locale);
   const [state, formAction, isPending] = useActionState(
     forgotPasswordAction,
     initialState,
@@ -19,8 +23,7 @@ export function ForgotPasswordForm() {
   if (state.submitted) {
     return (
       <p className="text-foreground/70">
-        If an account exists for that email, we&apos;ve sent a link to reset
-        your password.
+        {dict.auth.forgotPassword.successMessage}
       </p>
     );
   }
@@ -28,7 +31,7 @@ export function ForgotPasswordForm() {
   return (
     <form action={formAction} className="space-y-4">
       <AuthInput
-        label="Email"
+        label={dict.auth.forgotPassword.emailLabel}
         name="email"
         type="email"
         autoComplete="username"
@@ -36,7 +39,9 @@ export function ForgotPasswordForm() {
       />
       {state.error && (
         <p role="alert" className="text-sm text-danger">
-          {state.error}
+          {isErrorCode(state.error)
+            ? getErrorMessage(locale, state.error)
+            : state.error}
         </p>
       )}
       <Button
@@ -45,7 +50,9 @@ export function ForgotPasswordForm() {
         className="w-full"
         disabled={isPending}
       >
-        {isPending ? "Sending…" : "Send reset link"}
+        {isPending
+          ? dict.auth.forgotPassword.submitting
+          : dict.auth.forgotPassword.submit}
       </Button>
     </form>
   );

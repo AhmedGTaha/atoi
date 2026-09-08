@@ -3,6 +3,7 @@
 import { useId } from "react";
 import { Modal } from "@/components/ui/Modal";
 import type { Locale } from "@/lib/i18n/locale";
+import { localize } from "@/lib/i18n/locale";
 import type { PortfolioProjectWithImages } from "@/lib/services/portfolioService.types";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { ProjectGallery } from "./ProjectGallery";
@@ -35,6 +36,12 @@ export function WorkDetailModal({
     locale === "ar" ? project.builtAr || project.builtEn : project.builtEn;
   const result =
     locale === "ar" ? project.resultAr || project.resultEn : project.resultEn;
+  const category = project.category
+    ? localize(locale, {
+        valueEn: project.category,
+        valueAr: project.categoryAr ?? "",
+      })
+    : null;
 
   return (
     <Modal
@@ -61,7 +68,7 @@ export function WorkDetailModal({
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`${locale === "ar" ? "فتح الموقع" : "Open live site"}: ${title}`}
+                aria-label={`${dict.portfolio.openLiveSite}: ${title}`}
                 className="project-external-link"
               >
                 <ExternalIcon />
@@ -77,25 +84,21 @@ export function WorkDetailModal({
           />
         </div>
         <aside className="project-detail-overview">
-          <h3>
-            {locale === "ar" ? "نظرة عامة على المشروع" : "Project overview"}
-          </h3>
+          <h3>{dict.portfolio.projectOverview}</h3>
           <p>
             {[problem, built, result].filter(Boolean).join(" ") || description}
           </p>
           <dl>
-            {project.category && (
-              <Metadata label={locale === "ar" ? "الفئة" : "Category"}>
-                {project.category}
-              </Metadata>
+            {category && (
+              <Metadata label={dict.portfolio.category}>{category}</Metadata>
             )}
             {project.clientName && (
-              <Metadata label={locale === "ar" ? "العميل" : "Client"}>
+              <Metadata label={dict.portfolio.client}>
                 {project.clientName}
               </Metadata>
             )}
             {project.technologies.length > 0 && (
-              <Metadata label={locale === "ar" ? "التقنيات" : "Technologies"}>
+              <Metadata label={dict.portfolio.technologies}>
                 <ul className="project-tags">
                   {project.technologies.map((technology) => (
                     <li key={technology}>{technology}</li>
@@ -104,7 +107,7 @@ export function WorkDetailModal({
               </Metadata>
             )}
             {project.liveUrl && (
-              <Metadata label={locale === "ar" ? "الموقع" : "Live site"}>
+              <Metadata label={dict.portfolio.liveSite}>
                 <a
                   href={project.liveUrl}
                   target="_blank"

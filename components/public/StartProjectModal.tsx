@@ -8,12 +8,14 @@ import { submitProjectRequestAction } from "@/app/actions/projectRequestActions"
 import { BUSINESS_TYPES, DEFAULT_BUSINESS_TYPE } from "@/lib/validation/shared";
 import {
   DEFAULT_GCC_COUNTRY,
+  countryLabel,
   nationalNumberLength,
   type GccCountryCode,
 } from "@/lib/validation/phone";
 import type { Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { businessTypeLabel } from "@/lib/i18n/labels";
+import { getErrorMessage, isErrorCode } from "@/lib/i18n/errors";
 import { Button } from "@/components/ui/Button";
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -37,6 +39,17 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [confirmationEmailSent, setConfirmationEmailSent] = useState(true);
   const [reference, setReference] = useState("");
+
+  /** Resolves a field error, which the server sends as a semantic error
+   * code, into locale-appropriate text. Falls back to the raw value for the
+   * rare client-side (non-code) error string set in the catch block below. */
+  function resolveError(
+    code: string | undefined,
+    params?: Record<string, string | number>,
+  ): string | undefined {
+    if (!code) return undefined;
+    return isErrorCode(code) ? getErrorMessage(locale, code, params) : code;
+  }
 
   function resetForm() {
     setBusinessType(DEFAULT_BUSINESS_TYPE);
@@ -96,20 +109,22 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
 
   const contents = (
     <div className="inquiry-panel relative">
-      <p className="panel-strip pe-16">
+      <div className="inquiry-strip">
         <span aria-hidden="true" className="text-accent">
           ●
         </span>{" "}
-        atoi ~ new-project.inquiry
+        <bdi dir="ltr" className="inquiry-title">
+          {dict.modal.terminalStrip}
+        </bdi>
         <button
           type="button"
           onClick={close}
           aria-label={dict.modal.close}
-          className="icon-button absolute z-20 end-4 top-3"
+          className="icon-button inquiry-close-button"
         >
           <CloseIcon />
         </button>
-      </p>
+      </div>
 
       {status === "success" ? (
         <ReceiptView
@@ -120,16 +135,19 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
           titleId={titleId}
         />
       ) : (
-        <form onSubmit={handleSubmit} noValidate className="p-6 sm:p-7">
-          <p id={titleId} className="font-display text-sm text-muted">
-            <span className="text-accent">$</span> atoi new-project
+        <form onSubmit={handleSubmit} noValidate className="inquiry-form">
+          <p id={titleId} className="inquiry-preamble">
+            <span className="text-accent">$</span>{" "}
+            <bdi dir="ltr">{dict.modal.terminalPreamble}</bdi>
           </p>
 
           {/* Honeypot: hidden from real users, catches naive bots. Uses
               sr-only (clip, not offscreen positioning) so it can't create
               horizontal scroll overflow inside the modal. */}
           <div className="sr-only" aria-hidden="true">
-            <label htmlFor={`${titleId}-website`}>Website</label>
+            <label htmlFor={`${titleId}-website`}>
+              {dict.modal.websiteHoneypotLabel}
+            </label>
             <input
               id={`${titleId}-website`}
               name="website"
@@ -141,7 +159,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
             />
           </div>
 
-          <div className="mt-4">
+          <div className="inquiry-fields">
             <label className="terminal-row">
               <FieldPrompt>{dict.modal.nameLabel}</FieldPrompt>
               <input
@@ -178,7 +196,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
               />
               {fieldErrors.email && (
                 <span role="alert" className="text-sm text-danger">
-                  {fieldErrors.email}
+                  {resolveError(fieldErrors.email)}
                 </span>
               )}
             </label>
@@ -194,11 +212,20 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
                 number={phoneNumber}
                 onNumberChange={setPhoneNumber}
                 placeholder={dict.modal.phonePlaceholder}
-                error={fieldErrors.phoneNumber}
+                error={resolveError(fieldErrors.phoneNumber, {
+                  country: countryLabel(locale, phoneCountry),
+                  min: nationalNumberLength(phoneCountry).min,
+                  max: nationalNumberLength(phoneCountry).max,
+                })}
+                locale={locale}
               />
               {fieldErrors.phoneNumber && (
                 <span role="alert" className="text-sm text-danger">
-                  {fieldErrors.phoneNumber}
+                  {resolveError(fieldErrors.phoneNumber, {
+                    country: countryLabel(locale, phoneCountry),
+                    min: nationalNumberLength(phoneCountry).min,
+                    max: nationalNumberLength(phoneCountry).max,
+                  })}
                 </span>
               )}
             </div>
@@ -213,23 +240,23 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
                 required
                 minLength={20}
                 maxLength={5000}
-                rows={3}
+                rows={2}
                 aria-invalid={!!fieldErrors.description}
                 className="input resize-none"
               />
               {fieldErrors.description && (
                 <span role="alert" className="text-sm text-danger">
-                  {fieldErrors.description}
+                  {resolveError(fieldErrors.description)}
                 </span>
               )}
             </label>
           </div>
 
-          <div className="mt-5">
-            <p className="mb-2 font-display text-sm text-faint">
+          <div className="inquiry-types">
+            <p className="inquiry-types-label">
               {dict.modal.businessTypeLabel}
             </p>
-            <div className="columns-2 gap-6">
+            <div className="inquiry-type-grid">
               {BUSINESS_TYPES.map((type) => (
                 <label key={type} className="type-option">
                   <input
@@ -246,13 +273,19 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
 
           {fieldErrors.form && (
             <p role="alert" className="mt-4 text-sm text-danger">
-              {fieldErrors.form}
+              {resolveError(fieldErrors.form)}
             </p>
           )}
 
-          <div className="mt-6 flex justify-end border-t pt-5">
-            <Button type="submit" variant="primary" disabled={status === "submitting"}>
-              {status === "submitting" ? dict.modal.submitting : dict.modal.submit}
+          <div className="inquiry-submit-row">
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={status === "submitting"}
+            >
+              {status === "submitting"
+                ? dict.modal.submitting
+                : dict.modal.submit}
               <ArrowIcon />
             </Button>
           </div>
@@ -266,7 +299,7 @@ export function StartProjectModal({ locale }: { locale: Locale }) {
       onClose={close}
       titleId={titleId}
       restoreFocusTo={triggerRef}
-      className="max-w-[760px]"
+      className="inquiry-dialog max-w-[760px]"
     >
       {contents}
     </Modal>
@@ -286,18 +319,25 @@ function ReceiptView({
   onDone: () => void;
   titleId: string;
 }) {
-  const lines = [
-    "$ atoi send --inquiry",
-    "> validating fields … ok",
-    "> transmitting to info@atoi.online … ok",
-    `✓ received · ref ${reference}`,
+  const lines: React.ReactNode[] = [
+    `$ ${dict.success.receiptCommand}`,
+    `> ${dict.success.receiptValidating} ${dict.success.receiptStatusOk}`,
+    <span key="transmitting">
+      {"> "}
+      {dict.success.receiptTransmitting} <bdi dir="ltr">info@atoi.online</bdi>{" "}
+      {dict.success.receiptStatusOk}
+    </span>,
+    <span key="received">
+      {"✓ "}
+      {dict.success.receiptReceived} <bdi dir="ltr">{reference}</bdi>
+    </span>,
     "",
     dict.success.replyLine1,
     dict.success.replyLine2,
   ];
 
   return (
-    <div className="p-6 sm:p-7">
+    <div className="inquiry-receipt">
       <h2 id={titleId} className="sr-only">
         {dict.success.heading}
       </h2>
@@ -334,7 +374,9 @@ function FieldPrompt({
   children: React.ReactNode;
 }) {
   return (
-    <span className={className ? `terminal-label ${className}` : "terminal-label"}>
+    <span
+      className={className ? `terminal-label ${className}` : "terminal-label"}
+    >
       {children}
       {required && <span className="text-accent">*</span>} ›
     </span>
@@ -368,7 +410,7 @@ function ArrowIcon() {
       viewBox="0 0 24 24"
       fill="none"
       aria-hidden="true"
-      className="ms-2 inline rtl:-scale-x-100"
+      className="ms-2 inline flip-rtl"
     >
       <path
         d="M4 12h13"

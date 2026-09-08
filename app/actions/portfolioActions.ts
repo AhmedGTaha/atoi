@@ -30,6 +30,7 @@ function readPortfolioForm(formData: FormData) {
     descriptionEn: formData.get("descriptionEn"),
     descriptionAr: formData.get("descriptionAr"),
     category: formData.get("category") || null,
+    categoryAr: formData.get("categoryAr") || null,
     technologies: String(formData.get("technologies") || "")
       .split(/[\n,]/)
       .map((technology) => technology.trim())

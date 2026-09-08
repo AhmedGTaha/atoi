@@ -203,6 +203,7 @@ model PortfolioProject {
   descriptionEn String
   descriptionAr String
   category      String?
+  categoryAr    String?
   clientName    String?
   problemEn     String?
   problemAr     String?

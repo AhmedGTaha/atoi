@@ -1231,13 +1231,58 @@ html[dir="rtl"] {
     max-width: 100%;
     overflow-x: hidden;
   }
-  .inquiry-panel {
-    padding: 0 28px 28px;
+  .inquiry-dialog {
+    width: min(calc(100vw - 48px), 760px);
   }
-  .inquiry-panel .panel-strip {
-    margin-inline: -28px;
-    padding: 16px 70px 16px 20px;
-    min-height: 60px;
+  .inquiry-panel {
+    min-width: 0;
+    padding: 0;
+  }
+  .inquiry-strip {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    min-height: 56px;
+    border-bottom: 1px solid var(--color-divider);
+    padding: 8px 12px 8px 18px;
+    background: var(--color-surface);
+    color: var(--color-faint);
+    font: 400 13px/1.4 var(--font-heading);
+  }
+  .inquiry-title {
+    min-width: 0;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .inquiry-close-button {
+    width: 40px;
+    min-height: 40px;
+    border: 1px solid var(--color-divider);
+    background: transparent;
+    color: var(--color-muted);
+  }
+  .inquiry-close-button:hover {
+    border-color: var(--color-line-hi);
+    color: var(--color-text);
+  }
+  .inquiry-form,
+  .inquiry-receipt {
+    min-width: 0;
+    padding: 28px;
+  }
+  .inquiry-preamble {
+    margin: 0;
+    color: var(--color-muted);
+    font: 400 13px/1.4 var(--font-heading);
+  }
+  .inquiry-preamble > span {
+    color: var(--color-accent);
+  }
+  .inquiry-fields {
+    margin-top: 14px;
   }
   .terminal-row {
     display: grid;
@@ -1267,11 +1312,28 @@ html[dir="rtl"] {
   .terminal-row .input:focus-visible {
     outline-offset: 3px;
   }
+  .inquiry-types {
+    margin-top: 18px;
+  }
+  .inquiry-types-label {
+    margin: 0 0 9px;
+    color: var(--color-faint);
+    font: 400 13px/1.4 var(--font-heading);
+  }
+  .inquiry-type-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
   .type-option {
     display: flex;
     align-items: flex-start;
-    padding: 4px 0;
-    font: 400 13px/1.7 var(--font-heading);
+    min-width: 0;
+    min-height: 54px;
+    border: 1px solid var(--color-divider);
+    padding: 10px;
+    background: transparent;
+    font: 400 13px/1.45 var(--font-heading);
     color: var(--color-muted);
     cursor: pointer;
   }
@@ -1283,23 +1345,35 @@ html[dir="rtl"] {
     padding: 0;
   }
   .type-option::before {
-    content: "[ ] ";
+    content: "□";
+    flex: 0 0 auto;
+    margin-inline-end: 9px;
     color: var(--color-faint);
-    white-space: pre;
+    font-size: 18px;
+    line-height: 1;
   }
   .type-option:hover {
+    border-color: var(--color-line-hi);
     color: var(--color-text);
   }
   .type-option:has(input:checked) {
+    border-color: var(--color-accent);
     color: var(--color-accent);
   }
   .type-option:has(input:checked)::before {
-    content: "[x] ";
+    content: "▣";
     color: var(--color-accent);
   }
   .type-option:has(input:focus-visible) {
-    outline: 1px dotted var(--color-accent);
-    outline-offset: 3px;
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+  .inquiry-submit-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    border-top: 1px solid var(--color-divider);
+    padding-top: 16px;
   }
   .dial-select {
     display: inline-flex;
@@ -1311,6 +1385,9 @@ html[dir="rtl"] {
     font: 400 13.5px/1.6 var(--font-heading);
     cursor: pointer;
     padding: 2px 0;
+  }
+  .inquiry-phone-input {
+    min-width: 0;
   }
   .empty-state {
     padding: clamp(24px, 4vw, 48px);
@@ -1392,6 +1469,29 @@ html[dir="rtl"] {
 @media (max-width: 1023px) {
   .public-nav-container {
     grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .inquiry-dialog {
+    width: min(calc(100vw - 48px), 620px);
+    max-height: 88dvh;
+  }
+  .inquiry-form,
+  .inquiry-receipt {
+    padding: 20px;
+  }
+  .inquiry-preamble {
+    display: none;
+  }
+  .inquiry-fields {
+    margin-top: 0;
+  }
+  .inquiry-dialog .terminal-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+    padding-block: 8px;
+  }
+  .inquiry-dialog .terminal-row .input {
+    min-height: 40px;
+    padding-block: 3px;
   }
 }
 @media (min-width: 1024px) {
@@ -1513,19 +1613,58 @@ html[dir="rtl"] {
   .public-header > div {
     gap: 8px;
   }
-  .terminal-row {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 4px;
+  .inquiry-dialog {
+    width: 100%;
+    max-height: calc(100dvh - 24px);
   }
-  .terminal-row .input {
-    min-height: 44px;
-    font-size: 16px;
+  .inquiry-strip {
+    gap: 8px;
+    min-height: 52px;
+    padding-inline: 12px;
+    font-size: 12px;
   }
-  .inquiry-panel {
-    padding-inline: 18px;
+  .inquiry-close-button {
+    width: 40px;
+    min-height: 40px;
   }
-  .inquiry-panel .panel-strip {
-    margin-inline: -18px;
+  .inquiry-form,
+  .inquiry-receipt {
+    padding: 16px;
+  }
+  .inquiry-dialog .terminal-row {
+    padding-block: 7px;
+  }
+  .inquiry-dialog .terminal-row .input {
+    min-height: 40px;
+    font-size: 14px;
+  }
+  .inquiry-phone-input {
+    display: grid !important;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
+    gap: 12px;
+  }
+  .inquiry-phone-input .dial-select {
+    width: 100%;
+    min-width: 0;
+  }
+  .inquiry-types {
+    margin-top: 15px;
+  }
+  .inquiry-type-grid {
+    gap: 8px;
+  }
+  .type-option {
+    min-height: 58px;
+    padding: 9px;
+    font-size: 12px;
+  }
+  .inquiry-submit-row {
+    margin-top: 16px;
+    border-top: 0;
+    padding-top: 0;
+  }
+  .inquiry-submit-row .btn {
+    width: 100%;
   }
   .app-main .panel {
     padding: 16px;
@@ -1797,7 +1936,7 @@ html[dir="rtl"] .flip-rtl {
 .project-detail-close {
   position: absolute;
   top: 15px;
-  right: 15px;
+  inset-inline-end: 15px;
   z-index: 3;
 }
 .all-projects-modal h2 {
@@ -1893,7 +2032,7 @@ html[dir="rtl"] .flip-rtl {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding-right: 46px;
+  padding-inline-end: 46px;
 }
 .project-detail-title-row h2 {
   margin: 0;

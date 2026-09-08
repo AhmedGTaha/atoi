@@ -47,7 +47,7 @@ export function Navbar({
 
         <div className="public-nav-actions hidden lg:flex">
           <Link href="/login" className="public-sign-in">
-            {locale === "ar" ? "تسجيل الدخول" : "Sign in"}
+            {dict.nav.signIn}
           </Link>
           <span className="nav-divider" aria-hidden="true" />
           <LanguageToggle

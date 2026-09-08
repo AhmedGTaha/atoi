@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/Button";
 import type { Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getErrorMessage, isErrorCode } from "@/lib/i18n/errors";
 
 const initialState: SupportFormState = {};
 
@@ -45,7 +46,9 @@ export function SupportForm({
         />
         {state.error && (
           <p role="alert" className="text-sm text-danger">
-            {state.error}
+            {isErrorCode(state.error)
+              ? getErrorMessage(locale, state.error)
+              : state.error}
           </p>
         )}
         {state.success && (

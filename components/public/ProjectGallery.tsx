@@ -5,6 +5,8 @@ import Image from "next/image";
 import type { PortfolioImage } from "@prisma/client";
 import type { Locale } from "@/lib/i18n/locale";
 import { localize } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { formatNumber, interpolate } from "@/lib/i18n/format";
 
 type GalleryImage = Pick<
   PortfolioImage,
@@ -34,6 +36,7 @@ export function ProjectGallery({
   );
   const [imageIndex, setImageIndex] = useState(coverIndex);
   const imageSignature = images.map((image) => image.id).join(",");
+  const dict = getDictionary(locale);
 
   useEffect(() => {
     setImageIndex(coverIndex);
@@ -49,11 +52,7 @@ export function ProjectGallery({
       <div
         className={`project-gallery project-gallery-${mode} ${className ?? ""}`}
       >
-        <div className="project-gallery-empty">
-          {locale === "ar"
-            ? "لا توجد صورة للمشروع"
-            : "Project image unavailable"}
-        </div>
+        <div className="project-gallery-empty">{dict.gallery.emptyImage}</div>
       </div>
     );
   }
@@ -84,7 +83,7 @@ export function ProjectGallery({
         {canGoPrevious && (
           <button
             type="button"
-            aria-label={locale === "ar" ? "الصورة السابقة" : "Previous image"}
+            aria-label={dict.gallery.previousImage}
             onClick={() => setImageIndex((index) => index - 1)}
             className="project-gallery-arrow project-gallery-arrow-previous"
           >
@@ -94,7 +93,7 @@ export function ProjectGallery({
         {canGoNext && (
           <button
             type="button"
-            aria-label={locale === "ar" ? "الصورة التالية" : "Next image"}
+            aria-label={dict.gallery.nextImage}
             onClick={() => setImageIndex((index) => index + 1)}
             className="project-gallery-arrow project-gallery-arrow-next"
           >
@@ -106,17 +105,20 @@ export function ProjectGallery({
       {count > 1 && (
         <div className="project-gallery-status">
           <span>
-            {imageIndex + 1} / {count}
+            {formatNumber(locale, imageIndex + 1)} / {formatNumber(locale, count)}
           </span>
           <div
             className="project-gallery-dots"
-            aria-label={`${imageIndex + 1} of ${count}`}
+            aria-label={interpolate(dict.gallery.positionLabel, {
+              index: formatNumber(locale, imageIndex + 1),
+              count: formatNumber(locale, count),
+            })}
           >
             {images.map((galleryImage, index) => (
               <button
                 key={galleryImage.id}
                 type="button"
-                aria-label={`${locale === "ar" ? "عرض الصورة" : "Show image"} ${index + 1}`}
+                aria-label={`${dict.gallery.showImage} ${formatNumber(locale, index + 1)}`}
                 aria-current={index === imageIndex}
                 onClick={() => setImageIndex(index)}
               />
@@ -128,14 +130,14 @@ export function ProjectGallery({
       {mode === "detail" && count > 1 && (
         <div
           className="project-gallery-thumbnails"
-          aria-label={locale === "ar" ? "صور المشروع" : "Project images"}
+          aria-label={dict.gallery.projectImages}
         >
           {images.map((galleryImage, index) => (
             <button
               key={galleryImage.id}
               type="button"
               onClick={() => setImageIndex(index)}
-              aria-label={`${locale === "ar" ? "عرض الصورة" : "Show image"} ${index + 1}`}
+              aria-label={`${dict.gallery.showImage} ${formatNumber(locale, index + 1)}`}
               aria-current={index === imageIndex}
             >
               <Image

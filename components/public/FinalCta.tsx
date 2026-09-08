@@ -28,8 +28,9 @@ export function FinalCta({
           <StartProjectTrigger className="btn btn-primary">
             {t(content, "finalCta.ctaLabel", locale)}
           </StartProjectTrigger>
-          <a href={`mailto:${companyEmail}`} className="text-sm text-muted hover:text-foreground" dir="ltr">
-            {locale === "ar" ? "أو راسلنا على" : "or email"} {companyEmail}
+          <a href={`mailto:${companyEmail}`} className="text-sm text-muted hover:text-foreground">
+            {locale === "ar" ? "أو راسلنا على" : "or email"}{" "}
+            <bdi dir="ltr">{companyEmail}</bdi>
           </a>
         </div>
       </Container>

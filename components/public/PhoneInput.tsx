@@ -2,12 +2,14 @@
 
 import { useId } from "react";
 import {
-  GCC_COUNTRIES,
   GCC_COUNTRY_CODES,
+  countryLabel,
   dialCodeFor,
   nationalNumberLength,
   type GccCountryCode,
 } from "@/lib/validation/phone";
+import type { Locale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export function PhoneInput({
   country,
@@ -17,6 +19,7 @@ export function PhoneInput({
   placeholder,
   error,
   describedById,
+  locale,
 }: {
   country: GccCountryCode;
   onCountryChange: (c: GccCountryCode) => void;
@@ -25,21 +28,23 @@ export function PhoneInput({
   placeholder: string;
   error?: string;
   describedById?: string;
+  locale: Locale;
 }) {
   const countryId = useId();
   const { max } = nationalNumberLength(country);
+  const dict = getDictionary(locale);
   return (
-    <div className="flex min-w-0 items-baseline gap-2.5">
+    <div className="inquiry-phone-input flex min-w-0 items-baseline gap-2.5">
       <select
         id={countryId}
         value={country}
         onChange={(e) => onCountryChange(e.target.value as GccCountryCode)}
         className="dial-select shrink-0"
-        aria-label="Country code"
+        aria-label={dict.phone.countryCodeLabel}
       >
         {GCC_COUNTRY_CODES.map((code) => (
           <option key={code} value={code}>
-            {dialCodeFor(code)} {GCC_COUNTRIES[code].label.toLowerCase()}
+            {dialCodeFor(code)} {countryLabel(locale, code)}
           </option>
         ))}
       </select>

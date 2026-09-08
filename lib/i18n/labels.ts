@@ -10,7 +10,7 @@ export const STATUS_LABELS: Record<Locale, Record<ProjectStatusValue, string>> =
     DONE: "Done",
   },
   ar: {
-    PENDING_TEAM_APPROVAL: "بانتظار موافقة الفريق",
+    PENDING_TEAM_APPROVAL: "في انتظار موافقة الفريق",
     DEVELOPMENT: "قيد التطوير",
     TESTING: "قيد الاختبار",
     DONE: "مكتمل",
@@ -31,12 +31,12 @@ export const BUSINESS_TYPE_LABELS: Record<Locale, Record<BusinessType, string>> 
     something_else: "something else",
   },
   ar: {
-    business_website: "موقع تجاري",
+    business_website: "موقع للنشاط التجاري",
     restaurant_cafe: "مطعم / مقهى",
     school_system: "نظام مدرسي",
-    clinic_medical: "عيادة / طبي",
-    retail_online_store: "تجارة تجزئة / متجر إلكتروني",
-    something_else: "شيء آخر",
+    clinic_medical: "عيادة / رعاية صحية",
+    retail_online_store: "متجر / تجارة إلكترونية",
+    something_else: "مشروع آخر",
   },
 };
 

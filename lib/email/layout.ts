@@ -23,6 +23,15 @@ export interface EmailShellOptions {
 export function emailShell(opts: EmailShellOptions): string {
   const dir = opts.locale === "ar" ? "rtl" : "ltr";
   const align = opts.locale === "ar" ? "right" : "left";
+  // Arabic prose needs an Arabic-capable face — Courier New falls back
+  // inconsistently across mail clients for Arabic glyphs. Latin/technical
+  // tokens (the brand wordmark, raw URLs) stay monospace regardless of
+  // locale since they're decorative, not prose.
+  const proseFont =
+    opts.locale === "ar" ? "Tahoma, Arial, sans-serif" : "'Courier New', Courier, monospace";
+  const notificationLabel = opts.locale === "ar" ? "إشعار" : "NOTIFICATION";
+  const footerTagline =
+    opts.locale === "ar" ? "استوديو برمجيات من البحرين" : "Bahrain-based software studio";
 
   // Every actionable email needs a fallback: some clients strip button
   // styling or block the link entirely, so the raw URL is always printed
@@ -32,12 +41,12 @@ export function emailShell(opts: EmailShellOptions): string {
       ? `<div style="margin-top:28px;">
            <a href="${escapeAttr(opts.ctaUrl)}"
               class="email-cta" style="display:inline-block;background:${LIGHT.cyan};color:${LIGHT.ink};
-                     text-decoration:none;font-family:'Courier New',Courier,monospace;font-weight:700;
+                     text-decoration:none;font-family:${proseFont};font-weight:700;
                      padding:16px 24px;border-radius:0;font-size:14px;letter-spacing:.01em;">
              ${escapeHtml(opts.ctaLabel)}
            </a>
          </div>
-         <p class="email-fallback" style="margin:18px 0 0;font-family:'Courier New',Courier,monospace;font-size:11px;line-height:1.7;color:${LIGHT.dim};word-break:break-all;">
+         <p class="email-fallback" style="margin:18px 0 0;font-family:${proseFont};font-size:11px;line-height:1.7;color:${LIGHT.dim};word-break:break-all;">
            ${opts.locale === "ar" ? "أو انسخ هذا الرابط:" : "Or copy this link:"}
            <br />
            <a href="${escapeAttr(opts.ctaUrl)}" class="email-link" style="color:${LIGHT.cyan};">${escapeHtml(opts.ctaUrl)}</a>
@@ -78,8 +87,8 @@ export function emailShell(opts: EmailShellOptions): string {
         </span>
       </div>
       <div class="email-panel" style="margin-top:24px;background:${LIGHT.panel};border:1px solid ${LIGHT.line};padding:32px;text-align:${align};">
-        <div class="email-accent" style="margin-bottom:18px;font-family:'Courier New',Courier,monospace;font-size:11px;line-height:1;color:${LIGHT.cyan};letter-spacing:.08em;">ATOI / NOTIFICATION</div>
-        <h1 class="email-heading" style="margin:0 0 18px;font-family:'Courier New',Courier,monospace;font-size:24px;font-weight:500;line-height:1.25;letter-spacing:-.03em;color:${LIGHT.paper};">
+        <div class="email-accent" style="margin-bottom:18px;font-family:${proseFont};font-size:11px;line-height:1;color:${LIGHT.cyan};letter-spacing:.08em;">ATOI / ${notificationLabel}</div>
+        <h1 class="email-heading" style="margin:0 0 18px;font-family:${proseFont};font-size:24px;font-weight:500;line-height:1.25;letter-spacing:-.03em;color:${LIGHT.paper};">
           ${escapeHtml(opts.heading)}
         </h1>
         <div class="email-copy" style="font-size:15px;line-height:1.7;color:${LIGHT.dim};">
@@ -87,8 +96,8 @@ export function emailShell(opts: EmailShellOptions): string {
         </div>
         ${cta}
       </div>
-      <div class="email-footer email-rule" style="margin-top:20px;padding-top:18px;border-top:1px solid ${LIGHT.line};font-family:'Courier New',Courier,monospace;font-size:11px;line-height:1.6;color:${LIGHT.dim};text-align:${align};">
-        ${escapeHtml(opts.companyName)} · Bahrain-based software studio
+      <div class="email-footer email-rule" style="margin-top:20px;padding-top:18px;border-top:1px solid ${LIGHT.line};font-family:${proseFont};font-size:11px;line-height:1.6;color:${LIGHT.dim};text-align:${align};">
+        ${escapeHtml(opts.companyName)} · ${footerTagline}
       </div>
     </div>
   </body>

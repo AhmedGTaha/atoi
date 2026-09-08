@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { Modal } from "@/components/ui/Modal";
 import type { Locale } from "@/lib/i18n/locale";
+import { localize } from "@/lib/i18n/locale";
 import type { PortfolioProjectWithImages } from "@/lib/services/portfolioService.types";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { ProjectGallery } from "./ProjectGallery";
@@ -51,11 +52,7 @@ export function WorkGrid({
         ))}
       </div>
       <div className="selected-work-footer">
-        <span>
-          {locale === "ar"
-            ? "// المزيد قريباً. لنبدأ مشروعك التالي."
-            : "// More to come. Let’s build yours next."}
-        </span>
+        <span>{dict.portfolio.footerTagline}</span>
         <button
           type="button"
           onClick={() => setShowAll(true)}
@@ -108,6 +105,7 @@ function WorkCard({
   onOpen: () => void;
 }) {
   const { title, description } = localizedProject(project, locale);
+  const dict = getDictionary(locale);
   return (
     <article className="work-card">
       <ProjectGallery images={project.images} locale={locale} title={title} />
@@ -117,7 +115,7 @@ function WorkCard({
         {project.technologies.length > 0 && (
           <ul
             className="project-tags"
-            aria-label={locale === "ar" ? "التقنيات" : "Technologies"}
+            aria-label={dict.portfolio.technologies}
           >
             {project.technologies.map((technology) => (
               <li key={technology}>{technology}</li>
@@ -155,19 +153,30 @@ function AllProjectsModal({
   onClose: () => void;
   onOpenProject: (project: PortfolioProjectWithImages) => void;
 }) {
+  const dict = getDictionary(locale);
   const [category, setCategory] = useState("all");
-  const categories = useMemo(
-    () =>
-      Array.from(
-        new Set(projects.map((project) => project.category).filter(Boolean)),
-      ) as string[],
-    [projects],
-  );
+  // Filtering stays keyed on the canonical (English) category value so
+  // projects group correctly even when only some have an Arabic label;
+  // categoryLabels supplies the localized text shown for each chip.
+  const { categories, categoryLabels } = useMemo(() => {
+    const labels = new Map<string, string>();
+    for (const project of projects) {
+      if (project.category && !labels.has(project.category)) {
+        labels.set(
+          project.category,
+          localize(locale, {
+            valueEn: project.category,
+            valueAr: project.categoryAr ?? "",
+          }),
+        );
+      }
+    }
+    return { categories: Array.from(labels.keys()), categoryLabels: labels };
+  }, [projects, locale]);
   const filtered =
     category === "all"
       ? projects
       : projects.filter((project) => project.category === category);
-  const heading = locale === "ar" ? "كل المشاريع" : "All Projects";
   return (
     <Modal
       isOpen={isOpen}
@@ -180,26 +189,24 @@ function AllProjectsModal({
         <button
           type="button"
           onClick={onClose}
-          aria-label={locale === "ar" ? "إغلاق" : "Close"}
+          aria-label={dict.portfolio.close}
           className="icon-button all-projects-close"
         >
           ×
         </button>
-        <h2 id="all-projects-title">{heading}</h2>
-        <p>
-          {locale === "ar" ? "مجموعة من أعمالنا." : "A collection of our work."}
-        </p>
+        <h2 id="all-projects-title">{dict.portfolio.allProjectsHeading}</h2>
+        <p>{dict.portfolio.allProjectsIntro}</p>
         <div
           className="project-filters"
           role="group"
-          aria-label={locale === "ar" ? "تصفية المشاريع" : "Filter projects"}
+          aria-label={dict.portfolio.filterProjects}
         >
           <button
             type="button"
             aria-pressed={category === "all"}
             onClick={() => setCategory("all")}
           >
-            {locale === "ar" ? "الكل" : "All"}
+            {dict.portfolio.allCategory}
           </button>
           {categories.map((item) => (
             <button
@@ -208,7 +215,7 @@ function AllProjectsModal({
               aria-pressed={category === item}
               onClick={() => setCategory(item)}
             >
-              {item}
+              {categoryLabels.get(item) ?? item}
             </button>
           ))}
         </div>

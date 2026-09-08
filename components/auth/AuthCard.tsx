@@ -1,43 +1,48 @@
 import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
 import { Panel } from "@/components/ui/Panel";
+import type { Locale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export function AuthCard({
   title,
   subtitle,
   companyName,
+  locale,
   children,
   footer,
 }: {
   title: string;
   subtitle?: string;
   companyName: string;
+  locale: Locale;
   children: React.ReactNode;
   footer?: React.ReactNode;
 }) {
   const brandName = companyName;
+  const dict = getDictionary(locale);
   return (
     <main id="main-content" className="auth-layout">
       <div className="auth-context">
         <Link href="/" className="section-marker">
-          {brandName} · Software studio
+          {brandName} · {dict.auth.card.tagline}
         </Link>
         <div className="auth-wordmark">ATOI</div>
-        <p className="max-w-sm text-muted">
-          Your projects. A clear view of the work.
-        </p>
+        <p className="max-w-sm text-muted">{dict.auth.card.portalTagline}</p>
         <Link
           href="/"
           className="mt-8 inline-block text-sm text-accent hover:underline"
         >
-          ← Back to the website
+          {dict.auth.card.backToWebsite}
         </Link>
       </div>
       <div>
         <Panel className="auth-panel">
           <div className="panel-strip auth-strip">
-            <span>{brandName.toLowerCase()} / account access</span>
-            <ThemeToggle />
+            <bdi dir="ltr">
+              {brandName.toLowerCase()} / {dict.auth.card.accessLine}
+            </bdi>
+            <ThemeToggle locale={locale} />
           </div>
           <h1>{title}</h1>
           {subtitle && <p className="mt-3 text-muted">{subtitle}</p>}

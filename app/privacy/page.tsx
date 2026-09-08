@@ -2,14 +2,42 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getCompanySettings } from "@/lib/services/settingsService";
+import { getLocale } from "@/lib/i18n/getLocale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { interpolate, interpolateNodes } from "@/lib/i18n/format";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getCompanySettings();
-  return { title: `Privacy Policy — ${settings.companyName}` };
+  const [settings, locale] = await Promise.all([
+    getCompanySettings(),
+    getLocale(),
+  ]);
+  const dict = getDictionary(locale);
+  return {
+    title: interpolate(dict.legal.privacy.metaTitle, {
+      companyName: settings.companyName,
+    }),
+  };
 }
 
 export default async function PrivacyPage() {
-  const settings = await getCompanySettings();
+  const [settings, locale] = await Promise.all([
+    getCompanySettings(),
+    getLocale(),
+  ]);
+  const dict = getDictionary(locale);
+
+  const companyNode = (
+    <bdi key="companyName" dir="ltr">
+      {settings.companyName}
+    </bdi>
+  );
+  const emailNode = (
+    <bdi key="email" dir="ltr">
+      <a href={`mailto:${settings.companyEmail}`} className="underline">
+        {settings.companyEmail}
+      </a>
+    </bdi>
+  );
 
   return (
     <main id="main-content" className="legal-page">
@@ -18,32 +46,24 @@ export default async function PrivacyPage() {
           href="/"
           className="text-sm font-semibold text-accent hover:underline"
         >
-          ← Back home
+          {dict.legal.backHome}
         </Link>
-        <ThemeToggle />
+        <ThemeToggle locale={locale} />
       </div>
       <h1 className="mt-6 text-3xl font-semibold tracking-normal">
-        Privacy Policy
+        {dict.legal.privacy.heading}
       </h1>
       <div className="mt-6 space-y-4 text-foreground/70">
         <p>
-          {settings.companyName} collects the information you provide when you
-          submit a project request or use the customer portal — such as your
-          name, business name, email address and phone number — solely to
-          respond to your request and deliver our services.
+          {interpolateNodes(dict.legal.privacy.paragraph1, {
+            companyName: companyNode,
+          })}
         </p>
+        <p>{dict.legal.privacy.paragraph2}</p>
         <p>
-          We do not sell your information. We use Resend to send transactional
-          emails (request confirmations, account setup, project updates, and
-          support notifications) and a PostgreSQL database to store your request
-          and project information securely.
-        </p>
-        <p>
-          Contact us at{" "}
-          <a href={`mailto:${settings.companyEmail}`} className="underline">
-            {settings.companyEmail}
-          </a>{" "}
-          with any questions about your data.
+          {interpolateNodes(dict.legal.privacy.paragraph3, {
+            email: emailNode,
+          })}
         </p>
       </div>
     </main>

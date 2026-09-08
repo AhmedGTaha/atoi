@@ -4,8 +4,8 @@ export const supportRequestInputSchema = z.object({
   message: z
     .string()
     .trim()
-    .min(5, "Please enter at least 5 characters.")
-    .max(5000, "Message must be 5000 characters or fewer."),
+    .min(5, "MESSAGE_TOO_SHORT")
+    .max(5000, "MESSAGE_TOO_LONG"),
 });
 
 export type SupportRequestInput = z.infer<typeof supportRequestInputSchema>;

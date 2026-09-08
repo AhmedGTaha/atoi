@@ -28,7 +28,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Heading",
     multiline: false,
     valueEn: "Give us the problem. We ship the software.",
-    valueAr: "أعطنا المشكلة. سنشحن لك البرمجيات.",
+    valueAr: "أخبرنا بالمشكلة. ونحن نبني الحل البرمجي.",
   },
   {
     key: "hero.body",
@@ -38,7 +38,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     valueEn:
       "We design and build websites, web applications and internal software for businesses in Bahrain and beyond.",
     valueAr:
-      "نصمم ونبني مواقع إلكترونية وتطبيقات ويب وبرمجيات داخلية للشركات في البحرين وخارجها.",
+      "نصمم ونطوّر مواقع إلكترونية وتطبيقات ويب وأنظمة داخلية للشركات في البحرين وخارجها.",
   },
   {
     key: "hero.ctaPrimary",
@@ -46,7 +46,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Primary button label",
     multiline: false,
     valueEn: "Start a project",
-    valueAr: "ابدأ مشروعاً",
+    valueAr: "ابدأ مشروعك",
   },
   {
     key: "hero.ctaSecondary",
@@ -62,7 +62,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Heading",
     multiline: false,
     valueEn: "Six things, done properly.",
-    valueAr: "ستة أشياء، بإتقان.",
+    valueAr: "ستة حلول، ننفذها بإتقان.",
   },
   {
     key: "services.item1.name",
@@ -78,7 +78,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 1 description",
     multiline: true,
     valueEn: "Fast, clear, and editable by your team.",
-    valueAr: "سريعة وواضحة وقابلة للتعديل من فريقك.",
+    valueAr: "سريعة وواضحة، ويمكن لفريقك تحديثها بسهولة.",
   },
   {
     key: "services.item1.duration",
@@ -86,7 +86,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 1 duration",
     multiline: false,
     valueEn: "3–6 wks",
-    valueAr: "٣-٦ أسابيع",
+    valueAr: "٣–٦ أسابيع",
   },
   {
     key: "services.item2.name",
@@ -102,7 +102,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 2 description",
     multiline: true,
     valueEn: "Accounts, permissions and screens built for daily use.",
-    valueAr: "حسابات وصلاحيات وشاشات مبنية للاستخدام اليومي.",
+    valueAr: "حسابات وصلاحيات وواجهات مصممة للاستخدام اليومي.",
   },
   {
     key: "services.item2.duration",
@@ -110,7 +110,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 2 duration",
     multiline: false,
     valueEn: "6–14 wks",
-    valueAr: "٦-١٤ أسبوعاً",
+    valueAr: "٦–١٤ أسبوعًا",
   },
   {
     key: "services.item3.name",
@@ -118,7 +118,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 3 name",
     multiline: false,
     valueEn: "saas products",
-    valueAr: "منتجات ساس",
+    valueAr: "منتجات SaaS",
   },
   {
     key: "services.item3.description",
@@ -126,7 +126,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 3 description",
     multiline: true,
     valueEn: "Idea to paid product, then releases after launch.",
-    valueAr: "من الفكرة إلى منتج مدفوع، ثم تحديثات بعد الإطلاق.",
+    valueAr: "من الفكرة إلى منتج مدفوع، ثم تحديثات وتطوير بعد الإطلاق.",
   },
   {
     key: "services.item3.duration",
@@ -150,7 +150,8 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 4 description",
     multiline: true,
     valueEn: "The spreadsheet that runs your operation, rebuilt properly.",
-    valueAr: "جدول البيانات الذي يدير عملك، معاد بناؤه بشكل صحيح.",
+    valueAr:
+      "نحوّل جداول البيانات التي يعتمد عليها عملك إلى أدوات داخلية مصممة كما ينبغي.",
   },
   {
     key: "services.item4.duration",
@@ -158,7 +159,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 4 duration",
     multiline: false,
     valueEn: "4–10 wks",
-    valueAr: "٤-١٠ أسابيع",
+    valueAr: "٤–١٠ أسابيع",
   },
   {
     key: "services.item5.name",
@@ -174,7 +175,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 5 description",
     multiline: true,
     valueEn: "Systems that talk to each other; reports that write themselves.",
-    valueAr: "أنظمة تتواصل مع بعضها؛ تقارير تكتب نفسها.",
+    valueAr: "أنظمة مترابطة، وتقارير تُنشأ تلقائيًا.",
   },
   {
     key: "services.item5.duration",
@@ -182,7 +183,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 5 duration",
     multiline: false,
     valueEn: "2–5 wks",
-    valueAr: "٢-٥ أسابيع",
+    valueAr: "٢–٥ أسابيع",
   },
   {
     key: "services.item6.name",
@@ -198,7 +199,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 6 description",
     multiline: true,
     valueEn: "The thing no product on the market does.",
-    valueAr: "الشيء الذي لا يقدمه أي منتج في السوق.",
+    valueAr: "حلول مخصصة عندما لا يلبّي أي منتج جاهز احتياجك.",
   },
   {
     key: "services.item6.duration",
@@ -206,7 +207,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Service 6 duration",
     multiline: false,
     valueEn: "by scope",
-    valueAr: "حسب النطاق",
+    valueAr: "حسب نطاق المشروع",
   },
   {
     key: "process.heading",
@@ -214,7 +215,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Heading",
     multiline: false,
     valueEn: "From idea to production.",
-    valueAr: "من الفكرة إلى الإنتاج.",
+    valueAr: "من الفكرة إلى الإطلاق.",
   },
   {
     key: "process.step1.name",
@@ -230,7 +231,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Step 1 description",
     multiline: true,
     valueEn: "We define the scope, priorities, and technical approach with you.",
-    valueAr: "نحدد النطاق والأولويات والنهج التقني معك.",
+    valueAr: "نحدد معك نطاق المشروع وأولوياته والنهج التقني المناسب.",
   },
   {
     key: "process.step2.name",
@@ -238,7 +239,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Step 2 name",
     multiline: false,
     valueEn: "See progress every week",
-    valueAr: "شاهد التقدم كل أسبوع",
+    valueAr: "تابع التقدّم كل أسبوع",
   },
   {
     key: "process.step2.description",
@@ -246,7 +247,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Step 2 description",
     multiline: true,
     valueEn: "You get working builds on a real URL, not just status updates.",
-    valueAr: "تحصل على إصدارات عمل على رابط حقيقي، وليس مجرد تحديثات حالة.",
+    valueAr: "تحصل على نسخ تعمل فعليًا على رابط حقيقي، لا مجرد تحديثات عن الحالة.",
   },
   {
     key: "process.step3.name",
@@ -254,7 +255,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Step 3 name",
     multiline: false,
     valueEn: "Own what we build",
-    valueAr: "امتلك ما نبنيه",
+    valueAr: "ما نبنيه لك هو ملكك",
   },
   {
     key: "process.step3.description",
@@ -262,7 +263,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Step 3 description",
     multiline: true,
     valueEn: "Clean code, documentation, and a project your team can continue developing.",
-    valueAr: "كود نظيف وتوثيق ومشروع يستطيع فريقك مواصلة تطويره.",
+    valueAr: "كود نظيف، وتوثيق واضح، ومشروع يستطيع فريقك مواصلة تطويره.",
   },
   {
     key: "work.heading",
@@ -280,7 +281,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     valueEn:
       "Real projects. Real impact. Built with modern technology for forward-thinking businesses.",
     valueAr:
-      "مشاريع حقيقية وتأثير حقيقي. نبني بتقنيات حديثة للشركات ذات النظرة المستقبلية.",
+      "مشاريع حقيقية ونتائج ملموسة، بنيناها بتقنيات حديثة لشركات تتطلع إلى المستقبل.",
   },
   {
     key: "work.seeAllLabel",
@@ -288,7 +289,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: '"See all projects" label',
     multiline: false,
     valueEn: "See all projects",
-    valueAr: "عرض كل المشاريع",
+    valueAr: "شاهد جميع المشاريع",
   },
   {
     key: "finalCta.eyebrow",
@@ -296,7 +297,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Eyebrow",
     multiline: false,
     valueEn: "start a project",
-    valueAr: "ابدأ مشروعاً",
+    valueAr: "ابدأ مشروعك",
   },
   {
     key: "finalCta.heading",
@@ -304,7 +305,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Heading",
     multiline: false,
     valueEn: "Have something worth building?",
-    valueAr: "هل لديك ما يستحق البناء؟",
+    valueAr: "لديك فكرة تستحق التنفيذ؟",
   },
   {
     key: "finalCta.ctaLabel",
@@ -312,7 +313,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Button label",
     multiline: false,
     valueEn: "Open the inquiry form",
-    valueAr: "افتح نموذج الاستفسار",
+    valueAr: "أخبرنا عن مشروعك",
   },
   {
     key: "footer.tagline",
@@ -320,7 +321,7 @@ export const DEFAULT_WEBSITE_CONTENT: WebsiteContentField[] = [
     label: "Company tagline",
     multiline: false,
     valueEn: "Software solutions, made straightforward.",
-    valueAr: "حلول برمجية، بأسلوب مباشر.",
+    valueAr: "حلول برمجية بلا تعقيد.",
   },
 ];
 

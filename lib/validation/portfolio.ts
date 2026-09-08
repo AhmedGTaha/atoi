@@ -15,6 +15,7 @@ export const portfolioProjectSchema = z.object({
     .min(1, "Arabic description is required.")
     .max(2000),
   category: z.string().trim().max(100).optional().nullable(),
+  categoryAr: z.string().trim().max(100).optional().nullable(),
   clientName: z.string().trim().max(200).optional().nullable(),
   problemEn: z.string().trim().max(4000).optional().nullable(),
   problemAr: z.string().trim().max(4000).optional().nullable(),

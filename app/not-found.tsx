@@ -1,21 +1,19 @@
 import Link from "next/link";
 import { Panel } from "@/components/ui/Panel";
 import { getLocale } from "@/lib/i18n/getLocale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export default async function NotFound() {
-  const ar = (await getLocale()) === "ar";
+  const locale = await getLocale();
+  const dict = getDictionary(locale);
   return (
     <main id="main-content" className="site-container py-16">
       <Panel className="max-w-xl p-8">
         <p className="section-marker mb-4">ATOI / 404</p>
-        <h1>{ar ? "الصفحة غير موجودة" : "Page not found"}</h1>
-        <p className="my-6 text-muted">
-          {ar
-            ? "تحقق من الرابط أو عد إلى الصفحة الرئيسية."
-            : "Check the address or return to the website to continue."}
-        </p>
+        <h1>{dict.notFound.heading}</h1>
+        <p className="my-6 text-muted">{dict.notFound.body}</p>
         <Link href="/" className="btn btn-primary">
-          {ar ? "الرئيسية" : "Back home"}
+          {dict.notFound.backHome}
         </Link>
       </Panel>
     </main>

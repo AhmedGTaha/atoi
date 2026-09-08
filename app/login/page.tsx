@@ -4,6 +4,8 @@ import { AuthCard } from "@/components/auth/AuthCard";
 import { UniversalLoginForm } from "@/components/auth/UniversalLoginForm";
 import { getCompanySettings } from "@/lib/services/settingsService";
 import { getOptionalAdmin, getOptionalCustomer } from "@/lib/auth/guards";
+import { getLocale } from "@/lib/i18n/getLocale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
@@ -23,18 +25,24 @@ export default async function LoginPage({
   if (admin) redirect("/admin");
   if (customer) redirect("/portal");
 
-  const [settings, { passwordSet }] = await Promise.all([
+  const [settings, { passwordSet }, locale] = await Promise.all([
     getCompanySettings(),
     searchParams,
+    getLocale(),
   ]);
+  const dict = getDictionary(locale);
 
   return (
     <AuthCard
-      title="Sign in"
-      subtitle="One account, everything ATOI."
+      title={dict.auth.signIn.title}
+      subtitle={dict.auth.signIn.subtitle}
       companyName={settings.companyName}
+      locale={locale}
     >
-      <UniversalLoginForm justSetPassword={passwordSet === "1"} />
+      <UniversalLoginForm
+        justSetPassword={passwordSet === "1"}
+        locale={locale}
+      />
     </AuthCard>
   );
 }

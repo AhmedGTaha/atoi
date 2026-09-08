@@ -218,6 +218,64 @@ describe("internalNewRequestEmail", () => {
   });
 });
 
+describe("Arabic customer email localization", () => {
+  it("never leaks the English layout tagline or NOTIFICATION label into an Arabic email", () => {
+    const samples = [
+      requestConfirmationEmail("ar", COMPANY, "وصف المشروع").html,
+      customerInvitationEmail(
+        "ar",
+        COMPANY,
+        "https://atoi.online/set-password?token=abc",
+      ).html,
+      passwordResetEmail(
+        "ar",
+        COMPANY,
+        "https://atoi.online/set-password?token=abc&mode=reset",
+      ).html,
+      projectUpdateEmail(
+        "ar",
+        COMPANY,
+        "حجز الصالون",
+        "تحديث النص.",
+        "DEVELOPMENT",
+        40,
+        "https://atoi.online/portal/projects/1",
+      ).html,
+    ];
+
+    for (const html of samples) {
+      expect(html).not.toContain("Bahrain-based software studio");
+      expect(html).not.toContain("NOTIFICATION");
+      expect(html).toContain("إشعار");
+      expect(html).toContain("استوديو برمجيات من البحرين");
+      expect(html).toContain('lang="ar"');
+      expect(html).toContain('dir="rtl"');
+      // Arabic prose must not be forced into the Latin monospace stack.
+      expect(html).toMatch(/font-family:Tahoma, ?Arial, ?sans-serif/);
+    }
+  });
+
+  it("shows the polished Arabic request-confirmation copy", () => {
+    const email = requestConfirmationEmail("ar", COMPANY, "سارة");
+    expect(email.subject).toBe("تم استلام طلب مشروعك");
+    expect(email.html).toContain("شكرًا لتواصلك معنا.");
+    expect(email.html).toContain("مرحبًا سارة،");
+  });
+
+  it("formats Arabic project-update progress with Arabic-Indic digits", () => {
+    const email = projectUpdateEmail(
+      "ar",
+      COMPANY,
+      "حجز الصالون",
+      "تحديث",
+      "TESTING",
+      40,
+      "https://atoi.online/portal/projects/1",
+    );
+    expect(email.html).toContain("٤٠");
+  });
+});
+
 describe("supportNotificationEmail", () => {
   it("has an 'Open project' CTA linking to the admin URL", () => {
     const adminUrl = "https://atoi.online/admin/projects/proj-2";

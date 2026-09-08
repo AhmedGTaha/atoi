@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { statusLabel } from "@/lib/i18n/labels";
+import { formatDate, formatPercent } from "@/lib/i18n/format";
 import type { Project } from "@prisma/client";
 
 export function ProjectCard({
@@ -28,7 +29,7 @@ export function ProjectCard({
       <div className="mt-4">
         <div className="flex items-center justify-between text-sm text-muted">
           <span>{dict.portal.progress}</span>
-          <span>{project.progress}%</span>
+          <span>{formatPercent(locale, project.progress)}</span>
         </div>
         <div
           role="progressbar"
@@ -46,7 +47,7 @@ export function ProjectCard({
       </div>
 
       <p className="mt-4 text-sm text-muted">
-        {dict.portal.lastUpdated}: {project.updatedAt.toLocaleDateString()}
+        {dict.portal.lastUpdated}: {formatDate(locale, project.updatedAt)}
       </p>
     </Link>
   );

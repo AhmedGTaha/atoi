@@ -53,7 +53,7 @@ export async function submitProjectRequest(
     return {
       ok: false,
       fieldErrors: {
-        phoneNumber: phoneResult.error ?? "Invalid phone number.",
+        phoneNumber: phoneResult.errorCode ?? "PHONE_INVALID_FOR_COUNTRY",
       },
     };
   }

@@ -15,6 +15,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:fix-branding": "tsx scripts/fix-atoi-branding.ts",
     "db:sync-mockup-content": "tsx scripts/sync-mockup-content.ts",
+    "db:sync-arabic-localization": "tsx scripts/sync-arabic-localization.ts",
     "db:studio": "prisma studio",
     "test": "vitest run",
     "test:watch": "vitest",
