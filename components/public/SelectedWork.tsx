@@ -25,7 +25,7 @@ export function SelectedWork({
           as="p"
           className="section-marker section-marker-reveal selected-work-marker"
         >
-          [ 02 ]
+          [ 01 ] selected work
         </MotionReveal>
         <MotionReveal className="selected-work-heading" delay={70}>
           <div>

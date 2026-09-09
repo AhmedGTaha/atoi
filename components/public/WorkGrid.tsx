@@ -31,15 +31,6 @@ export function WorkGrid({
 
   return (
     <>
-      <div className="selected-work-actions">
-        <button
-          type="button"
-          onClick={() => setShowAll(true)}
-          className="work-cta"
-        >
-          {seeAllLabel} <ArrowIcon />
-        </button>
-      </div>
       <div className="work-grid">
         {featured.map((project, index) => (
           <MotionReveal
@@ -111,7 +102,6 @@ function WorkCard({
   onOpen: () => void;
 }) {
   const { title, description } = localizedProject(project, locale);
-  const dict = getDictionary(locale);
   const category = project.category
     ? localize(locale, {
         valueEn: project.category,
@@ -119,22 +109,73 @@ function WorkCard({
       })
     : null;
   const metadata = [category, project.clientName].filter(Boolean);
+  const built = localize(locale, {
+    valueEn: project.builtEn ?? "",
+    valueAr: project.builtAr ?? "",
+  });
+  const result = localize(locale, {
+    valueEn: project.resultEn ?? "",
+    valueAr: project.resultAr ?? "",
+  });
+  const detail =
+    built || metadata.join(" · ") || project.technologies.join(" · ");
+  const projectSlug = title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+  const frameLabel = project.liveUrl
+    ? project.liveUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")
+    : `work/${projectSlug || `project-${number}`}`;
+
+  if (number === FEATURED_COUNT) {
+    return (
+      <article className="work-card work-card-wide">
+        <div className="work-wide-heading">
+          <div>
+            <p className="work-card-kicker">{frameLabel}</p>
+            <h3 className="work-title">{title}</h3>
+          </div>
+          <button
+            type="button"
+            aria-label={`${actionLabel}: ${title}`}
+            onClick={onOpen}
+            className="work-cta"
+          >
+            {actionLabel} <ArrowIcon />
+          </button>
+        </div>
+        <ProjectGallery
+          images={project.images}
+          locale={locale}
+          title={title}
+          frameLabel={frameLabel}
+          mode="featured"
+          className="work-card-media"
+        />
+        <div className="work-wide-details">
+          <p className="work-desc">{description}</p>
+          {(detail || result) && (
+            <p className="work-card-meta">
+              {detail}
+              {result && <span>{result}</span>}
+            </p>
+          )}
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article className="work-card">
       <div className="work-card-body">
-        <p className="work-card-kicker">
-          {metadata.length > 0
-            ? metadata.join(" · ")
-            : `[ ${String(number).padStart(2, "0")} ]`}
-        </p>
+        <p className="work-card-kicker">{frameLabel}</p>
         <h3 className="work-title">{title}</h3>
         <p className="work-desc">{description}</p>
-        {project.technologies.length > 0 && (
-          <ul className="project-tags" aria-label={dict.portfolio.technologies}>
-            {project.technologies.map((technology) => (
-              <li key={technology}>{technology}</li>
-            ))}
-          </ul>
+        {(detail || result) && (
+          <p className="work-card-meta">
+            {detail}
+            {result && <span>{result}</span>}
+          </p>
         )}
         <div className="work-card-footer">
           <button
@@ -145,15 +186,13 @@ function WorkCard({
           >
             {actionLabel} <ArrowIcon />
           </button>
-          <span className="work-card-index">
-            [ {String(number).padStart(2, "0")} ]
-          </span>
         </div>
       </div>
       <ProjectGallery
         images={project.images}
         locale={locale}
         title={title}
+        frameLabel={frameLabel}
         mode="featured"
         className="work-card-media"
       />

@@ -17,12 +17,14 @@ export function ProjectGallery({
   images,
   locale,
   title,
+  frameLabel,
   mode = "card",
   className,
 }: {
   images: GalleryImage[];
   locale: Locale;
   title: string;
+  frameLabel?: string;
   mode?: "card" | "detail" | "preview" | "featured";
   className?: string;
 }) {
@@ -115,6 +117,9 @@ export function ProjectGallery({
     <div
       className={`project-gallery project-gallery-${mode} ${className ?? ""}`}
     >
+      {mode === "featured" && frameLabel && (
+        <div className="project-gallery-framebar">{frameLabel}</div>
+      )}
       <div
         className="project-gallery-stage"
         style={
@@ -136,7 +141,11 @@ export function ProjectGallery({
                 ? "(min-width: 1024px) 58vw, 92vw"
                 : "(min-width: 1024px) 34vw, 92vw"
           }
-          className="object-contain object-center"
+          className={
+            mode === "featured"
+              ? "object-cover object-center"
+              : "object-contain object-center"
+          }
           unoptimized={image.publicUrl.startsWith("blob:")}
         />
         {canGoPrevious && (
