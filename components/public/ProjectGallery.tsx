@@ -23,7 +23,7 @@ export function ProjectGallery({
   images: GalleryImage[];
   locale: Locale;
   title: string;
-  mode?: "card" | "detail" | "preview";
+  mode?: "card" | "detail" | "preview" | "featured";
   className?: string;
 }) {
   const coverIndex = useMemo(
@@ -75,7 +75,9 @@ export function ProjectGallery({
           sizes={
             mode === "detail"
               ? "(min-width: 1024px) 52vw, 94vw"
-              : "(min-width: 1024px) 34vw, 92vw"
+              : mode === "featured"
+                ? "(min-width: 1024px) 58vw, 92vw"
+                : "(min-width: 1024px) 34vw, 92vw"
           }
           className="object-contain object-center"
           unoptimized={image.publicUrl.startsWith("blob:")}
@@ -105,7 +107,8 @@ export function ProjectGallery({
       {count > 1 && (
         <div className="project-gallery-status">
           <span>
-            {formatNumber(locale, imageIndex + 1)} / {formatNumber(locale, count)}
+            {formatNumber(locale, imageIndex + 1)} /{" "}
+            {formatNumber(locale, count)}
           </span>
           <div
             className="project-gallery-dots"

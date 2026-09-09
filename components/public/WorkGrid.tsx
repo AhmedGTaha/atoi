@@ -44,7 +44,7 @@ export function WorkGrid({
         {featured.map((project, index) => (
           <MotionReveal
             key={project.id}
-            className="motion-work-card"
+            className={`motion-work-card motion-featured-work motion-featured-work-${index + 1}`}
             delay={120 + index * 110}
           >
             <WorkCard
@@ -112,10 +112,21 @@ function WorkCard({
 }) {
   const { title, description } = localizedProject(project, locale);
   const dict = getDictionary(locale);
+  const category = project.category
+    ? localize(locale, {
+        valueEn: project.category,
+        valueAr: project.categoryAr ?? "",
+      })
+    : null;
+  const metadata = [category, project.clientName].filter(Boolean);
   return (
     <article className="work-card">
-      <ProjectGallery images={project.images} locale={locale} title={title} />
       <div className="work-card-body">
+        <p className="work-card-kicker">
+          {metadata.length > 0
+            ? metadata.join(" · ")
+            : `[ ${String(number).padStart(2, "0")} ]`}
+        </p>
         <h3 className="work-title">{title}</h3>
         <p className="work-desc">{description}</p>
         {project.technologies.length > 0 && (
@@ -134,11 +145,18 @@ function WorkCard({
           >
             {actionLabel} <ArrowIcon />
           </button>
-          <span className="section-marker">
+          <span className="work-card-index">
             [ {String(number).padStart(2, "0")} ]
           </span>
         </div>
       </div>
+      <ProjectGallery
+        images={project.images}
+        locale={locale}
+        title={title}
+        mode="featured"
+        className="work-card-media"
+      />
     </article>
   );
 }
