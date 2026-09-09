@@ -1044,7 +1044,7 @@ html[dir="rtl"] {
   }
   .motion-work-card[data-motion-ready]:not([data-motion-visible]) {
     opacity: 0;
-    transform: translateY(28px);
+    transform: translateY(16px);
   }
   .motion-work-card[data-motion-ready] {
     transition:
@@ -1967,6 +1967,7 @@ html[dir="rtl"] .section-marker-reveal::after {
   gap: 28px;
 }
 .selected-work-heading h2 {
+  max-width: 26ch;
   margin: 0;
   font: 500 clamp(27px, 3.4vw, 42px)/1.08 var(--font-heading);
   letter-spacing: -0.04em;
@@ -2039,6 +2040,7 @@ html[dir="rtl"] .section-marker-reveal::after {
   overflow: hidden;
   border: 1px solid var(--color-divider);
   background: var(--color-surface);
+  transition: border-color var(--motion-fast);
 }
 .project-gallery-framebar {
   padding: 9px 12px;
@@ -2050,12 +2052,16 @@ html[dir="rtl"] .section-marker-reveal::after {
   aspect-ratio: 16 / 10 !important;
   border: 0;
 }
+.work-card-media-wide .project-gallery-stage,
+.work-card-media-wide .project-gallery-empty {
+  aspect-ratio: 2 / 1 !important;
+}
 .motion-featured-work .project-gallery-stage {
   transition:
     border-color var(--motion-fast),
     background-color var(--motion-fast);
 }
-.motion-featured-work:hover .project-gallery-stage {
+.motion-featured-work:hover .work-card-media {
   border-color: var(--color-line-hi);
 }
 .motion-featured-work:hover .project-gallery-stage > img {
@@ -2256,17 +2262,17 @@ html[dir="rtl"] .section-marker-reveal::after {
 }
 
 /* The featured trio follows the editorial rhythm of the public work reference. */
-@media (min-width: 768px) {
+@media (min-width: 900px) {
   .work-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: clamp(50px, 7vw, 96px);
+    gap: clamp(36px, 4.4vw, 64px);
   }
   .work-card {
     display: grid;
-    grid-template-columns: minmax(240px, 0.78fr) minmax(0, 1.22fr);
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     align-items: center;
-    gap: clamp(34px, 5vw, 78px);
+    gap: clamp(20px, 2.6vw, 40px);
   }
   .work-card-media {
     order: initial;
@@ -2274,6 +2280,9 @@ html[dir="rtl"] .section-marker-reveal::after {
   .motion-featured-work-2 .work-card-body {
     grid-column: 2;
     grid-row: 1;
+  }
+  .motion-featured-work-2 .work-card {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   }
   .motion-featured-work-2 .work-card-media {
     grid-column: 1;
@@ -2287,6 +2296,11 @@ html[dir="rtl"] .section-marker-reveal::after {
   .motion-featured-work-3 .work-wide-details {
     grid-column: 1 / -1;
   }
+}
+
+.project-gallery-featured .project-gallery-status {
+  padding: 10px 12px;
+  border-top: 1px solid var(--color-divider);
 }
 
 .all-projects-dialog {

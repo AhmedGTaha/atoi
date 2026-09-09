@@ -25,7 +25,7 @@ export function SelectedWork({
           as="p"
           className="section-marker section-marker-reveal selected-work-marker"
         >
-          [ 01 ] selected work
+          [01] {locale === "ar" ? "أعمال مختارة" : "selected work"}
         </MotionReveal>
         <MotionReveal className="selected-work-heading" delay={70}>
           <div>

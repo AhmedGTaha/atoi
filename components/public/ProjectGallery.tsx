@@ -102,6 +102,9 @@ export function ProjectGallery({
       <div
         className={`project-gallery project-gallery-${mode} ${className ?? ""}`}
       >
+        {mode === "featured" && frameLabel && (
+          <div className="project-gallery-framebar">{frameLabel}</div>
+        )}
         <div className="project-gallery-empty">{dict.gallery.emptyImage}</div>
       </div>
     );
@@ -141,11 +144,8 @@ export function ProjectGallery({
                 ? "(min-width: 1024px) 58vw, 92vw"
                 : "(min-width: 1024px) 34vw, 92vw"
           }
-          className={
-            mode === "featured"
-              ? "object-cover object-center"
-              : "object-contain object-center"
-          }
+          className="object-contain object-center"
+          quality={mode === "featured" ? 90 : undefined}
           unoptimized={image.publicUrl.startsWith("blob:")}
         />
         {canGoPrevious && (

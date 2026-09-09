@@ -27,7 +27,9 @@ export function WorkGrid({
   const [selected, setSelected] = useState<PortfolioProjectWithImages | null>(
     null,
   );
-  const featured = projects.slice(0, FEATURED_COUNT);
+  const featured = projects
+    .filter((project) => project.featured)
+    .slice(0, FEATURED_COUNT);
 
   return (
     <>
@@ -108,7 +110,7 @@ function WorkCard({
         valueAr: project.categoryAr ?? "",
       })
     : null;
-  const metadata = [category, project.clientName].filter(Boolean);
+  const technologySummary = project.technologies.join(" · ");
   const built = localize(locale, {
     valueEn: project.builtEn ?? "",
     valueAr: project.builtAr ?? "",
@@ -117,8 +119,9 @@ function WorkCard({
     valueEn: project.resultEn ?? "",
     valueAr: project.resultAr ?? "",
   });
-  const detail =
-    built || metadata.join(" · ") || project.technologies.join(" · ");
+  const detail = [project.clientName, technologySummary, built]
+    .filter(Boolean)
+    .join(" · ");
   const projectSlug = title
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
@@ -132,7 +135,7 @@ function WorkCard({
       <article className="work-card work-card-wide">
         <div className="work-wide-heading">
           <div>
-            <p className="work-card-kicker">{frameLabel}</p>
+            <p className="work-card-kicker">{category || frameLabel}</p>
             <h3 className="work-title">{title}</h3>
           </div>
           <button
@@ -150,7 +153,7 @@ function WorkCard({
           title={title}
           frameLabel={frameLabel}
           mode="featured"
-          className="work-card-media"
+          className="work-card-media work-card-media-wide"
         />
         <div className="work-wide-details">
           <p className="work-desc">{description}</p>
@@ -168,7 +171,7 @@ function WorkCard({
   return (
     <article className="work-card">
       <div className="work-card-body">
-        <p className="work-card-kicker">{frameLabel}</p>
+        <p className="work-card-kicker">{category || frameLabel}</p>
         <h3 className="work-title">{title}</h3>
         <p className="work-desc">{description}</p>
         {(detail || result) && (
