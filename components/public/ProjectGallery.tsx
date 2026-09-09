@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import Image from "next/image";
 import type { PortfolioImage } from "@prisma/client";
 import type { Locale } from "@/lib/i18n/locale";
@@ -35,12 +35,60 @@ export function ProjectGallery({
     [images],
   );
   const [imageIndex, setImageIndex] = useState(coverIndex);
+  const [frameRatio, setFrameRatio] = useState<number>();
   const imageSignature = images.map((image) => image.id).join(",");
   const dict = getDictionary(locale);
 
   useEffect(() => {
     setImageIndex(coverIndex);
   }, [coverIndex, imageSignature]);
+
+  // A gallery keeps one stable frame while the visitor moves through it.  Use
+  // the largest source image as that frame, rather than cropping every upload
+  // into a design-time ratio such as 16:10.
+  useEffect(() => {
+    let cancelled = false;
+
+    Promise.all(
+      images.map(
+        (galleryImage) =>
+          new Promise<{ width: number; height: number } | null>((resolve) => {
+            const source = new window.Image();
+            source.onload = () =>
+              resolve({
+                width: source.naturalWidth,
+                height: source.naturalHeight,
+              });
+            source.onerror = () => resolve(null);
+            source.src = galleryImage.publicUrl;
+          }),
+      ),
+    ).then((dimensions) => {
+      if (cancelled) return;
+      const largest = dimensions.reduce<{
+        width: number;
+        height: number;
+      } | null>((current, candidate) => {
+        if (!candidate) return current;
+        if (
+          !current ||
+          candidate.width * candidate.height > current.width * current.height
+        ) {
+          return candidate;
+        }
+        return current;
+      }, null);
+      setFrameRatio(
+        largest && largest.width > 0 && largest.height > 0
+          ? largest.width / largest.height
+          : undefined,
+      );
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [images, imageSignature]);
 
   const image = images[imageIndex];
   const count = images.length;
@@ -67,7 +115,16 @@ export function ProjectGallery({
     <div
       className={`project-gallery project-gallery-${mode} ${className ?? ""}`}
     >
-      <div className="project-gallery-stage">
+      <div
+        className="project-gallery-stage"
+        style={
+          frameRatio
+            ? ({
+                "--project-gallery-ratio": String(frameRatio),
+              } as CSSProperties)
+            : undefined
+        }
+      >
         <Image
           src={image.publicUrl}
           alt={alt}
