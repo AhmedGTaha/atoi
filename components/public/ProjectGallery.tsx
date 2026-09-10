@@ -145,7 +145,6 @@ export function ProjectGallery({
                 : "(min-width: 1024px) 34vw, 92vw"
           }
           className="object-contain object-center"
-          quality={mode === "featured" ? 90 : undefined}
           unoptimized={image.publicUrl.startsWith("blob:")}
         />
         {canGoPrevious && (

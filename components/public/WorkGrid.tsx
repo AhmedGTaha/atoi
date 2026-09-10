@@ -27,9 +27,7 @@ export function WorkGrid({
   const [selected, setSelected] = useState<PortfolioProjectWithImages | null>(
     null,
   );
-  const featured = projects
-    .filter((project) => project.featured)
-    .slice(0, FEATURED_COUNT);
+  const featured = projects.slice(0, FEATURED_COUNT);
 
   return (
     <>
