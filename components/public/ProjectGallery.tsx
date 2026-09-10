@@ -45,9 +45,9 @@ export function ProjectGallery({
     setImageIndex(coverIndex);
   }, [coverIndex, imageSignature]);
 
-  // A gallery keeps one stable frame while the visitor moves through it.  Use
-  // the largest source image as that frame, rather than cropping every upload
-  // into a design-time ratio such as 16:10.
+  // A gallery keeps one stable frame while the visitor moves through it. Its
+  // bounds are the largest usable width and height across the whole project,
+  // rather than the dimensions of whichever image is currently selected.
   useEffect(() => {
     let cancelled = false;
 
@@ -71,22 +71,19 @@ export function ProjectGallery({
       ),
     ).then((dimensions) => {
       if (cancelled) return;
-      const largest = dimensions.reduce<{
+      const bounds = dimensions.reduce<{
         width: number;
         height: number;
       } | null>((current, candidate) => {
         if (!candidate) return current;
-        if (
-          !current ||
-          candidate.width * candidate.height > current.width * current.height
-        ) {
-          return candidate;
-        }
-        return current;
+        return {
+          width: Math.max(current?.width ?? 0, candidate.width),
+          height: Math.max(current?.height ?? 0, candidate.height),
+        };
       }, null);
       setFrameRatio(
-        largest && largest.width > 0 && largest.height > 0
-          ? largest.width / largest.height
+        bounds && bounds.width > 0 && bounds.height > 0
+          ? bounds.width / bounds.height
           : undefined,
       );
     });
