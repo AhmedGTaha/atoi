@@ -28,14 +28,6 @@ export function WorkDetailModal({
     locale === "ar"
       ? project.descriptionAr || project.descriptionEn
       : project.descriptionEn;
-  const problem =
-    locale === "ar"
-      ? project.problemAr || project.problemEn
-      : project.problemEn;
-  const built =
-    locale === "ar" ? project.builtAr || project.builtEn : project.builtEn;
-  const result =
-    locale === "ar" ? project.resultAr || project.resultEn : project.resultEn;
   const category = project.category
     ? localize(locale, {
         valueEn: project.category,
@@ -85,9 +77,6 @@ export function WorkDetailModal({
         </div>
         <aside className="project-detail-overview">
           <h3>{dict.portfolio.projectOverview}</h3>
-          <p>
-            {[problem, built, result].filter(Boolean).join(" ") || description}
-          </p>
           <dl>
             {category && (
               <Metadata label={dict.portfolio.category}>{category}</Metadata>

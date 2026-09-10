@@ -51,6 +51,10 @@ export function ProjectGallery({
   useEffect(() => {
     let cancelled = false;
 
+    // Do not carry a previous project's canvas into a newly supplied gallery
+    // while its own image dimensions are being resolved.
+    setFrameRatio(undefined);
+
     Promise.all(
       images.map(
         (galleryImage) =>
@@ -90,7 +94,7 @@ export function ProjectGallery({
     return () => {
       cancelled = true;
     };
-  }, [images, imageSignature]);
+  }, [imageSignature, images]);
 
   const image = images[imageIndex];
   const count = images.length;
