@@ -5,6 +5,7 @@ import { setLocaleAction } from "@/lib/i18n/actions";
 import type { Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import clsx from "clsx";
+import { localizedPublicPath, publicRouteFromPath } from "@/lib/i18n/publicRoutes";
 
 export function LanguageToggle({
   locale,
@@ -26,6 +27,13 @@ export function LanguageToggle({
     }
     startTransition(async () => {
       await setLocaleAction(next);
+      const route = publicRouteFromPath(window.location.pathname);
+      if (route) {
+        // Reload across languages so the shared root layout's lang/dir also update.
+        window.location.assign(
+          localizedPublicPath(route.path, next) + window.location.search + window.location.hash,
+        );
+      }
     });
   }
 

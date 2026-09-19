@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { PUBLIC_LOCALE_HEADER, publicRouteFromPath } from "@/lib/i18n/publicRoutes";
 import {
   ADMIN_SESSION_COOKIE,
   CUSTOMER_SESSION_COOKIE,
@@ -10,6 +11,19 @@ import {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.delete(PUBLIC_LOCALE_HEADER);
+  const publicRoute = publicRouteFromPath(pathname);
+  if (publicRoute) {
+    requestHeaders.set(PUBLIC_LOCALE_HEADER, publicRoute.locale);
+    const options = { request: { headers: requestHeaders } };
+    if (publicRoute.locale === "ar") {
+      const url = request.nextUrl.clone();
+      url.pathname = publicRoute.path;
+      return NextResponse.rewrite(url, options);
+    }
+    return NextResponse.next(options);
+  }
 
   // /admin/login is retired in favor of the universal /login page — keep a
   // permanent redirect so old links/bookmarks still work.
@@ -58,11 +72,20 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
 export const config = {
   matcher: [
+    "/",
+    "/privacy",
+    "/terms",
+    "/ar",
+    "/ar/privacy",
+    "/ar/terms",
+    "/login",
+    "/forgot-password",
+    "/set-password",
     "/admin/:path*",
     "/admin-preview/:path*",
     "/portal/:path*",

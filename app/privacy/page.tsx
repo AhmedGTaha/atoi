@@ -6,6 +6,7 @@ import { getLocale } from "@/lib/i18n/getLocale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { interpolate, interpolateNodes } from "@/lib/i18n/format";
 import { publicMetadata } from "@/lib/publicMetadata";
+import { localizedPublicPath } from "@/lib/i18n/publicRoutes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [settings, locale] = await Promise.all([
@@ -49,7 +50,7 @@ export default async function PrivacyPage() {
     <main id="main-content" className="legal-page">
       <div className="flex items-center justify-between">
         <Link
-          href="/"
+          href={localizedPublicPath("/", locale)}
           className="text-sm font-semibold text-accent-foreground hover:underline"
         >
           {dict.legal.backHome}

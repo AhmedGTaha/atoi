@@ -8,6 +8,7 @@ import { PrimaryNav } from "./PrimaryNav";
 import { ScrollHeader } from "./ScrollHeader";
 import type { Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { localizedPublicPath } from "@/lib/i18n/publicRoutes";
 
 const NAV_ITEMS = [
   { href: "/#work", key: "work" as const },
@@ -31,10 +32,11 @@ export function Navbar({
   onLocaleChange?: (locale: Locale) => void;
 }) {
   const dict = getDictionary(locale);
+  const homePath = localizedPublicPath("/", locale);
 
   const navItems = NAV_ITEMS.map((item) => ({
     ...item,
-    href: previewMode ? item.href.replace("/", "") : item.href,
+    href: previewMode ? item.href.replace("/", "") : homePath + item.href.slice(1),
     label: dict.nav[item.key],
   }));
 
@@ -42,7 +44,7 @@ export function Navbar({
     <ScrollHeader>
       <Container className="public-nav-container">
         <Link
-          href={previewMode ? "#home" : "/#home"}
+          href={previewMode ? "#home" : `${homePath}#home`}
           className="public-brand-link"
         >
           <Logo

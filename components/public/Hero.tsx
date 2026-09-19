@@ -5,6 +5,7 @@ import type { Locale } from "@/lib/i18n/locale";
 import type { WebsiteContentMap } from "@/lib/services/websiteContentService";
 import { t } from "@/lib/content/helpers";
 import { HeroDepth, MotionReveal } from "./MotionReveal";
+import { localizedPublicPath } from "@/lib/i18n/publicRoutes";
 
 export function Hero({
   locale,
@@ -58,7 +59,7 @@ export function Hero({
               {t(content, "hero.ctaPrimary", locale)}
             </StartProjectTrigger>
             <Link
-              href={previewMode ? "#work" : "/#work"}
+              href={previewMode ? "#work" : `${localizedPublicPath("/", locale)}#work`}
               className="btn btn-secondary"
             >
               {t(content, "hero.ctaSecondary", locale)}
