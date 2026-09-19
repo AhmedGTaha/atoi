@@ -5,6 +5,7 @@ import { getCompanySettings } from "@/lib/services/settingsService";
 import { getLocale } from "@/lib/i18n/getLocale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { interpolate, interpolateNodes } from "@/lib/i18n/format";
+import { publicMetadata } from "@/lib/publicMetadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [settings, locale] = await Promise.all([
@@ -12,11 +13,16 @@ export async function generateMetadata(): Promise<Metadata> {
     getLocale(),
   ]);
   const dict = getDictionary(locale);
-  return {
-    title: interpolate(dict.legal.privacy.metaTitle, {
+  return publicMetadata(
+    "/privacy",
+    interpolate(dict.legal.privacy.metaTitle, {
       companyName: settings.companyName,
     }),
-  };
+    locale === "ar"
+      ? "تعرّف على كيفية جمع ATOI لبيانات طلبات المشاريع وبوابة العميل واستخدامها وتخزينها، وكيفية التواصل معنا بشأن بياناتك."
+      : "Learn how ATOI collects, uses, and stores project request and customer portal information, and how to contact us about your data.",
+    locale,
+  );
 }
 
 export default async function PrivacyPage() {

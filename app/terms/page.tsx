@@ -5,6 +5,7 @@ import { getCompanySettings } from "@/lib/services/settingsService";
 import { getLocale } from "@/lib/i18n/getLocale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { interpolate, interpolateNodes } from "@/lib/i18n/format";
+import { publicMetadata } from "@/lib/publicMetadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [settings, locale] = await Promise.all([
@@ -12,11 +13,16 @@ export async function generateMetadata(): Promise<Metadata> {
     getLocale(),
   ]);
   const dict = getDictionary(locale);
-  return {
-    title: interpolate(dict.legal.terms.metaTitle, {
+  return publicMetadata(
+    "/terms",
+    interpolate(dict.legal.terms.metaTitle, {
       companyName: settings.companyName,
     }),
-  };
+    locale === "ar"
+      ? "اقرأ شروط إرسال طلبات المشاريع واستخدام بوابة عميل ATOI، وكيفية الاتفاق على نطاق المشروع والجداول الزمنية والمخرجات."
+      : "Read the terms for submitting project requests and using the ATOI customer portal, including how project scope, timelines, and deliverables are agreed.",
+    locale,
+  );
 }
 
 export default async function TermsPage() {

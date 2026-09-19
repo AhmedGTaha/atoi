@@ -6,7 +6,7 @@ import { dirFor } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { I18nProvider } from "@/lib/i18n/I18nProvider";
 import { getCompanySettings } from "@/lib/services/settingsService";
-import { appUrl } from "@/lib/utils/appUrl";
+import { metadataBase } from "@/lib/publicMetadata";
 
 const latin = IBM_Plex_Sans({
   variable: "--font-latin",
@@ -41,7 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const customIconUrl = settings.activeAppIcon?.publicUrl;
 
   return {
-    metadataBase: new URL(appUrl()),
+    metadataBase,
     title,
     description,
     applicationName: settings.companyName,
@@ -57,11 +57,10 @@ export async function generateMetadata(): Promise<Metadata> {
         apple: customIconUrl,
       },
     }),
-    alternates: { canonical: "/" },
     openGraph: {
       title,
       description,
-      url: appUrl(),
+      url: metadataBase.href,
       siteName: settings.companyName,
       locale: locale === "ar" ? "ar_BH" : "en_US",
       type: "website",
