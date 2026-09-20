@@ -5,6 +5,9 @@ import { t } from "@/lib/content/helpers";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { StartProjectTrigger } from "./StartProjectTrigger";
 import { MotionReveal } from "./MotionReveal";
+import Link from "next/link";
+import { localizedPublicPath } from "@/lib/i18n/publicRoutes";
+import { SERVICE_CONTENT, SERVICE_PATHS } from "@/lib/content/services";
 
 export function Services({
   locale,
@@ -66,6 +69,13 @@ export function Services({
               </MotionReveal>
             );
           })}
+        </div>
+        <div className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-sm font-display">
+          {(["custom", "pos"] as const).map((service) => (
+            <Link key={service} href={localizedPublicPath(SERVICE_PATHS[service], locale)} className="text-accent-foreground underline underline-offset-4 hover:text-foreground">
+              {SERVICE_CONTENT[service][locale].name} {locale === "ar" ? "←" : "→"}
+            </Link>
+          ))}
         </div>
       </Container>
     </section>

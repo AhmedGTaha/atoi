@@ -5,7 +5,11 @@ export const PUBLIC_LOCALE_HEADER = "x-atoi-public-locale";
 
 // Only register published pages with existing English and Arabic content.
 // Keep the explicit public middleware matchers in sync when adding pages.
-export const PUBLIC_PATHS = ["/", "/privacy", "/terms"] as const;
+export const PUBLIC_PATHS = [
+  "/", "/privacy", "/terms",
+  "/services/custom-software-development",
+  "/services/pos-system-development",
+] as const;
 export type PublicPath = (typeof PUBLIC_PATHS)[number];
 
 export function localizedPublicPath(path: PublicPath, locale: Locale): string {

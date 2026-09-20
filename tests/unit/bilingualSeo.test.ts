@@ -63,6 +63,8 @@ describe("public language URLs", () => {
       "https://atoi.online/", "https://atoi.online/ar",
       "https://atoi.online/privacy", "https://atoi.online/ar/privacy",
       "https://atoi.online/terms", "https://atoi.online/ar/terms",
+      "https://atoi.online/services/custom-software-development", "https://atoi.online/ar/services/custom-software-development",
+      "https://atoi.online/services/pos-system-development", "https://atoi.online/ar/services/pos-system-development",
     ]);
     expect(entries[0].alternates?.languages).toEqual({
       en: "https://atoi.online/", ar: "https://atoi.online/ar", "x-default": "https://atoi.online/",
@@ -72,8 +74,8 @@ describe("public language URLs", () => {
     }
   });
 
-  it("does not create prefixed private, service, location, or unknown pages", () => {
-    for (const url of ["/ar/admin", "/ar/portal", "/ar/login", "/ar/team", "/ar/unknown", "/services/custom-software-development", "/ar/services/custom-software-development", "/ar/saudi-arabia"]) {
+  it("does not create private aliases, unapproved services, location, or unknown pages", () => {
+    for (const url of ["/ar/admin", "/ar/portal", "/ar/login", "/ar/team", "/ar/unknown", "/services/erp", "/ar/services/crm", "/ar/saudi-arabia"]) {
       expect(unstable_doesMiddlewareMatch({ config, nextConfig: {}, url })).toBe(false);
     }
   });

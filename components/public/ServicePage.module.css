@@ -1,0 +1,188 @@
+.page {
+  min-width: 0;
+}
+.hero {
+  padding-block: clamp(40px, 7vw, 96px);
+}
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(32px, 6vw, 80px);
+  align-items: center;
+}
+.title {
+  font-size: clamp(36px, 4.5vw, 62px);
+  line-height: 1.08;
+  max-width: 19ch;
+  text-wrap: balance;
+}
+.page:dir(rtl) .title {
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+.intro {
+  color: var(--color-muted);
+  font-size: 18px;
+  line-height: 1.8;
+  margin-top: 28px;
+  max-width: 58ch;
+}
+.outline {
+  border: 1px solid var(--color-divider);
+  background: var(--color-surface);
+  padding: clamp(22px, 3vw, 36px);
+}
+.outline li {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 18px;
+  padding-block: 22px;
+  border-top: 1px solid var(--color-divider);
+}
+.outline h2 {
+  font-size: 17px;
+  line-height: 1.5;
+}
+.outline li p {
+  margin-top: 8px;
+  color: var(--color-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.number {
+  font: 12px/1.8 var(--font-heading);
+  color: var(--color-accent-foreground);
+}
+.principle {
+  border-top: 1px solid var(--color-divider);
+  padding-top: 24px;
+  font: 14px/1.8 var(--font-heading);
+  color: var(--color-accent-foreground);
+}
+.sectionHeading {
+  max-width: 780px;
+  margin-bottom: 36px;
+}
+.sectionHeading > p:last-child,
+.fit p,
+.related p:not(:first-child) {
+  color: var(--color-muted);
+  line-height: 1.8;
+  margin-top: 20px;
+}
+.problemGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
+}
+.problem {
+  border-top: 1px solid var(--color-divider);
+  padding-block: 24px;
+}
+.problem h3 {
+  font-size: 19px;
+  line-height: 1.5;
+  margin-block: 20px 12px;
+}
+.problem p,
+.capability p {
+  color: var(--color-muted);
+  line-height: 1.8;
+  font-size: 15px;
+}
+.capabilities {
+  border-top: 1px solid var(--color-divider);
+}
+.capability {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 24px;
+  align-items: baseline;
+  padding-block: 26px;
+  border-bottom: 1px solid var(--color-divider);
+}
+.capability h3 {
+  font-size: 21px;
+  line-height: 1.5;
+}
+.fit {
+  border-inline-start: 2px solid var(--color-accent);
+  padding: 24px 28px;
+  margin-top: 36px;
+  background: var(--color-field);
+}
+.fit h3 {
+  font-size: 22px;
+  line-height: 1.5;
+}
+.faqGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 64px;
+}
+.faqs details {
+  border-top: 1px solid var(--color-divider);
+}
+.faqs details:last-child {
+  border-bottom: 1px solid var(--color-divider);
+}
+.faqs summary {
+  cursor: pointer;
+  padding-block: 22px;
+  font: 16px/1.65 var(--font-heading);
+}
+.faqs summary::marker {
+  color: var(--color-accent-foreground);
+}
+.faqs summary:focus-visible {
+  outline: 2px solid var(--color-accent-foreground);
+  outline-offset: 4px;
+}
+.faqs details p {
+  color: var(--color-muted);
+  line-height: 1.85;
+  padding-bottom: 24px;
+}
+.related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  justify-content: space-between;
+  align-items: center;
+}
+.related > div {
+  max-width: 640px;
+}
+.related > a {
+  white-space: normal;
+  max-width: 100%;
+}
+@media (max-width: 900px) {
+  .heroGrid,
+  .faqGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+  .problemGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .problemGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .capability {
+    grid-template-columns: 24px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .capability p {
+    grid-column: 2;
+  }
+  .title {
+    font-size: 36px;
+  }
+  .fit {
+    padding: 20px;
+  }
+}

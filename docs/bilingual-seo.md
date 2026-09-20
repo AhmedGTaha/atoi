@@ -3,6 +3,12 @@
 English remains at `/`, `/privacy`, and `/terms`. Their Arabic counterparts are
 `/ar`, `/ar/privacy`, and `/ar/terms`. No language detection redirects are used.
 
+The published service pages are `/services/custom-software-development` and
+`/services/pos-system-development`, each with an `/ar` counterpart. Their bilingual
+copy lives in `lib/content/services.ts`; both use the existing public shell,
+project inquiry modal, and delivery-process content. Only the custom software page
+shows published portfolio records; no POS case studies are inferred from them.
+
 Middleware recognizes only these published public paths. It overwrites an internal
 request locale header and rewrites Arabic requests to the existing page modules,
 keeping the Arabic URL in the browser. `getLocale()` uses this URL-derived locale
@@ -26,7 +32,7 @@ When adding a genuinely new bilingual public page, add the page and its existing
 reviewed translations, then register its unprefixed path and add both exact paths
 to the middleware matcher. Do not register pages before they exist. Do not use a
 catch-all Arabic rewrite: private and unknown paths must not acquire public aliases.
-Service and regional pages are not part of this change. Future Gulf location pages
+Only the two registered service pages are published. Future Gulf location pages
 require useful regional content, not duplicated text with country names replaced.
 
 Migration: users with an Arabic cookie now see English at `/`; their Arabic entry
