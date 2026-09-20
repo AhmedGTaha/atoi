@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "./Logo";
 import type { Locale } from "@/lib/i18n/locale";
@@ -5,6 +6,7 @@ import type { WebsiteContentMap } from "@/lib/services/websiteContentService";
 import { t } from "@/lib/content/helpers";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import type { CompanySettingsWithLogos } from "@/lib/services/settingsService";
+import { localizedPublicPath } from "@/lib/i18n/publicRoutes";
 
 export function Footer({
   locale,
@@ -67,6 +69,18 @@ export function Footer({
             {dict.footer.linkedin}
           </a>
         )}
+        <Link
+          href={localizedPublicPath("/privacy", locale)}
+          className="hover:text-foreground"
+        >
+          {locale === "ar" ? "سياسة الخصوصية" : "Privacy Policy"}
+        </Link>
+        <Link
+          href={localizedPublicPath("/terms", locale)}
+          className="hover:text-foreground"
+        >
+          {locale === "ar" ? "الشروط والأحكام" : "Terms of Service"}
+        </Link>
         <span className="ms-auto">
           © {new Date().getFullYear()} {settings.companyName} — {location} ·{" "}
           {t(content, "footer.tagline", locale)}
