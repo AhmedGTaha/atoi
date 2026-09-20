@@ -5,6 +5,8 @@ English remains at `/`, `/privacy`, and `/terms`. Their Arabic counterparts are
 
 The published service pages are `/services/custom-software-development` and
 `/services/pos-system-development`, each with an `/ar` counterpart. Their bilingual
+companions are `/services/business-management-systems` and
+`/services/inventory-management-systems`, also with `/ar` counterparts. Their bilingual
 copy lives in `lib/content/services.ts`; both use the existing public shell,
 project inquiry modal, and delivery-process content. Only the custom software page
 shows published portfolio records; no POS case studies are inferred from them.
@@ -32,7 +34,7 @@ When adding a genuinely new bilingual public page, add the page and its existing
 reviewed translations, then register its unprefixed path and add both exact paths
 to the middleware matcher. Do not register pages before they exist. Do not use a
 catch-all Arabic rewrite: private and unknown paths must not acquire public aliases.
-Only the two registered service pages are published. Future Gulf location pages
+Only the four registered service pages are published. Future Gulf location pages
 require useful regional content, not duplicated text with country names replaced.
 
 Migration: users with an Arabic cookie now see English at `/`; their Arabic entry

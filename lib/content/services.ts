@@ -1,9 +1,12 @@
 import type { Locale } from "@/lib/i18n/locale";
 import type { PublicPath } from "@/lib/i18n/publicRoutes";
+import { ADDITIONAL_SERVICE_CONTENT } from "./additionalServices";
 
 export const SERVICE_PATHS = {
   custom: "/services/custom-software-development",
   pos: "/services/pos-system-development",
+  business: "/services/business-management-systems",
+  inventory: "/services/inventory-management-systems",
 } as const satisfies Record<string, PublicPath>;
 export type ServiceKey = keyof typeof SERVICE_PATHS;
 
@@ -34,8 +37,8 @@ export interface ServiceCopy {
   relatedBody: string;
 }
 
-export const SERVICE_CONTENT: Record<
-  ServiceKey,
+const CORE_SERVICE_CONTENT: Record<
+  "custom" | "pos",
   Record<Locale, ServiceCopy>
 > = {
   custom: {
@@ -484,4 +487,12 @@ export const SERVICE_CONTENT: Record<
         "تعرّف على تطوير البرمجيات المخصصة لإدارة الإجراءات الداخلية وبوابات العملاء والموافقات وربط أنظمة الشركة.",
     },
   },
+};
+
+export const SERVICE_CONTENT: Record<
+  ServiceKey,
+  Record<Locale, ServiceCopy>
+> = {
+  ...CORE_SERVICE_CONTENT,
+  ...ADDITIONAL_SERVICE_CONTENT,
 };

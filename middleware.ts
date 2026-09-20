@@ -1,5 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { PUBLIC_LOCALE_HEADER, publicRouteFromPath } from "@/lib/i18n/publicRoutes";
+import {
+  PUBLIC_LOCALE_HEADER,
+  publicRouteFromPath,
+} from "@/lib/i18n/publicRoutes";
 import {
   ADMIN_SESSION_COOKIE,
   CUSTOMER_SESSION_COOKIE,
@@ -87,6 +90,10 @@ export const config = {
     "/services/pos-system-development",
     "/ar/services/custom-software-development",
     "/ar/services/pos-system-development",
+    "/services/business-management-systems",
+    "/services/inventory-management-systems",
+    "/ar/services/business-management-systems",
+    "/ar/services/inventory-management-systems",
     "/login",
     "/forgot-password",
     "/set-password",

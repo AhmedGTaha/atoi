@@ -71,11 +71,18 @@ export function Services({
           })}
         </div>
         <div className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-sm font-display">
-          {(["custom", "pos"] as const).map((service) => (
-            <Link key={service} href={localizedPublicPath(SERVICE_PATHS[service], locale)} className="text-accent-foreground underline underline-offset-4 hover:text-foreground">
-              {SERVICE_CONTENT[service][locale].name} {locale === "ar" ? "←" : "→"}
-            </Link>
-          ))}
+          {(["custom", "pos", "business", "inventory"] as const).map(
+            (service) => (
+              <Link
+                key={service}
+                href={localizedPublicPath(SERVICE_PATHS[service], locale)}
+                className="text-accent-foreground underline underline-offset-4 hover:text-foreground"
+              >
+                {SERVICE_CONTENT[service][locale].name}{" "}
+                {locale === "ar" ? "←" : "→"}
+              </Link>
+            ),
+          )}
         </div>
       </Container>
     </section>

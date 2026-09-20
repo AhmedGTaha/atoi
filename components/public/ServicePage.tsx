@@ -27,6 +27,13 @@ import { FinalCta } from "./FinalCta";
 import { SelectedWork } from "./SelectedWork";
 import styles from "./ServicePage.module.css";
 
+const RELATED_SERVICES: Record<ServiceKey, ServiceKey[]> = {
+  custom: ["business", "pos"],
+  pos: ["inventory", "custom"],
+  business: ["custom", "inventory"],
+  inventory: ["business", "pos"],
+};
+
 export async function serviceMetadata(service: ServiceKey) {
   const locale = await getLocale();
   const copy = SERVICE_CONTENT[service][locale];
@@ -47,7 +54,7 @@ export async function ServicePage({ service }: { service: ServiceKey }) {
   ]);
   const copy = SERVICE_CONTENT[service][locale];
   const dict = getDictionary(locale);
-  const related = service === "custom" ? "pos" : "custom";
+  const related = RELATED_SERVICES[service];
   const url = publicLanguageUrls(SERVICE_PATHS[service])[locale];
   const structuredData = {
     "@context": "https://schema.org",
@@ -243,13 +250,23 @@ export async function ServicePage({ service }: { service: ServiceKey }) {
                 <h2>{copy.relatedHeading}</h2>
                 <p>{copy.relatedBody}</p>
               </div>
-              <Link
-                className="btn btn-secondary"
-                href={localizedPublicPath(SERVICE_PATHS[related], locale)}
-              >
-                {SERVICE_CONTENT[related][locale].name}
-                <span aria-hidden="true">{locale === "ar" ? "←" : "→"}</span>
-              </Link>
+              <div className="flex flex-wrap gap-3">
+                {related.map((relatedService) => (
+                  <Link
+                    key={relatedService}
+                    className="btn btn-secondary"
+                    href={localizedPublicPath(
+                      SERVICE_PATHS[relatedService],
+                      locale,
+                    )}
+                  >
+                    {SERVICE_CONTENT[relatedService][locale].name}
+                    <span aria-hidden="true">
+                      {locale === "ar" ? "←" : "→"}
+                    </span>
+                  </Link>
+                ))}
+              </div>
             </MotionReveal>
           </Container>
         </section>
