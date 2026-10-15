@@ -1,8 +1,12 @@
 import type { MetadataRoute } from "next";
-import { PUBLIC_PATHS, publicLanguageUrls } from "@/lib/i18n/publicRoutes";
+import {
+  PUBLIC_PATHS,
+  isIndexablePublicPath,
+  publicLanguageUrls,
+} from "@/lib/i18n/publicRoutes";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return PUBLIC_PATHS.flatMap((path) => {
+  return PUBLIC_PATHS.filter(isIndexablePublicPath).flatMap((path) => {
     const languages = publicLanguageUrls(path);
     return (["en", "ar"] as const).map((locale) => ({
       url: languages[locale],

@@ -45,8 +45,7 @@ See `.env.example` for the full list and descriptions. At minimum you need
 `APP_URL`'s scheme matters: cookies are only marked `Secure` when `APP_URL`
 starts with `https://`, so a local `https://` value would prevent the
 session cookie from working over plain `http://localhost`. Use
-`http://localhost:3000` locally and the real `https://` URL in deployed
-environments.
+`http://localhost:3000` locally and `https://atoi.online` in production.
 
 ## Scripts
 
@@ -279,7 +278,7 @@ before upgrading to Prisma 7.
 1. Provision a Postgres database (Neon, Vercel Postgres, Supabase, etc.)
    and a Vercel Blob store.
 2. Set all variables from `.env.example` in the Vercel project settings —
-   `APP_URL` must be the real `https://` deployment URL.
+   `APP_URL` must be `https://atoi.online` in production.
 3. Run `npm run db:migrate:deploy` against the production database (from
    CI or locally with the production `DATABASE_URL`), then `npm run db:seed`
    once to create the first admin.

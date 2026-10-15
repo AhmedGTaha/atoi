@@ -73,7 +73,10 @@ describe("public language URLs", () => {
           languages: publicLanguageUrls(path),
         });
         expect(metadata.openGraph?.url).toBe(`https://atoi.online${pathname}`);
-        expect(metadata.robots).toEqual({ index: true, follow: true });
+        expect(metadata.robots).toEqual({
+          index: path !== "/privacy" && path !== "/terms",
+          follow: true,
+        });
       });
     }
   }
@@ -83,10 +86,6 @@ describe("public language URLs", () => {
     expect(entries.map((entry) => entry.url)).toEqual([
       "https://atoi.online/",
       "https://atoi.online/ar",
-      "https://atoi.online/privacy",
-      "https://atoi.online/ar/privacy",
-      "https://atoi.online/terms",
-      "https://atoi.online/ar/terms",
       "https://atoi.online/services/custom-software-development",
       "https://atoi.online/ar/services/custom-software-development",
       "https://atoi.online/services/pos-system-development",

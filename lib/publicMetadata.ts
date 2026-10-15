@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/lib/i18n/locale";
-import { PUBLIC_ORIGIN, publicLanguageUrls, type PublicPath } from "@/lib/i18n/publicRoutes";
+import {
+  PUBLIC_ORIGIN,
+  isIndexablePublicPath,
+  publicLanguageUrls,
+  type PublicPath,
+} from "@/lib/i18n/publicRoutes";
 
 export const metadataBase = new URL(PUBLIC_ORIGIN);
 
@@ -20,7 +25,7 @@ export function publicMetadata(
     title,
     description,
     alternates: { canonical: url, languages },
-    robots: { index: true, follow: true },
+    robots: { index: isIndexablePublicPath(path), follow: true },
     openGraph: {
       type: "website",
       siteName: "ATOI",

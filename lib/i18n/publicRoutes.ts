@@ -16,6 +16,10 @@ export const PUBLIC_PATHS = [
 ] as const;
 export type PublicPath = (typeof PUBLIC_PATHS)[number];
 
+export function isIndexablePublicPath(path: PublicPath): boolean {
+  return path !== "/privacy" && path !== "/terms";
+}
+
 export function localizedPublicPath(path: PublicPath, locale: Locale): string {
   return locale === "ar" ? `/ar${path === "/" ? "" : path}` : path;
 }
